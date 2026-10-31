@@ -1,0 +1,23 @@
+{
+  "admins": [
+    { "name": "Weaverjr", "guild": "Church" },
+    { "name": "Zedd", "guild": "Ranger" },
+    { "name": "Wint", "guild": "Sorcere" },
+    { "name": "Weaver", "guild": "Assassin" },
+    { "name": "Viperjr", "guild": "Bastion" },
+    { "name": "Viper", "guild": "Sorcere" },
+    { "name": "Sassman", "guild": "Monk" },
+    { "name": "Sassjr", "guild": "Adventurer" },
+    { "name": "Mordro", "guild": "Adventurer" },
+    { "name": "Meson", "guild": "Knight" },
+    { "name": "Kyus", "guild": "Knight" },
+    { "name": "Kryten", "guild": "Stronghold" },
+    { "name": "Kahlan", "guild": "Bastion" },
+    { "name": "Cyrgon", "guild": "Monk" },
+    { "name": "Cougar", "guild": "Melee-magthere" },
+    { "name": "Blink", "guild": "Battlemage" },
+    { "name": "Beowulf", "guild": "Assassin" },
+    { "name": "Arruns", "guild": "Elite" },
+    { "name": "Apex", "guild": "Monk" }
+  ]
+}

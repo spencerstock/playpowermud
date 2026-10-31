@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="description" content="Play Powermud in your browser: terminal, aliases, comms and a world map." />
+    <title>Play Powermud</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/build/xterm.css" />
+  </head>
+  <body>
+    <header>
+      <h1>playpowermud</h1>
+      <div class="connection-bar" aria-live="polite">
+        <div class="conn-status">
+          <span class="conn-pill conn-pill-muted" id="mud-status" data-kind="mud">Offline</span>
+        </div>
+        <div class="conn-controls">
+          <button type="button" id="mud-connect" title="Connect to powermud.com">Connect</button>
+          <button type="button" id="mud-disconnect" title="Close the MUD connection">Disconnect</button>
+        </div>
+      </div>
+      <div class="controls">
+        <button type="button" id="skin-cycle" title="Switch color theme (dark / light)">Skin: Dark</button>
+      </div>
+    </header>
+    <div class="play-stack">
+      <div class="play-main">
+        <div id="log" class="mud-log-host" aria-label="MUD output"></div>
+        <aside id="chat-panel-mount" aria-label="Comms"></aside>
+      </div>
+      <div id="map-panel-mount" aria-label="World map panel"></div>
+    </div>
+    <div id="mobile-commands" class="mobile-commands" aria-label="Game commands" hidden>
+      <button type="button" class="mobile-command" data-quick-cmd="look">look</button>
+      <button type="button" class="mobile-command" data-quick-cmd="who">who</button>
+      <button type="button" class="mobile-command" data-quick-cmd="score">score</button>
+    </div>
+    <nav id="mobile-actions" class="mobile-actions" aria-label="Quick actions" hidden>
+      <button type="button" class="mobile-action" id="mobile-map" title="World map (Option+M)">Map</button>
+      <button type="button" class="mobile-action" id="mobile-comms" title="Comms (Option+C)">Comms</button>
+    </nav>
+    <form id="form">
+      <div class="command-wrap">
+        <input
+          id="input"
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          enterkeyhint="send"
+          placeholder="Command  ·  /alias NAME EXPANSION  ·  /aliases  ·  /unalias NAME"
+          aria-autocomplete="list"
+          aria-controls="alias-ac"
+          aria-expanded="false"
+        />
+        <ul id="alias-ac" class="alias-ac" role="listbox" hidden></ul>
+      </div>
+      <button type="submit">Send</button>
+    </form>
+    <div id="wire-hint" class="wire-hint" aria-live="polite"></div>
+    <script type="module" src="/build/app.js"></script>
+  </body>
+</html>
