@@ -16,15 +16,6 @@ This file tracks how **Powermud** knowledge is organized on the Play Powermud wi
 
 ---
 
-## World
-
-| Wiki page | Source notes |
-|-----------|----------------|
-| [World overview](../public/wiki/reference/world-and-directions.html) | Threshold, zones, `directions.txt` / HTML routes |
-| [Explored map data](../public/wiki/reference/explored-world.html) | `public/data/powermud.graph.json`, IndexedDB merge |
-
----
-
 ## Characters
 
 | Wiki page | Source notes |
@@ -51,17 +42,16 @@ This file tracks how **Powermud** knowledge is organized on the Play Powermud wi
 |-----------|----------------|
 | [Quest system](../public/wiki/reference/help/quests.html) | `help quests` |
 | [Quest notes & clues](../public/wiki/reference/quests-corpus.html) | Lists, `clues.md` hooks |
-| [Herbs & doctor](../public/wiki/reference/help/herbs-doctor.html) | Doctor profession, herb routes |
 | [Player guides](../public/wiki/reference/guides.html) | Compatible spells, Apex components, legacy doctor TXTs |
 
 ---
 
-## Spells & help
+## Professions
 
 | Wiki page | Source notes |
 |-----------|----------------|
-| [Help topic index](../public/wiki/reference/spells.html) | Curated help copies under `docs/powermud/help/` |
-| [Colors (eset)](../public/wiki/reference/help/eset.html) | `help eset` / ANSI |
+| [Professions index](../public/wiki/reference/professions.html) | Link professions on the wiki |
+| [Doctor](../public/wiki/reference/help/herbs-doctor.html) | Doctor profession, herb routes |
 
 ---
 
@@ -69,7 +59,6 @@ This file tracks how **Powermud** knowledge is organized on the Play Powermud wi
 
 | Wiki page | Purpose |
 |-----------|---------|
-| [Spoilers & sources](../public/wiki/reference/content-notes.html) | Unofficial or spoiler-heavy material |
 | [Behind the scenes data](../public/wiki/reference/data-caches.html) | `known-players.json` and related caches |
 
 ---

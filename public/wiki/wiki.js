@@ -13,13 +13,6 @@ const WIKI_NAV_SECTIONS = [
     ],
   },
   {
-    title: "World",
-    links: [
-      ["World overview", "/wiki/reference/world-and-directions.html"],
-      ["Explored map data", "/wiki/reference/explored-world.html"],
-    ],
-  },
-  {
     title: "Characters",
     links: [
       ["Races", "/wiki/reference/help/races.html"],
@@ -40,22 +33,17 @@ const WIKI_NAV_SECTIONS = [
     links: [
       ["Quest system", "/wiki/reference/help/quests.html"],
       ["Quest notes & clues", "/wiki/reference/quests-corpus.html"],
-      ["Herbs & doctor", "/wiki/reference/help/herbs-doctor.html"],
       ["Player guides", "/wiki/reference/guides.html"],
     ],
   },
   {
-    title: "Spells & help",
-    links: [
-      ["Help topic index", "/wiki/reference/spells.html"],
-      ["Colors (eset)", "/wiki/reference/help/eset.html"],
-    ],
+    title: "Professions",
+    links: [["Doctor", "/wiki/reference/help/herbs-doctor.html"]],
   },
   {
     title: "About this wiki",
     links: [
       ["Game wiki home", "/wiki/reference/"],
-      ["Spoilers & sources", "/wiki/reference/content-notes.html"],
       ["Behind the scenes data", "/wiki/reference/data-caches.html"],
     ],
   },
