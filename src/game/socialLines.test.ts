@@ -25,24 +25,29 @@ test("parsePowermudChatLine includes outgoing say, tell, and shout", () => {
   assert.deepEqual(parsePowermudChatLine("You say in common : hello there."), {
     kind: "say",
     speaker: "You",
-    message: "hello there",
+    message: "hello there.",
     raw: "You say in common : hello there.",
   });
   assert.deepEqual(parsePowermudChatLine("You tell Weaver hi."), {
     kind: "tell",
     speaker: "You",
     target: "Weaver",
-    message: "hi",
+    message: "hi.",
     raw: "You tell Weaver hi.",
   });
   assert.deepEqual(parsePowermudChatLine("You shout anyone around?"), {
     kind: "shout",
     speaker: "You",
-    message: "anyone around",
+    message: "anyone around?",
     raw: "You shout anyone around?",
   });
   assert.equal(parsePowermudChatLine("Weaver says in common : yo")?.speaker, "Weaver");
   assert.equal(extractChatMessage("say", "Weaver says in common : yo"), "yo");
+  assert.equal(
+    extractChatMessage("say", 'Weaver says in common : he said "wait!"'),
+    'he said "wait!"',
+  );
+  assert.equal(extractChatMessage("tell", "Weaver tells you don't stop."), "don't stop.");
 });
 
 test("parsePowermudSideChatLine is room say only", () => {

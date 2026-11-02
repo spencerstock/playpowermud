@@ -50,7 +50,7 @@ test("ingest skips tell/shout/announce replay log blocks", () => {
   assert.equal(ingest.ingestLogText(`${block}\n`).length, 0);
   const live = ingest.ingestLogText("Weaver tells you 'live'\n");
   assert.equal(live.length, 1);
-  assert.equal(live[0]!.message, "live");
+  assert.equal(live[0]!.message, "'live'");
 });
 
 test("ingest suppresses You say after bot echo", () => {

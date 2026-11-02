@@ -483,9 +483,8 @@ input[type="text"] {
 
 .chat-who {
   font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-word;
+  white-space: normal;
 }
 
 .chat-msg {

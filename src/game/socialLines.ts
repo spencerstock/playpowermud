@@ -58,32 +58,28 @@ function normName(name: string): string {
   return name.trim().toLowerCase();
 }
 
-function stripTrailingPunct(s: string): string {
-  return s.replace(/[.!?]+$/, "").trim();
-}
-
-/** Pull spoken text after common Powermud say/tell/shout trailers. */
+/** Pull spoken text after common Powermud say/tell/shout trailers (verbatim, no trimming punctuation). */
 export function extractChatMessage(kind: ParsedChatLine["kind"], line: string): string {
   const t = line.trim();
   if (kind === "say") {
     const youSay = t.match(/^You say(?:\s+in\s+\S+)?\s*:\s*(.*)$/is);
-    if (youSay) return stripTrailingPunct(youSay[1]!);
+    if (youSay) return youSay[1]!;
     const inCommon = t.match(/\b(?:says|asks|exclaims) in common\s*:\s*(.*)$/is);
-    if (inCommon) return stripTrailingPunct(inCommon[1]!);
-    const says = t.match(/\b(?:says|asks|exclaims)\s+(?:in\s+\S+\s*)?[:\s]+['"]?(.*?)['"]?$/is);
-    if (says) return stripTrailingPunct(says[1]!);
+    if (inCommon) return inCommon[1]!;
+    const says = t.match(/\b(?:says|asks|exclaims)\s+(?:in\s+\S+\s*)?[:\s]+(.*)$/is);
+    if (says) return says[1]!;
   }
   if (kind === "tell") {
-    const incoming = t.match(/\btells you\s*[:\s]+['"]?(.*?)['"]?$/is);
-    if (incoming) return stripTrailingPunct(incoming[1]!);
-    const outgoing = t.match(/^You tell \S+\s*[:\s]+['"]?(.*?)['"]?$/is);
-    if (outgoing) return stripTrailingPunct(outgoing[1]!);
+    const incoming = t.match(/\btells you(?:\s*:\s*|\s+)(.*)$/is);
+    if (incoming) return incoming[1]!;
+    const outgoing = t.match(/^You tell \S+(?:\s*:\s*|\s+)(.*)$/is);
+    if (outgoing) return outgoing[1]!;
   }
   if (kind === "shout") {
-    const incoming = t.match(/\bshouts\s*[:\s]+['"]?(.*?)['"]?$/is);
-    if (incoming) return stripTrailingPunct(incoming[1]!);
-    const outgoing = t.match(/^You shout\s*[:\s]+['"]?(.*?)['"]?$/is);
-    if (outgoing) return stripTrailingPunct(outgoing[1]!);
+    const incoming = t.match(/\bshouts(?:\s*:\s*|\s+)(.*)$/is);
+    if (incoming) return incoming[1]!;
+    const outgoing = t.match(/^You shout(?:\s*:\s*|\s+)(.*)$/is);
+    if (outgoing) return outgoing[1]!;
   }
   return t;
 }
