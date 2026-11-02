@@ -7,7 +7,7 @@ export type FlakyTravelContext = {
   fromId: string;
   map: {
     room(id: string): MapRoom | undefined;
-    canonicalId(id: string): string | undefined;
+    canonicalId(id: string): string;
   };
 };
 
@@ -19,7 +19,7 @@ export const FLAKY_MOVE_MAX_ATTEMPTS = 16;
 export const COMPASS_MOVE_MAX_ATTEMPTS = 3;
 
 const MOVE_FAILED_RE =
-  /cannot go that direction|can't go that way|alas, you cannot|too busy fighting|can't move|you fail to climb|you are unable to climb|you fail to enter|you are unable to enter|you slip|lose your grip|you can't reach|you cannot reach|find nothing|search reveals nothing/i;
+  /cannot go that direction|can't go that way|alas, you cannot|too busy fighting|trips you|tripping you|can't move|you fail to climb|you are unable to climb|you fail to enter|you are unable to enter|you slip|lose your grip|you can't reach|you cannot reach|find nothing|search reveals nothing/i;
 
 export function outputSaysMoveFailed(output: string): boolean {
   return MOVE_FAILED_RE.test(output);

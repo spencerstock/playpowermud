@@ -27,7 +27,7 @@ function readExpanded(): boolean {
   return false;
 }
 
-/** Comms side panel: tells, says, shouts and channels parsed from the MUD stream. */
+/** Comms side panel: tells, says, and shouts parsed from the MUD stream. */
 export function createSidePanel(opts: { mount: HTMLElement; onCommsClear?: () => void }): SidePanel {
   const root = opts.mount;
   root.classList.add("side-panel-root");

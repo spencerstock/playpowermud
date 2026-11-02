@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aliases — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Aliases</h2>
+      <p class="wiki-lede">Client-side command shortcuts — not Powermud’s in-game <code>alias</code> command.</p>
+
+      <h3>Commands</h3>
+      <table>
+        <thead>
+          <tr><th>Input</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/alias NAME EXPANSION</code></td><td>Create or replace an alias</td></tr>
+          <tr><td><code>/unalias NAME</code></td><td>Remove an alias</td></tr>
+          <tr><td><code>/aliases</code></td><td>List all aliases</td></tr>
+          <tr><td><code>/aliases filter</code></td><td>List aliases whose name or body matches <code>filter</code></td></tr>
+        </tbody>
+      </table>
+      <p>Names are one word, case-insensitive. Expansions can be several MUD commands.</p>
+
+      <h3>Expansion features</h3>
+      <ul>
+        <li><strong>Chains</strong> — separate commands with <code>;</code> (e.g. <code>look;score</code>).</li>
+        <li><strong>Trailing args</strong> — a one-word alias can take the rest of the line (<code>/alias bs backstab</code> → <code>bs orc</code> sends <code>backstab orc</code>).</li>
+        <li><strong>Prefix args</strong> — name the alias <code>NAME $1$</code> and use <code>$1$</code> in the body for the words after the command (e.g. <code>/alias ca $1$ cast stoneskin on $1$</code>).</li>
+        <li><strong>Nesting</strong> — aliases can call other aliases; cycles return an error instead of looping.</li>
+        <li><strong>zScript</strong> — bodies containing <code>#</code> run a small Mudlet-style subset (timing/actions mudwithme supports).</li>
+      </ul>
+      <p class="wiki-callout wiki-callout-warn">
+        Smart-alias markers from mudwithme are <strong>not</strong> supported here — those expansions are blocked.
+      </p>
+
+      <h3>Autocomplete</h3>
+      <p>
+        Type <code>/</code> in the command field to suggest client slash commands and your alias names.
+        While typing <code>/alias …</code> or <code>/unalias …</code>, alias autocomplete hides so you
+        are not interrupted.
+      </p>
+
+      <h3>Storage</h3>
+      <p>
+        Aliases live in this browser’s <code>localStorage</code> under
+        <code>playpowermud-aliases</code>. They do not sync across devices or browsers. Powermud’s own
+        saved aliases (if any) are separate — use this client’s <code>/alias</code> for playpowermud.
+      </p>
+
+      <h3>Examples</h3>
+      <pre>/alias cma cast magic invulnerability
+/alias bs backstab
+/alias ca $1$ cast stoneskin on $1$;cast bless on $1$
+/alias esetcolors eset ansi on;eset tell bold blue;eset say green</pre>
+      <p>Then type <code>ca bishop</code> or <code>esetcolors</code> like ordinary commands (no leading <code>/</code>).</p>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

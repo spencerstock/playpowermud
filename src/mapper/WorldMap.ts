@@ -12,7 +12,7 @@ import { descriptionWithDoorStates, OPEN_DOOR_COMMAND, parseDoors } from "../gam
 import { cleanseRoomDescription, isRoomDescriptionNoiseLine } from "../game/roomDescriptionNoise.js";
 import type { DoorState, RoomDoor, RoomObservation } from "../game/types.js";
 import { areaDisplayLabel, propagateAreas } from "./areaInfer.js";
-import { PREFER_AVOID_ROOM_COST } from "./pathPolicy.js";
+import { linkNeverPathed, PREFER_AVOID_ROOM_COST } from "./pathPolicy.js";
 import { npcMatchFor, npcNamesForRoom, syncRoomNpcs } from "./npcs.js";
 import { isNumericRoomIdQuery } from "./roomIdQuery.js";
 import type {
@@ -212,6 +212,8 @@ export type HealReport = {
   prefixesStripped?: number;
   /** Copies of one room (rare prose, same exits, neighbors that agree) merged. */
   chainsMerged?: number;
+  /** Thin look-alike fragments folded into their well-wired original. */
+  lookalikesFolded?: number;
 };
 
 /**
@@ -489,6 +491,10 @@ export class WorldMap {
       // Same prose in several rooms (uniform swamp, corridor tiles): never treat description
       // lookup as unique just because title/exits filtered compatibility down to one.
       if (sharedDesc.length >= 2) {
+        // Look-alike fragments minted after a tripped batch (r731/r3379, r2980/r3584) must not
+        // hide the one well-wired original forever: pin to it when the rest are thin copies.
+        const est = this.soleEstablished(sharedDesc);
+        if (est && this.compatibility(est, obs) > 0) return { room: est, candidates: 1 };
         return { room: null, candidates: Math.max(matches.length, sharedDesc.length) };
       }
       return { room: matches.length === 1 ? matches[0]! : null, candidates: matches.length };
@@ -501,6 +507,20 @@ export class WorldMap {
       return { room: null, candidates: matches.length };
     }
     return { room: null, candidates: 0 };
+  }
+
+  /**
+   * Of rooms sharing one prose, the single well-wired original (2+ confirmed exits) when every
+   * other is a thin look-alike fragment (at most 1 confirmed exit, fewer visits); else null.
+   * Genuine twins and uniform tiles are each wired, so they never qualify.
+   */
+  soleEstablished(ids: string[]): MapRoom | null {
+    const rooms = ids.map((id) => this.doc.rooms[id]).filter((r): r is MapRoom => !!r);
+    const confirmed = (r: MapRoom) => Object.values(r.links).filter((l) => l?.confirmed).length;
+    const strong = rooms.filter((r) => confirmed(r) >= 2);
+    if (strong.length !== 1) return null;
+    const s = strong[0]!;
+    return rooms.every((r) => r === s || (confirmed(r) <= 1 && r.visits < s.visits)) ? s : null;
   }
 
   /** Known rooms whose verbose text matches `obs` (ignores title and exits). */
@@ -794,7 +814,8 @@ export class WorldMap {
     for (const id of ids) {
       const room = this.room(id);
       if (!room) continue;
-      const p: MapPos = { ...addVec(room.pos, delta), plane: opts.plane ?? room.pos.plane };
+      const p = addVec(room.pos, delta);
+      if (opts.plane) p.plane = opts.plane;
       this.setPos(room, p);
       n += 1;
     }
@@ -1129,6 +1150,8 @@ export class WorldMap {
     report.linksPruned += this.pruneLinks();
     report.roomsRemoved += this.removeGhosts(protect);
     report.merged += this.consolidate();
+    report.lookalikesFolded = this.foldThinLookalikes();
+    report.merged += report.lookalikesFolded;
     report.linksStitched += this.stitchExits();
     report.planesRemoved += this.dropEmptyPlanes();
     report.redirectsPruned = this.pruneRedirects();
@@ -1217,6 +1240,43 @@ export class WorldMap {
     }
     for (const [id, text] of fixes) this.setDescription(this.doc.rooms[id]!, text);
     return fixes.size;
+  }
+
+  /**
+   * Thin look-alike fragments minted after a tripped batch (r731/r3379, r2980/r3584) fold into
+   * the one well-wired original sharing their prose and exit list (see soleEstablished).
+   * Uniform tiles and genuine twins are each wired, so they are never touched.
+   */
+  private foldThinLookalikes(): number {
+    const groups = new Map<string, MapRoom[]>();
+    for (const room of this.rooms()) {
+      if (!room.description) continue;
+      const norm = normalizeDescription(room.description);
+      if (norm.length < CHAIN_MERGE_MIN_DESC) continue;
+      const key = `${[...room.exits].sort().join(",")}|${norm}`;
+      let g = groups.get(key);
+      if (!g) groups.set(key, (g = []));
+      g.push(room);
+    }
+    let n = 0;
+    for (const group of groups.values()) {
+      // Rare prose only: a pair, never a field of uniform tiles where some are just unwired.
+      if (group.length !== 2) continue;
+      const keep = this.soleEstablished(group.map((r) => r.id));
+      if (!keep) continue;
+      for (const drop of group) {
+        if (drop === keep || !this.doc.rooms[drop.id] || !this.doc.rooms[keep.id]) continue;
+        // A confirmed exit of the fragment that leads somewhere else than the original's is
+        // evidence of a distinct room (look-alike road tiles), not a stray copy.
+        const conflicts = Object.entries(drop.links).some(([cmd, link]) => {
+          const k = keep.links[cmd];
+          return link?.confirmed && k?.to && this.canonicalId(k.to) !== this.canonicalId(link.to);
+        });
+        if (conflicts) continue;
+        if (this.mergeRooms(keep.id, drop.id)) n += 1;
+      }
+    }
+    return n;
   }
 
   /**
@@ -1719,9 +1779,10 @@ export class WorldMap {
     return n;
   }
 
-  private linkUsable(link: MapLink, opts: PathOptions, now: number, doorState?: DoorState): boolean {
+  private linkUsable(link: MapLink, opts: PathOptions, now: number, doorState?: DoorState, roomId?: string, cmd?: string): boolean {
     if (doorState === "locked") return false;
     if (!link.to) return false;
+    if (roomId !== undefined && cmd !== undefined && linkNeverPathed(roomId, cmd, opts.allowLinks)) return false;
     if (link.kind === "teleport") return false;
     if (opts.allowInferred === false && !link.confirmed) return false;
     if (opts.allowSpecial === false && link.kind === "special") return false;
@@ -1768,7 +1829,7 @@ export class WorldMap {
       }
       if ((prev.size > maxSteps)) break;
       for (const [cmd, link] of Object.entries(room.links)) {
-        if (!this.linkUsable(link, opts, now, room.doors?.find((d) => d.direction === cmd)?.state)) continue;
+        if (!this.linkUsable(link, opts, now, room.doors?.find((d) => d.direction === cmd)?.state, room.id, cmd)) continue;
         if (opts.avoidLinks?.includes(`${room.id}:${cmd}`)) continue;
         const next = this.doc.rooms[link.to!];
         if (!next || done.has(next.id)) continue;
@@ -1809,7 +1870,7 @@ export class WorldMap {
       distance += 1;
       for (const room of layer) {
         for (const [cmd, link] of Object.entries(room.links)) {
-          if (!this.linkUsable(link, opts, now, room.doors?.find((d) => d.direction === cmd)?.state)) continue;
+          if (!this.linkUsable(link, opts, now, room.doors?.find((d) => d.direction === cmd)?.state, room.id, cmd)) continue;
           if (opts.avoidLinks?.includes(`${room.id}:${cmd}`)) continue;
           const n = this.doc.rooms[link.to!];
           if (!n || seen.has(n.id)) continue;
@@ -1847,7 +1908,7 @@ export class WorldMap {
           out.push({ room, exits: unexplored, distance });
         }
         for (const [cmd, link] of Object.entries(room.links)) {
-          if (!this.linkUsable(link, opts, now, room.doors?.find((d) => d.direction === cmd)?.state)) continue;
+          if (!this.linkUsable(link, opts, now, room.doors?.find((d) => d.direction === cmd)?.state, room.id, cmd)) continue;
           if (opts.avoidLinks?.includes(`${room.id}:${cmd}`)) continue;
           const n = this.doc.rooms[link.to!];
           if (!n || seen.has(n.id) || this.roomAvoided(n, opts)) continue;

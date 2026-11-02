@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Herbs &amp; doctor — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Doctor, herbs &amp; intensify</h2>
+      <p class="wiki-lede">
+        From in-game help (<code>doctor</code>, <code>succor</code>, <code>harvest</code>,
+        <code>intensify</code>). Routes below match common player travel aliases; verify plants live.
+      </p>
+
+      <h3>Doctor profession</h3>
+      <ul>
+        <li>Requires 12 INT, 12 DEX; lower path: <strong>Herbalist</strong>.</li>
+        <li>Strong <code>succor</code> and natural regeneration; raises caps for First aid, Intensification, Harvesting.</li>
+        <li>Shorter wait between <code>succor</code>; can use stronger medical components.</li>
+      </ul>
+
+      <h3>Harvesting</h3>
+      <ul>
+        <li><code>harvest</code> with no target — in rooms with gatherable plants.</li>
+        <li>Cooldown: “You must wait a moment” between tries; area depletion: “harvested too much recently.”</li>
+        <li>On success, <code>get all</code> if loot is not automatic.</li>
+      </ul>
+
+      <h3>Succor (First aid)</h3>
+      <p><code>succor</code> · <code>succor &lt;target&gt;</code> · <code>succor &lt;target&gt; with &lt;component&gt;</code></p>
+      <p>Removes bleeding on success; components (bandages, herbs, crafted tiers) improve odds.</p>
+
+      <h3>Intensification</h3>
+      <p><code>intensify &lt;type&gt; on &lt;target&gt;</code> or <code>on me</code> — Doctor and/or Herbalist only for each type.</p>
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Component</th><th>Where</th><th>Who</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Strength</td><td>Sargat Root</td><td>Plains of Nereka</td><td>Herbalist + Doctor</td></tr>
+          <tr><td>Dexterity</td><td>Balestra</td><td>Desert (caravan trail)</td><td>Both</td></tr>
+          <tr><td>Charisma</td><td>Blue Cohosh</td><td>Mountains (Viluten, Absinthe)</td><td>Both</td></tr>
+          <tr><td>Health boost</td><td>Sargat Root</td><td>Plains of Nereka</td><td>Doctor ≈2× Herbalist</td></tr>
+          <tr><td>Physical focus</td><td>Bardock Sap</td><td>Swamps south of Threshold</td><td>Doctor only</td></tr>
+          <tr><td>Technical focus</td><td>Compeda</td><td>Beaches (Minot, Deepwater)</td><td>Doctor only</td></tr>
+          <tr><td>Melee focus</td><td>Hiyent</td><td>Absinthe Mountains near Toril</td><td>Doctor only</td></tr>
+          <tr><td>Melee cynosure</td><td>Gybtu Root</td><td>UnderDark</td><td>Doctor only</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Herb case</h3>
+      <ul>
+        <li>Large herb case: contents do not count toward carry limit (the case counts as one item).</li>
+        <li><code>look in case</code> / <code>look in case 2</code> … · <code>put &lt;item&gt; in case</code></li>
+      </ul>
+
+      <h3>Travel from Threshold Main Square</h3>
+      <p>Many players use long speedwalk aliases — you can mirror them with client <a href="/wiki/client/aliases.html"><code>/alias</code></a> entries:</p>
+      <table>
+        <thead>
+          <tr><th>Route alias</th><th>Goal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>mstobalestra</code></td><td>Kalamshite Desert caravan (balestra)</td></tr>
+          <tr><td><code>mstocohosh</code></td><td>Toward Viluten/Absinthe (blue cohosh)</td></tr>
+          <tr><td><code>mstohiyent</code></td><td>Absinthe / Toril (hiyent)</td></tr>
+          <tr><td><code>mstogybtu</code></td><td>UnderDark (gybtu) — long, dangerous</td></tr>
+          <tr><td><code>mstosap</code></td><td>Bardock sap (swamp south of Threshold)</td></tr>
+          <tr><td><code>mstocompeda</code></td><td>Compeda (beaches)</td></tr>
+        </tbody>
+      </table>
+      <p>Return routes often use a <code>*toms</code> suffix (e.g. <code>balestratoms</code> → Main Square).</p>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

@@ -76,7 +76,7 @@ test("flaky travel commands are detected from aliases-style verbs", () => {
   assert.equal(isFlakyTravelCommand("enter crack"), true);
   assert.equal(isFlakyTravelCommand("climb up"), true);
   assert.equal(isFlakyTravelCommand("search southern wall"), true);
-  assert.equal(isFlakyTravelCommand("out", { kind: "named", to: "r2" }), false);
+  assert.equal(isFlakyTravelCommand("out", { kind: "named", to: "r2", confirmed: true }), false);
   assert.equal(isFlakyTravelCommand("push west wall"), true);
   assert.equal(isFlakyTravelCommand("move south"), true);
   assert.equal(isFlakyTravelCommand("enter hole"), true);
@@ -206,4 +206,32 @@ test("an unlisted compass link the game keeps refusing is dropped after a few tr
   for (let i = 0; i < 5; i++) map.recordNavigationFailure(a.id, "s", "You cannot go that direction.");
   assert.equal(a.links.s?.to, c.id);
   assert.equal(moveMaxAttempts("s", a.links.s), 3, "a walk tries a plain exit only a few times before rerouting");
+});
+
+// Real Powermud line, Zurker at r1540 (Kalin caravan route start) 2026-11-01: the Small boy
+// tripped five `ne` tries in a row and the walker blocked the link, breaking the kobold route.
+test("a mob tripping you is a transient refusal: the compass link is not failed or blocked", async () => {
+  const map = WorldMap.empty("test");
+  const a = map.createRoom({ plane: "p1", x: 0, y: 0, z: 0 });
+  map.applyObservation(a, { mode: "brief", title: "Caravan Route start", exits: ["ne", "sw", "nw"], contents: [] });
+  const b = map.createRoom({ plane: "p1", x: 1, y: 1, z: 0 });
+  map.applyObservation(b, { mode: "brief", title: "Mountain path", exits: ["sw"], contents: [] });
+  map.link(a.id, "ne", b.id, { kind: "dir", confirmed: true });
+  let sends = 0;
+  const r = await retryCompassMove({
+    fromId: a.id,
+    cmd: "ne",
+    map,
+    maxAttempts: 3,
+    send: async () => {
+      sends += 1;
+      return { output: `The small boy trips you!  What a punk!\n${P}` };
+    },
+    moved: () => false,
+  });
+  assert.equal(r.ok, false);
+  assert.equal(sends, 3);
+  assert.equal(a.links.ne?.to, b.id);
+  assert.equal(a.links.ne?.failCount, undefined);
+  assert.equal(a.links.ne?.blocked, undefined);
 });

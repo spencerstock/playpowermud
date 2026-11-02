@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comms — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Comms panel</h2>
+      <p class="wiki-lede">Tells, room says, and shouts in a side panel — guild chat and announce lines stay in the main log.</p>
+
+      <h3>Open the panel</h3>
+      <ul>
+        <li><kbd>Alt</kbd>+<kbd>C</kbd> (<strong>Option+C</strong> on macOS) toggles expand/collapse.</li>
+        <li>On mobile, tap <strong>Comms</strong> in the bottom bar.</li>
+      </ul>
+
+      <h3>What gets captured</h3>
+      <ul>
+        <li><strong>Tells</strong> — incoming and your outgoing tells</li>
+        <li><strong>Says</strong> — room speech (yours always; others only if they are in the client’s known-player list)</li>
+        <li><strong>Shouts</strong> — always shown</li>
+      </ul>
+      <p>Each line has a timestamp. The panel keeps up to <strong>400</strong> recent entries.</p>
+      <p>
+        Powermud channels (<code>[guild]</code>, group chat, fields, etc.) are <em>not</em> copied into
+        this panel — read them in the main terminal (use <code>eset</code> colors from
+        <a href="/wiki/client/terminal.html">Terminal &amp; colors</a>).
+      </p>
+
+      <h3>Per character</h3>
+      <p>
+        When the logged-in character changes, the comms list switches to that character’s saved
+        history in <code>localStorage</code> on this browser. Nothing syncs across devices.
+      </p>
+
+      <div class="wiki-callout">
+        If a tell or say is missing here, check the main log — parsing waits for a full line, and some
+        lines are filtered (e.g. replay blocks, announce spam).
+      </div>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Live map data." />
+    <title>Explored world — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+    <main class="wiki-main" id="wiki-main">
+
+      <h2>Explored world</h2>
+      <p class="wiki-lede">mudwithme <code>docs/world/</code> holds machine-readable exploration (zones, room corpus). playpowermud ships a community graph for the browser mapper.</p>
+      <h3>playpowermud</h3>
+      <ul>
+        <li><code>public/data/powermud.graph.json</code> — baseline world graph (from mudwithme <code>data/world/</code>)</li>
+        <li>Your tab merges live exploration into <strong>IndexedDB</strong> — see <a href="/wiki/client/map.html">World map</a></li>
+      </ul>
+      <h3>mudwithme (agents / CLI)</h3>
+      <ul>
+        <li><code>docs/world/MAP.md</code> — human index; ingest via map persist CLI</li>
+        <li><code>world-map.json</code>, zone JSON, <code>room-corpus.json</code>, <code>rooms/</code> snapshots</li>
+      </ul>
+
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

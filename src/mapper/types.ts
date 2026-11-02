@@ -112,6 +112,12 @@ export type PathOptions = {
   avoid?: string[];
   /** Exits never to take on this request, as `roomId:cmd` (failed earlier in the same walk). */
   avoidLinks?: string[];
+  /**
+   * Opt in to links that pathing never takes by default (`NEVER_PATH_LINKS`: the Assassin's Guild
+   * red stone to Dunagin, `homeland`). Entries are a bare command (`touch red stone`), a
+   * `roomId:cmd` key, or `*` for all of them.
+   */
+  allowLinks?: string[];
   /** Extra cost to traverse these room ids or tags; still used when no alternate exists. */
   preferAvoid?: string[];
   /** Use inferred (unconfirmed) links (default true). */

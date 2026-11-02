@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Getting started — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Getting started</h2>
+      <p class="wiki-lede">Connect from the home page, play in one tab, reconnect when the relay drops.</p>
+
+      <h3>What this client is</h3>
+      <p>
+        Play Powermud is a browser client built from the core of
+        <strong>mudwithme</strong>: terminal, aliases, comms log, and world map. Everything except
+        the network relay runs in your browser; aliases and comms use <code>localStorage</code>, and
+        map discoveries use <code>IndexedDB</code> on this device.
+      </p>
+
+      <h3>Keyboard shortcuts</h3>
+      <p>On macOS, <kbd>Alt</kbd> is labeled <strong>Option</strong>. Shortcuts use <kbd>Alt</kbd>, not <kbd>Option+Command</kbd>.</p>
+      <table>
+        <thead>
+          <tr><th>Shortcut</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><kbd>Alt</kbd>+<kbd>M</kbd></td><td>Toggle <a href="/wiki/client/map.html">world map</a> panel</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>C</kbd></td><td>Toggle <a href="/wiki/client/comms.html">comms</a> panel</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>D</kbd></td><td>Focus terminal: scroll log to bottom and focus the command line</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Connect</h3>
+      <ol>
+        <li>Open <a href="/">/</a> and click <strong>Connect</strong>.</li>
+        <li>Log in on Powermud as usual (name, password). The password field is masked in the UI.</li>
+        <li>Use the command line at the bottom; ↑/↓ recall history. Empty Enter repeats the last command.</li>
+      </ol>
+      <p>
+        The site talks to Powermud through a <strong>relay</strong> at <code>/api/ws</code> — a dumb
+        pipe to <code>powermud.com:2000</code>. You cannot point the public relay at another host from
+        the browser; only the server config chooses the target.
+      </p>
+
+      <h3>Session length (Vercel)</h3>
+      <p>
+        On Vercel, the WebSocket closes when the function hits its max duration (about
+        <strong>5 minutes</strong> on Hobby, longer on Pro). When the relay drops, your character goes
+        link-dead and you will see the login prompt again after reconnect.
+      </p>
+      <p>For long uninterrupted sessions, run your own relay:</p>
+      <pre>yarn relay   # standalone relay; set PORT, MUD_HOST, MUD_PORT</pre>
+      <p>
+        Build or load the client with <code>RELAY_URL=wss://your-host/api/ws</code>, or add
+        <code>?relay=wss://…</code> to the page URL for a quick test.
+      </p>
+
+      <h3>Run locally</h3>
+      <pre>yarn install
+yarn dev    # http://localhost:3000 — static site + relay at /api/ws</pre>
+      <p>Run <code>yarn build</code> before deploy; Vercel serves <code>public/</code> and deploys the relay function.</p>
+
+      <h3>Optional environment (hosting)</h3>
+      <table>
+        <thead>
+          <tr><th>Variable</th><th>Default</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>MUD_HOST</code> / <code>MUD_PORT</code></td><td>powermud.com / 2000</td><td>Relay target</td></tr>
+          <tr><td><code>ALLOWED_ORIGINS</code></td><td>(any)</td><td>Comma-separated origins allowed to open the relay</td></tr>
+          <tr><td><code>RELAY_URL</code></td><td>this site’s <code>/api/ws</code></td><td>Build-time: external relay URL for the client</td></tr>
+        </tbody>
+      </table>
+
+      <h3>What is not in this client</h3>
+      <p>
+        Compared to full mudwithme: no auto-walking, speedwalk, map click-to-walk, triggers, smart
+        aliases, bots, multi-viewer hub, or saved login profiles.
+      </p>
+
+      <div class="wiki-see-also">
+        <h2>Next steps</h2>
+        <ul>
+          <li><a href="/wiki/client/terminal.html">Terminal &amp; colors</a> — <code>eset</code> after login</li>
+          <li><a href="/wiki/client/aliases.html">Aliases</a> — macros in this browser</li>
+          <li><a href="/wiki/client/map.html">World map</a> — where you are in the world graph</li>
+        </ul>
+      </div>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

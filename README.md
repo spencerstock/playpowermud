@@ -7,9 +7,10 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
   Command history (↑/↓), empty Enter repeats the last command, the password prompt is masked.
 - **Aliases** — `/alias NAME EXPANSION`, `/unalias NAME`, `/aliases [filter]`. `;` chains, nested
   aliases, `$1$` args. Type `/` for autocomplete. Stored in this browser (localStorage).
-- **Comms** — tells, says, shouts and channels in the side panel (Option+C), kept per character.
+- **Comms** — tells, says, and shouts in the side panel (Option+C), kept per character.
 - **Map** — the shipped Powermud world graph with live position tracking, level/plane view,
   search and a room inspector (Option+M). What you map is saved in this browser (IndexedDB).
+- **Wiki** — [/wiki](/wiki): **Client** (browser help) and **Game reference** (from mudwithme `docs/GAME_REFERENCE.md` / `docs/powermud/`).
 
 ## Run locally
 

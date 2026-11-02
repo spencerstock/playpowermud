@@ -22,7 +22,11 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url ?? "/", "http://local");
   let rel = decodeURIComponent(url.pathname);
   if (rel.endsWith("/")) rel += "index.html";
-  const file = path.join(root, rel);
+  let file = path.join(root, rel);
+  if (!path.extname(rel) && !rel.endsWith("index.html")) {
+    const asDir = path.join(root, rel, "index.html");
+    if (fs.existsSync(asDir)) file = asDir;
+  }
   if (!file.startsWith(root + path.sep)) {
     res.writeHead(403);
     res.end();

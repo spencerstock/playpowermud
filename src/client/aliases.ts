@@ -6,7 +6,7 @@ export type AliasStorage = Pick<Storage, "getItem" | "setItem">;
 
 /**
  * Plain aliases (`/alias NAME EXPANSION`) kept in this browser's localStorage and resolved by
- * the copied mudwithme `AliasEngine` (`;` chains, `$1$`/`%1`/`%*` args, nested aliases, zScript subset).
+ * the copied mudwithme `AliasEngine` (`;` chains, `$1$` / prefix args, nested aliases, zScript subset).
  */
 export class AliasStore {
   private aliases = new Map<string, string>();

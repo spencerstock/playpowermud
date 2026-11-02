@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terminal &amp; colors — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Terminal &amp; colors</h2>
+      <p class="wiki-lede">xterm.js output with full ANSI — Powermud <code>eset</code> colors render as the MUD sends them.</p>
+
+      <h3>Command line</h3>
+      <ul>
+        <li><strong>History</strong> — ↑ and ↓ walk previous commands (plain arrows, not modified).</li>
+        <li><strong>Repeat</strong> — Enter on an empty line resends the last command.</li>
+        <li><strong>Password</strong> — input is masked while Powermud asks for your password.</li>
+        <li><strong>Line cursor</strong> — ←/→ move within the line; <kbd>Alt</kbd>+←/→ insert telnet cursor-move sequences at the caret.</li>
+        <li><strong>Log cursor</strong> — <kbd>Alt</kbd>+<kbd>Shift</kbd>+arrow sends cursor keys to the MUD (for full-screen editors on the game side).</li>
+        <li><strong>Word delete</strong> — <kbd>Alt</kbd>+Backspace deletes the word before the caret (macOS Option+Backspace).</li>
+        <li><strong>Back to terminal</strong> — <kbd>Alt</kbd>+<kbd>D</kbd> scrolls the log to the bottom and focuses input (<a href="/wiki/client/getting-started.html">shortcut list</a>).</li>
+      </ul>
+
+      <h3>Mobile</h3>
+      <p>
+        On small screens, quick buttons for <code>look</code>, <code>who</code>, and
+        <code>score</code> appear above the input; Map and Comms toggle the side panels.
+      </p>
+
+      <h3>Theme</h3>
+      <p>
+        <strong>Skin: Dark / Light</strong> on the play page (and this wiki) switches UI chrome only;
+        MUD colors still come from ANSI. The choice is saved in <code>localStorage</code>.
+      </p>
+
+      <h3>Powermud ANSI (<code>eset</code>)</h3>
+      <p>In-game: <code>help ansi</code>, <code>help eset</code>, <code>help variables</code>. Help digest: <a href="/wiki/reference/help/eset.html">Eset &amp; ANSI</a>.</p>
+      <ul>
+        <li><code>eset ansi on</code> — required for channel colors and combat ANSI.</li>
+        <li><code>eset &lt;variable&gt; &lt;setting&gt;</code> — e.g. <code>eset tell bold blue</code>.</li>
+        <li><code>eunset &lt;variable&gt;</code> — clear one variable.</li>
+      </ul>
+      <p><strong>Colors:</strong> black, red, green, yellow, blue, purple, cyan, white.</p>
+      <p><strong>Effects:</strong> beep, flash, underline, normal, bold, italics, inverse (not every effect shows in every client).</p>
+
+      <h3>Suggested channel preset</h3>
+      <p>Define once as a client alias (see <a href="/wiki/client/aliases.html">Aliases</a>), then run it each session:</p>
+      <pre>eset ansi on
+eset tell bold blue
+eset say green
+eset shout bold cyan
+eset announce bold yellow
+eset guild bold purple
+eset groupchat bold magenta
+eset fields green
+eset emote cyan</pre>
+      <p>
+        Example client alias:
+        <code>/alias esetcolors eset ansi on;eset tell bold blue;eset say green;…</code>
+        — run <code>esetcolors</code> after each login, then verify with <code>eset</code>.
+      </p>
+
+      <table>
+        <thead>
+          <tr><th>Variable</th><th>Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>tell</code></td><td>Tells you see</td></tr>
+          <tr><td><code>say</code></td><td>Room speech from others</td></tr>
+          <tr><td><code>shout</code></td><td>Shouts</td></tr>
+          <tr><td><code>announce</code></td><td>Announce channel</td></tr>
+          <tr><td><code>guild</code></td><td>Guild channel</td></tr>
+          <tr><td><code>groupchat</code></td><td>Group chat</td></tr>
+          <tr><td><code>fields</code></td><td>Fields channel</td></tr>
+          <tr><td><code>emote</code></td><td>Atmosphere / soul lines</td></tr>
+        </tbody>
+      </table>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "yarn build",
   "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/wiki", "destination": "/wiki/index.html" },
+    { "source": "/wiki/reference", "destination": "/wiki/reference/index.html" }
+  ],
   "functions": {
     "api/ws.ts": { "maxDuration": 300 }
   }

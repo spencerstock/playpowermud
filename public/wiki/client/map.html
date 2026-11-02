@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World map — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>World map</h2>
+      <p class="wiki-lede">Live mapper while you play — same graph engine as mudwithme, running entirely in the browser.</p>
+
+      <h3>Open the map</h3>
+      <ul>
+        <li><kbd>Alt</kbd>+<kbd>M</kbd> (<strong>Option+M</strong> on macOS) expands or collapses the panel.</li>
+        <li>On mobile, tap <strong>Map</strong>.</li>
+      </ul>
+
+      <h3>What you see</h3>
+      <ul>
+        <li><strong>Your position</strong> updates as room text arrives from the MUD.</li>
+        <li><strong>Levels</strong> — use ▲/▼ in the map toolbar to change <code>z</code> (up/down in the world).</li>
+        <li><strong>Follow</strong> — when on, the view stays centered on you; panning or selecting another room turns it off.</li>
+        <li><strong>Search</strong> — filter mapped rooms by title, description, tags, or NPC names.</li>
+        <li><strong>Room details</strong> — click a room for exits, contents, and links.</li>
+        <li><strong>Legend</strong> — dashed = inferred link; markers for up/down and unexplored exits.</li>
+      </ul>
+      <p>
+        Click-drag empty map space to pan. Focus the map canvas and use arrow keys to move the
+        selection cursor between rooms (navigation only — does not send movement commands).
+      </p>
+      <p>This client does <strong>not</strong> click-to-walk, speedwalk, or auto-path.</p>
+
+      <h3>Shipped map vs your discoveries</h3>
+      <p>
+        The site ships a Powermud world graph at
+        <code>/data/powermud.graph.json</code> (copied from mudwithme). As you explore, new rooms and
+        links merge into your local copy. If a newer shipped file arrives (newer
+        <code>updatedAt</code>), it replaces your local base.
+      </p>
+      <p>Your learned map is saved in <strong>IndexedDB</strong> (<code>playpowermud</code> database) on this browser.</p>
+
+      <h3>How mapping works (short)</h3>
+      <p>Each command you send is queued; each room display is matched to the command that caused it. The mapper:</p>
+      <ul>
+        <li>Identifies rooms by title, exits, and description (brief and verbose <code>look</code> map to the same room).</li>
+        <li>Learns compass, vertical, named, and secret exits as you traverse them.</li>
+        <li>Re-localizes when dead reckoning disagrees with room text (same algorithm as mudwithme hub).</li>
+        <li>Periodically heals duplicate rooms and bad links (on load and as you move).</li>
+      </ul>
+      <h3>Updating the shipped graph</h3>
+      <p>
+        Site deploys include <code>public/data/powermud.graph.json</code>. When maintainers publish a
+        newer graph, your browser merges it if the file’s <code>updatedAt</code> is newer than your saved base.
+      </p>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

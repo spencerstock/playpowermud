@@ -139,6 +139,21 @@ h1 {
   align-items: center;
 }
 
+.header-wiki-link {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid var(--ui-border-strong);
+  background: var(--ui-surface);
+  color: var(--ui-hint);
+  text-decoration: none;
+}
+
+.header-wiki-link:hover {
+  border-color: var(--ui-hint);
+}
+
 button,
 input[type="text"] {
   font: inherit;

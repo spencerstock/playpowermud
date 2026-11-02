@@ -845,7 +845,7 @@ export class Mapper {
     if (!anchor) return undefined;
     const ids = new Set(this.candidatePool(obs).map((r) => r.id));
     if (ids.size === 0) return undefined;
-    const path = this.map.findPath(anchor.id, (r) => ids.has(r.id), { maxSteps: 400 });
+    const path = this.map.findPath(anchor.id, (r) => ids.has(r.id), { maxSteps: 400, allowLinks: ["*"] });
     if (path && path.length <= 12) return this.map.room(path[path.length - 1]?.to ?? anchor.id);
     return ids.has(anchor.id) ? anchor : undefined;
   }
@@ -1134,7 +1134,8 @@ export class Mapper {
 
   /** Several mapped rooms share this prose — need a uniform run before a description pin. */
   private sharedDescriptionArea(obs: RoomObservation): boolean {
-    return this.map.roomIdsMatchingDescription(obs).length >= 2;
+    const ids = this.map.roomIdsMatchingDescription(obs);
+    return ids.length >= 2 && !this.map.soleEstablished(ids);
   }
 
   private descriptionPinAllowed(obs: RoomObservation): boolean {
