@@ -342,8 +342,8 @@ export function createWorldPanel(opts: WorldPanelOptions) {
     z: null as number | null,
     follow: true,
     centerRef: null as string | null,
-    // Phones start collapsed so the log keeps the screen; the choice is remembered.
-    expanded: (localStorage.getItem("playpowermud-world-expanded") ?? (window.innerWidth > 720 ? "1" : "0")) !== "0",
+    // Start collapsed so the log keeps the screen; the choice is remembered.
+    expanded: (localStorage.getItem("playpowermud-world-expanded") ?? "0") !== "0",
     refreshTimer: null as ReturnType<typeof setTimeout> | null,
     /** Grid cursor for keyboard navigation (same z as current map level). */
     navCell: null as { x: number; y: number } | null,

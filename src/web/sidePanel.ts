@@ -24,7 +24,7 @@ function el<K extends keyof HTMLElementTagNameMap>(
 function readExpanded(): boolean {
   const stored = localStorage.getItem(EXPANDED_LS);
   if (stored != null) return stored !== "0";
-  return window.innerWidth > 720;
+  return false;
 }
 
 /** Comms side panel: tells, says, shouts and channels parsed from the MUD stream. */
