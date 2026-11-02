@@ -57,6 +57,14 @@
         the browser; only the server config chooses the target.
       </p>
 
+      <h3>Wiki while you play</h3>
+      <p>
+        Open the <a href="/wiki/">wiki</a> from the header to read help or game reference in the same tab.
+        Your MUD connection stays open in a shared background worker while you browse the wiki, so you do not
+        go link-dead just from checking a page. When you return to <a href="/">Play</a>, you are still connected
+        (new output appears in the terminal; text you missed while reading is not replayed).
+      </p>
+
       <h3>Session length (Vercel)</h3>
       <p>
         On Vercel, the WebSocket closes when the function hits its max duration (about

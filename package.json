@@ -7,11 +7,12 @@
   "scripts": {
     "dev": "yarn build && node --import tsx server/dev.ts",
     "relay": "node --import tsx server/standalone.ts",
-    "build": "yarn build:css && yarn build:app",
+    "build": "yarn build:css && yarn build:wiki && yarn build:app",
     "build:css": "mkdir -p public/build && cp node_modules/@xterm/xterm/css/xterm.css public/build/xterm.css",
+    "build:wiki": "node scripts/build-wiki-search.mjs",
     "build:app": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test 'src/**/*.test.ts' 'server/**/*.test.ts'"
+    "test": "node --import tsx --test 'src/**/*.test.ts' 'server/**/*.test.ts' 'scripts/**/*.test.mjs'"
   },
   "dependencies": {
     "ws": "^8.18.3"

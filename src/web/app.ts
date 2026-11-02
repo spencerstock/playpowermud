@@ -1,6 +1,14 @@
 import { parseSlashAliasesLine } from "../aliases/slashCommands.js";
 import { AliasStore } from "../client/aliases.js";
-import { defaultRelayUrl, MudConnection, type RelayStatus } from "../client/connection.js";
+import {
+  applyClientConfigToLocalStorage,
+  buildClientConfig,
+  collectPlaypowermudLocalStorage,
+  configExportFilename,
+  parseClientConfig,
+} from "../client/clientConfig.js";
+import { defaultRelayUrl, type RelayStatus } from "../client/connection.js";
+import { createMudConnection } from "../client/relayClient.js";
 import { createMapApi } from "../client/mapApi.js";
 import { BrowserMapStore } from "../client/mapStore.js";
 import { ClientRuntime } from "../client/runtime.js";
@@ -32,6 +40,9 @@ const statusEl = byId("mud-status");
 const connectBtn = byId<HTMLButtonElement>("mud-connect");
 const disconnectBtn = byId<HTMLButtonElement>("mud-disconnect");
 const skinCycleBtn = byId<HTMLButtonElement>("skin-cycle");
+const configExportBtn = byId<HTMLButtonElement>("config-export");
+const configImportBtn = byId<HTMLButtonElement>("config-import-btn");
+const configImportInput = byId<HTMLInputElement>("config-import");
 const form = byId<HTMLFormElement>("form");
 const input = byId<HTMLInputElement>("input");
 const aliasAcEl = byId("alias-ac");
@@ -41,7 +52,7 @@ const sidePanelMount = byId("chat-panel-mount");
 
 const mudTerm = createMudTerminal(logEl, 10_000);
 const aliases = new AliasStore();
-const connection = new MudConnection(defaultRelayUrl(location, __RELAY_URL__));
+const connection = createMudConnection(defaultRelayUrl(location, __RELAY_URL__));
 
 const META_ANSI = "\x1b[90m";
 const ECHO_ANSI = "\x1b[33m";
@@ -74,6 +85,52 @@ applySkin(localStorage.getItem(SKIN_LS) ?? "dark", false);
 skinCycleBtn.addEventListener("click", () => {
   const cur = document.documentElement.dataset.skin === "light" ? "light" : "dark";
   applySkin(SKINS[(SKINS.indexOf(cur) + 1) % SKINS.length]!);
+});
+
+// ---- config export / import -------------------------------------------------------------
+
+async function exportClientConfig(): Promise<void> {
+  try {
+    const map = runtime ? await runtime.mapStore.exportSnapshot() : undefined;
+    const doc = buildClientConfig({
+      localStorage: collectPlaypowermudLocalStorage(localStorage),
+      map,
+    });
+    const json = JSON.stringify(doc, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = configExportFilename(doc.exportedAt);
+    a.click();
+    URL.revokeObjectURL(url);
+    meta(
+      `Config exported (${Object.keys(doc.localStorage).length} localStorage keys${map ? ", map included" : ""}).`,
+    );
+  } catch (err) {
+    errorLine(`Export failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+async function importClientConfigFile(file: File): Promise<void> {
+  try {
+    const doc = parseClientConfig(JSON.parse(await file.text()) as unknown);
+    applyClientConfigToLocalStorage(doc, localStorage);
+    if (doc.map) await BrowserMapStore.importSaved(doc.map);
+    meta("Config imported — reloading…");
+    window.location.reload();
+  } catch (err) {
+    errorLine(`Import failed: ${err instanceof Error ? err.message : String(err)}`);
+  } finally {
+    configImportInput.value = "";
+  }
+}
+
+configExportBtn.addEventListener("click", () => void exportClientConfig());
+configImportBtn.addEventListener("click", () => configImportInput.click());
+configImportInput.addEventListener("change", () => {
+  const file = configImportInput.files?.[0];
+  if (file) void importClientConfigFile(file);
 });
 
 // ---- panels -----------------------------------------------------------------------------
@@ -146,6 +203,7 @@ connection.on("echo", (on) => {
 connection.on("sent", (line) => runtime?.onCommandSent(line));
 
 function connect(): void {
+  if (connection.connected || connection.status === "connecting") return;
   meta("Connecting…");
   connection.connect();
 }
@@ -567,7 +625,12 @@ async function boot(): Promise<void> {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") void store.flush();
   });
-  connect();
+  if (connection.connected) {
+    renderStatus("connected");
+    runtime.onConnected();
+  } else {
+    connect();
+  }
 }
 
 void boot().catch((err) => errorLine(`Startup failed: ${err instanceof Error ? err.message : String(err)}`));

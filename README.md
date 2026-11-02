@@ -7,6 +7,8 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
   Command history (↑/↓), empty Enter repeats the last command, the password prompt is masked.
 - **Aliases** — `/alias NAME EXPANSION`, `/unalias NAME`, `/aliases [filter]`. `;` chains, nested
   aliases, `$1$` args. Type `/` for autocomplete. Stored in this browser (localStorage).
+- **Config** — **Export config** / **Import config** in the header backs up aliases, comms, skin,
+  panel prefs, and the learned map (JSON file).
 - **Comms** — tells, says, and shouts in the side panel (Option+C), kept per character.
 - **Map** — the shipped Powermud world graph with live position tracking, level/plane view,
   search and a room inspector (Option+M). What you map is saved in this browser (IndexedDB).

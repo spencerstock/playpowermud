@@ -14,7 +14,8 @@ const STORE = "kv";
 const KEY = "world-graph";
 const SAVE_DEBOUNCE_MS = 4000;
 
-type Saved = { baseUpdatedAt: string; doc: WorldGraphDocument };
+export type SavedWorldGraph = { baseUpdatedAt: string; doc: WorldGraphDocument };
+type Saved = SavedWorldGraph;
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -108,5 +109,16 @@ export class BrowserMapStore {
   /** Forget local changes; the next load uses the shipped map. */
   static async clearSaved(): Promise<void> {
     await idb("readwrite", (s) => s.delete(KEY));
+  }
+
+  /** Current graph for export (flushes pending saves first). */
+  async exportSnapshot(): Promise<SavedWorldGraph> {
+    await this.flush();
+    return { baseUpdatedAt: this.baseUpdatedAt, doc: this.map.doc };
+  }
+
+  /** Replace the saved learned map (used after config import). */
+  static async importSaved(record: SavedWorldGraph): Promise<void> {
+    await idb("readwrite", (s) => s.put(record, KEY));
   }
 }
