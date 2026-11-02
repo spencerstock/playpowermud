@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Powermud game reference — structure mirrored from mudwithme GAME_REFERENCE.md." />
-    <title>Game reference overview — Play Powermud wiki</title>
+    <meta name="description" content="Powermud game wiki — world, characters, items, quests, and help topics." />
+    <title>Game wiki home — Play Powermud wiki</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/wiki/wiki.css" />
   </head>
@@ -22,48 +22,52 @@
 
     <main class="wiki-main" id="wiki-main">
 
-      <h2>Game reference overview</h2>
+      <h2>Powermud game wiki</h2>
       <p class="wiki-lede">
-        Player knowledge from the mudwithme corpus (<code>docs/powermud/</code>, <code>docs/world/</code>, help pulls, JSON caches).
-        Tooling docs (<code>bots.md</code>, agents, MCP) are out of scope for this wiki.
+        Player-written notes and copied in-game help, grouped like a classic MUD wiki.
+        Pages are still being filled in — when in doubt, check Powermud with <code>help</code> and your own map.
       </p>
 
-      <h3>Hub and entry points (mudwithme)</h3>
-      <table>
-        <thead><tr><th>Source</th><th>Role</th></tr></thead>
-        <tbody>
-          <tr><td><code>AGENT_CONTEXT.md</code></td><td>Agent playbook (Zim session rules, spells, pitfalls) — not reproduced here.</td></tr>
-          <tr><td><code>docs/powermud/README.md</code></td><td>Canonical index of imported player files, provenance, Underhanded merges.</td></tr>
-        </tbody>
-      </table>
-
-      <h3><code>docs/powermud/</code> corpus</h3>
+      <h3>World</h3>
       <ul>
-        <li><a href="/wiki/reference/items-and-equipment.html">Items &amp; equipment</a> — catalogs, drops, sac/plus, verified sources</li>
-        <li><a href="/wiki/reference/characters-and-stats.html">Characters &amp; stats</a> — builds, ranks, professions</li>
-        <li><a href="/wiki/reference/combat.html">Combat</a> — damage words, stun, dragon/battlemage notes</li>
-        <li><a href="/wiki/reference/quests-corpus.html">Quests corpus</a> — lists, requirements, clues (not full walkthroughs)</li>
-        <li><a href="/wiki/reference/guides.html">Guides</a> — legacy doctor notes, spell compatibility, components</li>
-        <li><a href="/wiki/reference/world-and-directions.html">World &amp; directions</a> — Threshold, zones, HTML/txt route dumps</li>
-      </ul>
-      <p>Also in corpus: <code>code-and-functions/</code> (LPC name dump), <code>client/</code> (Ashavar AL Client archives), <code>misc/</code>, <code>archives/</code> (original zips).</p>
-
-      <h3>Curated <code>help/</code></h3>
-      <p>Agent-maintained in-game help — <a href="/wiki/reference/spells.html">spells &amp; help index</a> links every topic page.</p>
-
-      <h3>Explored world &amp; caches</h3>
-      <ul>
-        <li><a href="/wiki/reference/explored-world.html">Explored world</a> — live map vs static PM dumps</li>
-        <li><a href="/wiki/reference/data-caches.html">Data caches</a> — JSON observation files</li>
+        <li><a href="/wiki/reference/world-and-directions.html">World overview</a> — Threshold, zone notes, route archives</li>
+        <li><a href="/wiki/reference/explored-world.html">Explored map data</a> — the shared world graph and your personal map</li>
+        <li><a href="/wiki/client/map.html">Using the in-browser map</a> — how Play Powermud tracks rooms</li>
       </ul>
 
-      <h3>Mental model</h3>
-      <pre>AGENT_CONTEXT ──┬── docs/world/ (explored map)
-                    ├── docs/powermud/ (imported corpus + help/)
-                    └── data/powermud/*.json (caches)
+      <h3>Characters</h3>
+      <ul>
+        <li><a href="/wiki/reference/help/races.html">Races</a> — from <code>help races</code></li>
+        <li><a href="/wiki/reference/characters-and-stats.html">Stats &amp; builds</a> — ranks, professions, sample sheets</li>
+        <li><a href="/wiki/reference/help/battlemage.html">Battlemages</a> — guild help plus community join notes</li>
+      </ul>
 
-playpowermud ─────── shipped powermud.graph.json + your IndexedDB map
-                    known-players.json (comms filter)</pre>
+      <h3>Items &amp; combat</h3>
+      <ul>
+        <li><a href="/wiki/reference/items-and-equipment.html">Items &amp; equipment</a> — catalogs, plus items, shops</li>
+        <li><a href="/wiki/reference/combat.html">Combat</a> — damage words, stun notes, dragon tips</li>
+        <li><a href="/wiki/reference/help/pk-areas.html">PK areas</a> — where player killing is allowed</li>
+      </ul>
+
+      <h3>Quests &amp; crafting</h3>
+      <ul>
+        <li><a href="/wiki/reference/help/quests.html">Quest system</a> — how quests work in game</li>
+        <li><a href="/wiki/reference/quests-corpus.html">Quest notes &amp; clues</a> — lists and hooks (not full walkthroughs)</li>
+        <li><a href="/wiki/reference/help/herbs-doctor.html">Herbs &amp; doctor</a> — harvesting and the doctor profession</li>
+        <li><a href="/wiki/reference/guides.html">Player guides</a> — spell combos, area components, legacy doctor notes</li>
+      </ul>
+
+      <h3>Spells &amp; help</h3>
+      <ul>
+        <li><a href="/wiki/reference/spells.html">Help topic index</a> — what we have on the wiki so far</li>
+        <li><a href="/wiki/reference/help/eset.html">Colors (<code>eset</code>)</a> — ANSI and channel colors</li>
+      </ul>
+
+      <h3>About these pages</h3>
+      <ul>
+        <li><a href="/wiki/reference/content-notes.html">Spoilers &amp; sources</a> — what is sensitive or unofficial</li>
+        <li><a href="/wiki/reference/data-caches.html">Behind the scenes data</a> — JSON files the client uses</li>
+      </ul>
 
     </main>
 

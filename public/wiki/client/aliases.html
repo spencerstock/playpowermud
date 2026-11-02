@@ -44,10 +44,10 @@
         <li><strong>Trailing args</strong> — a one-word alias can take the rest of the line (<code>/alias bs backstab</code> → <code>bs orc</code> sends <code>backstab orc</code>).</li>
         <li><strong>Prefix args</strong> — name the alias <code>NAME $1$</code> and use <code>$1$</code> in the body for the words after the command (e.g. <code>/alias ca $1$ cast stoneskin on $1$</code>).</li>
         <li><strong>Nesting</strong> — aliases can call other aliases; cycles return an error instead of looping.</li>
-        <li><strong>zScript</strong> — bodies containing <code>#</code> run a small Mudlet-style subset (timing/actions mudwithme supports).</li>
+        <li><strong>zScript</strong> — bodies containing <code>#</code> run a small Mudlet-style subset (limited timing and action lines).</li>
       </ul>
       <p class="wiki-callout wiki-callout-warn">
-        Smart-alias markers from mudwithme are <strong>not</strong> supported here — those expansions are blocked.
+        Special “smart alias” marker strings from other clients are <strong>not</strong> supported here — those expansions are blocked for safety.
       </p>
 
       <h3>Autocomplete</h3>

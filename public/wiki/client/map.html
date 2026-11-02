@@ -22,7 +22,7 @@
 
     <main class="wiki-main" id="wiki-main">
       <h2>World map</h2>
-      <p class="wiki-lede">Live mapper while you play — same graph engine as mudwithme, running entirely in the browser.</p>
+      <p class="wiki-lede">Live mapper while you play — builds a world graph from room text, entirely in your browser.</p>
 
       <h3>Open the map</h3>
       <ul>
@@ -48,7 +48,7 @@
       <h3>Shipped map vs your discoveries</h3>
       <p>
         The site ships a Powermud world graph at
-        <code>/data/powermud.graph.json</code> (copied from mudwithme). As you explore, new rooms and
+        <code>/data/powermud.graph.json</code> (a community baseline). As you explore, new rooms and
         links merge into your local copy. If a newer shipped file arrives (newer
         <code>updatedAt</code>), it replaces your local base.
       </p>
@@ -59,7 +59,7 @@
       <ul>
         <li>Identifies rooms by title, exits, and description (brief and verbose <code>look</code> map to the same room).</li>
         <li>Learns compass, vertical, named, and secret exits as you traverse them.</li>
-        <li>Re-localizes when dead reckoning disagrees with room text (same algorithm as mudwithme hub).</li>
+        <li>Re-localizes when dead reckoning disagrees with room text, so the pin stays on the right room.</li>
         <li>Periodically heals duplicate rooms and bad links (on load and as you move).</li>
       </ul>
       <h3>Updating the shipped graph</h3>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="JSON observation files." />
-    <title>Data caches — Play Powermud wiki</title>
+    <meta name="description" content="JSON data files used by Play Powermud." />
+    <title>Behind the scenes data — Play Powermud wiki</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/wiki/wiki.css" />
   </head>
@@ -22,17 +22,21 @@
 
     <main class="wiki-main" id="wiki-main">
 
-      <h2>Data caches</h2>
-      <p class="wiki-lede"><code>data/powermud/*.json</code> in mudwithme; playpowermud ships a subset for the client.</p>
+      <h2>Behind the scenes data</h2>
+      <p class="wiki-lede">
+        A few small JSON files ship with the site to improve the client. You do not need to edit them to play.
+      </p>
       <table>
-        <thead><tr><th>File</th><th>Purpose</th><th>playpowermud</th></tr></thead>
+        <thead><tr><th>File</th><th>What it does</th></tr></thead>
         <tbody>
-          <tr><td><code>known-players.json</code></td><td>Staff/admin names for social awareness</td><td>Shipped under <code>data/powermud/</code>; comms panel uses it to filter room says</td></tr>
-          <tr><td><code>discovered-players.json</code></td><td>Players seen via announce/who</td><td>mudwithme hub only</td></tr>
-          <tr><td><code>atmosphere-commands.json</code></td><td>Full souls/emotes list</td><td>mudwithme only</td></tr>
-          <tr><td><code>npc-gauge-results.json</code></td><td>Cached <code>gauge</code> output</td><td>mudwithme only</td></tr>
+          <tr><td><code>known-players.json</code></td><td>Staff and admin names — the comms panel uses this so room <code>say</code> lines from staff are easier to spot</td></tr>
+          <tr><td><code>powermud.graph.json</code></td><td>Starting world map — see <a href="/wiki/reference/explored-world.html">Explored map data</a></td></tr>
         </tbody>
       </table>
+      <p>
+        Other observation files (full emote lists, NPC <code>gauge</code> caches, and similar) are kept for
+        reference when building wiki pages; they are not loaded by the public client today.
+      </p>
 
     </main>
 

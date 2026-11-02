@@ -1,9 +1,9 @@
 const SKIN_LS = "playpowermud-skin";
 
-/** Single source for wiki navigation (mirrors mudwithme docs/GAME_REFERENCE.md). */
+/** Single source for wiki sidebar navigation. */
 const WIKI_NAV_SECTIONS = [
   {
-    title: "Client",
+    title: "Using the client",
     links: [
       ["Getting started", "/wiki/client/getting-started.html"],
       ["Terminal & colors", "/wiki/client/terminal.html"],
@@ -13,30 +13,50 @@ const WIKI_NAV_SECTIONS = [
     ],
   },
   {
-    title: "Game reference",
+    title: "World",
     links: [
-      ["Overview", "/wiki/reference/"],
-      ["Items & equipment", "/wiki/reference/items-and-equipment.html"],
-      ["Characters & stats", "/wiki/reference/characters-and-stats.html"],
-      ["Combat", "/wiki/reference/combat.html"],
-      ["Quests corpus", "/wiki/reference/quests-corpus.html"],
-      ["Guides", "/wiki/reference/guides.html"],
-      ["World & directions", "/wiki/reference/world-and-directions.html"],
-      ["Explored world", "/wiki/reference/explored-world.html"],
-      ["Data caches", "/wiki/reference/data-caches.html"],
-      ["Spells & help index", "/wiki/reference/spells.html"],
-      ["Content notes", "/wiki/reference/content-notes.html"],
+      ["World overview", "/wiki/reference/world-and-directions.html"],
+      ["Explored map data", "/wiki/reference/explored-world.html"],
     ],
   },
   {
-    title: "Help topics",
+    title: "Characters",
     links: [
-      ["Herbs & doctor", "/wiki/reference/help/herbs-doctor.html"],
-      ["Quest system", "/wiki/reference/help/quests.html"],
-      ["PK areas", "/wiki/reference/help/pk-areas.html"],
       ["Races", "/wiki/reference/help/races.html"],
+      ["Stats & builds", "/wiki/reference/characters-and-stats.html"],
       ["Battlemages", "/wiki/reference/help/battlemage.html"],
-      ["Eset & ANSI", "/wiki/reference/help/eset.html"],
+    ],
+  },
+  {
+    title: "Items & combat",
+    links: [
+      ["Items & equipment", "/wiki/reference/items-and-equipment.html"],
+      ["Combat", "/wiki/reference/combat.html"],
+      ["PK areas", "/wiki/reference/help/pk-areas.html"],
+    ],
+  },
+  {
+    title: "Quests & crafting",
+    links: [
+      ["Quest system", "/wiki/reference/help/quests.html"],
+      ["Quest notes & clues", "/wiki/reference/quests-corpus.html"],
+      ["Herbs & doctor", "/wiki/reference/help/herbs-doctor.html"],
+      ["Player guides", "/wiki/reference/guides.html"],
+    ],
+  },
+  {
+    title: "Spells & help",
+    links: [
+      ["Help topic index", "/wiki/reference/spells.html"],
+      ["Colors (eset)", "/wiki/reference/help/eset.html"],
+    ],
+  },
+  {
+    title: "About this wiki",
+    links: [
+      ["Game wiki home", "/wiki/reference/"],
+      ["Spoilers & sources", "/wiki/reference/content-notes.html"],
+      ["Behind the scenes data", "/wiki/reference/data-caches.html"],
     ],
   },
 ];

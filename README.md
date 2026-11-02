@@ -10,7 +10,7 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
 - **Comms** — tells, says, and shouts in the side panel (Option+C), kept per character.
 - **Map** — the shipped Powermud world graph with live position tracking, level/plane view,
   search and a room inspector (Option+M). What you map is saved in this browser (IndexedDB).
-- **Wiki** — [/wiki](/wiki): **Client** (browser help) and **Game reference** (from mudwithme `docs/GAME_REFERENCE.md` / `docs/powermud/`).
+- **Wiki** — [/wiki](/wiki): **Using the client** and **Powermud game wiki** (world, characters, items, quests, help topics).
 
 ## Run locally
 
