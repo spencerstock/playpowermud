@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Powermud beginner's guide: first steps, races, guilds, combat, healing, hunting spots, money and dangers." />
+    <title>Beginner's guide — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+    <main class="wiki-main" id="wiki-main">
+<h2>Powermud Beginner's Guide</h2>
+<p class="wiki-lede">How to start, survive, level, make money and stay out of trouble in Powermud, with an overview of all 12 races and 24 guilds. Tips from other players are marked as unverified.</p>
+<h3>Contents</h3>
+<ul><li><a href="#about">What Powermud is</a></li><li><a href="#first-hour">Your first hour</a></li><li><a href="#commands">Essential commands</a></li><li><a href="#prompt">Reading your prompt</a></li><li><a href="#races">Races</a></li><li><a href="#stats">Stats, restat and hometowns</a></li><li><a href="#guilds">Guilds</a></li><li><a href="#race-guild">Which race for which guild</a></li><li><a href="#professions">Professions</a></li><li><a href="#houses">Drow houses and Bey-Sandrax</a></li><li><a href="#combat">Combat basics</a></li><li><a href="#healing">Healing and resting</a></li><li><a href="#death">Death and getting lost</a></li><li><a href="#training">Training skills</a></li><li><a href="#hunting">Where to hunt</a></li><li><a href="#travel">Getting around</a></li><li><a href="#money">Money, selling and gear</a></li><li><a href="#dangers">Dangers to avoid</a></li><li><a href="#community">Community and etiquette</a></li><li><a href="#leads">Tips to explore</a></li></ul>
+
+<h3 id="about">What Powermud is</h3>
+<p>Powermud is a fantasy LPMud that has been running since 1993. You play it by typing commands in a text world of cities, dungeons and wilderness, with two dozen guilds, professions, magic and other players.</p>
+<ul><li><strong>Server:</strong> <code>powermud.com</code> port <code>2000</code> (telnet, no SSL)</li><li><strong>Clients:</strong> Any MUD client works, for example Mudlet, MUSHclient, TinTin++ or Blightmud.</li><li><strong>New account:</strong> Type a new user name at the login prompt, then <code>create &lt;name&gt;</code>. Names are letters only.</li><li><strong>Fresh start:</strong> Every old character was archived on 25 Oct 2026, so everyone is new.</li><li><strong>Colour:</strong> Turn ANSI on. If tells and says look wrong, use <code>eset</code> to fix the colours.</li></ul>
+
+<h3 id="first-hour">Your first hour</h3>
+<ol><li><strong>Create your character.</strong> Choose a race that fits the guild you want later (see Which race for which guild). 'none' is accepted for the real name and email questions.</li><li><strong>Gear up with Pete.</strong> You start in the Newbie Arena. <code>say equip me</code> gets you a torch, leather armour, a small dagger, mace and sword, and 50 drakaan.</li><li><strong>Wear and wield two weapons.</strong> <code>wear all</code>, then wield two weapons. Sword trains slash, mace blunt, dagger pierce. Pick the skill your future guild keeps.</li><li><strong>Get blessed.</strong> <code>say bless me</code>. Ask again when you see 'You lose your blessed feeling.' Use <code>say heal me</code> when you're hurt. You have to <code>say</code> these.</li><li><strong>Fight rats.</strong> Go north and <code>kill rat</code>. Afterwards, <code>get all from corpse</code> and optionally <code>bury corpse</code>.</li><li><strong>Train.</strong> <code>skills</code> shows your skills, <code>cost</code> shows prices and <code>train all</code> at Pete raises them. A new character can go from 1 to almost 500 exp in about 20 minutes.</li><li><strong>Try the Academy.</strong> The official newbie guide points to the PowerMud Academy, down and north from Pete, for free exp and coins.</li><li><strong>Leave at 500 exp.</strong> At 500 exp the arena moves you out. Use <code>restat</code> first if you want it, then find a guild.</li></ol>
+<div class="wiki-callout"><strong>Don't fight outside the arena yet.</strong> Brand-new characters who fight outside the arena will probably be killed.</div>
+
+<h3 id="commands">Essential commands</h3>
+<table>
+<thead><tr><th>Command</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><code>look</code> / <code>l at &lt;thing&gt;</code></td><td>Room description, or a closer look at an object. Read every room: hidden exits are hinted there.</td></tr>
+<tr><td><code>score</code> / <code>sscore</code></td><td>Your stats, exp, hometown, alignment and wealth</td></tr>
+<tr><td><code>i</code> / <code>equip</code></td><td>Inventory, and what you're wearing and wielding</td></tr>
+<tr><td><code>skills</code> / <code>skills -p</code></td><td>Your skill levels and skill exp</td></tr>
+<tr><td><code>effects</code></td><td>Your active buffs and their strength</td></tr>
+<tr><td><code>who</code> / <code>finger &lt;name&gt;</code></td><td>Who's online (ghosts show [ GHOST! ]), and info on one player</td></tr>
+<tr><td><code>kill &lt;mob&gt;</code> / <code>flee</code></td><td>Start a fight, or try to run</td></tr>
+<tr><td><code>wimpy</code></td><td>Automatic flee threshold. 40% is a good setting.</td></tr>
+<tr><td><code>gauge &lt;npc&gt;</code></td><td>Rates an NPC's skills, not how dangerous it is</td></tr>
+<tr><td><code>judge &lt;item&gt;</code></td><td>Rates a weapon or armour, for example at Willen Noggler's in Threshold</td></tr>
+<tr><td><code>rest now</code> / <code>wake</code> / <code>stand</code></td><td>Resting trance for fast SP. You have to wake and stand afterwards.</td></tr>
+<tr><td><code>list</code> / <code>buy</code> / <code>sell all</code></td><td>Shop or waiter menu, buying, and selling everything you carry that isn't worn</td></tr>
+<tr><td><code>uptime</code> / <code>time</code></td><td>How long the MUD has been up (used for respawns), and day or night (some shops close at night)</td></tr>
+<tr><td><code>quests list</code> / <code>quests breakdown</code></td><td>Open quests and the exp each one recommends</td></tr>
+<tr><td><code>homeland</code></td><td>Teleports you to your hometown, but only at 4,000 exp or less</td></tr>
+<tr><td><code>help &lt;topic&gt;</code> / <code>guildhelp</code></td><td>In-game help. Try <code>help newbie</code>, <code>help races</code>, <code>help guilds</code>, <code>help &lt;guild&gt;</code>, <code>help professions</code>, <code>help alignment</code>.</td></tr>
+<tr><td><code>alias &lt;name&gt; &lt;cmds&gt;</code></td><td>Your own shortcuts. Separate commands with <code>;</code>, for example <code>alias cb medallion bless</code>.</td></tr>
+<tr><td><code>secure &lt;item&gt;</code></td><td>Toggles [SECURE] so you don't sell or drop it by accident</td></tr>
+</tbody>
+</table>
+
+<h3 id="prompt">Reading your prompt</h3>
+<p>An example prompt: <code>[HP: 600(600(100%)) SP: 62(200(31%)) XP: 21270(730(36%)) Cash: 885(29370)]</code></p>
+<ul><li><strong>HP:</strong> Current (max (percent)). Constitution and total exp raise your max.</li><li><strong>SP:</strong> Spell or skill points. Openers like <code>assassinate</code> cost 5. Below about 3 you get 'too fatigued', so rest.</li><li><strong>XP:</strong> Total experience, followed by a progress counter that shrinks as you gain exp. Total exp decides your title, max HP, guild joining (500), item save levels (1,000 for magic gear) and <code>homeland</code> (4,000 or less).</li><li><strong>Cash:</strong> Drakaan you're carrying (drakaan in the bank)</li></ul>
+
+<h3 id="races">Races</h3>
+<p class="wiki-lede">From the in-game race help files. 'Experienced' races are flagged by the game as for experienced players only.</p>
+<table>
+<thead><tr><th>Race</th><th>Above average</th><th>Below average</th><th>Resistances</th></tr></thead>
+<tbody>
+<tr><td>Human</td><td>Nothing</td><td>Nothing</td><td>None</td></tr>
+<tr><td>Elf</td><td>Int, Dex</td><td>Str, Con</td><td>Enchant (extremely high), Illusion (medium), Dragonfear (low)</td></tr>
+<tr><td>Half-Elf</td><td>Wis</td><td>Cha</td><td>Enchant (high), Illusion (low)</td></tr>
+<tr><td>Drow (experienced)</td><td>Int, Dex</td><td>Str, Con</td><td>Enchant (extremely high), Illusion (low), Dragonfear (medium)</td></tr>
+<tr><td>Gnome</td><td>Int</td><td>Str, Wis</td><td>Enchant (very high), Illusion (very high)</td></tr>
+<tr><td>Svirfneblin (experienced)</td><td>Int</td><td>Cha</td><td>Enchant (very high), Illusion (very high)</td></tr>
+<tr><td>Dwarf</td><td>Str, Con</td><td>Int, Cha</td><td>Enchant (high), Illusion (low), Poison (medium), Dragonfear (medium)</td></tr>
+<tr><td>Duergar (experienced)</td><td>Str, Con</td><td>Int, Cha</td><td>Enchant (extremely high), Illusion (medium), Poison (medium), Dragonfear (medium)</td></tr>
+<tr><td>Halfling</td><td>Dex, Cha</td><td>Str, Wis</td><td>None listed</td></tr>
+<tr><td>Half-Orc</td><td>Str, Con</td><td>Int, Cha</td><td>Dragonfear (low)</td></tr>
+<tr><td>Half-Ogre</td><td>Str, Con (exceptional)</td><td>Int, Wis, Cha (exceptionally low), Dex</td><td>Dragonfear (high)</td></tr>
+<tr><td>Minotaur (experienced)</td><td>Str (exceptional), Con</td><td>Wis, Cha (very low)</td><td>Dragonfear (high)</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Human</strong> — Average at everything and the widest guild choice of any race (13 guilds, including Knights, Monks, Northmen and Battlemages). The safest pick for a first character.</li><li><strong>Elf</strong> — Good and nature-loving; home city Elinost and the Great Forest. Natural infravision. Joins the Elite, Priests of Eli, Bastion and Rangers.</li><li><strong>Half-Elf</strong> — Mixes with both races; the second-widest guild list (10), from Militia to Bastion to Battlemages.</li><li><strong>Drow</strong> — Purely evil Underdark elves of Nal Shaddar who worship Loth and hate elves. They see in the dark without light, and drow belong to noble houses. Guilds split by gender: males Melee-Magthere, females Arach-Tillith.</li><li><strong>Gnome</strong> — Tinkers and gem-cutters with very high illusion resistance; natural Illusionists.</li><li><strong>Svirfneblin</strong> — Deep gnomes of the Underdark, good miners, mostly with illusionist talent.</li><li><strong>Dwarf</strong> — Stout warriors who love gold and hate orcs and goblins. Natural Stronghold Honor Guard, also Church of Kertaine.</li><li><strong>Duergar</strong> — Evil, half-mad Underdark dwarves of Dunkrist, sometimes allied with drow. Homeguard or Dark Trinity.</li><li><strong>Halfling</strong> — High Dex makes picking locks, pockets and hiding easy. Thief, Assassin, Merchant, Church or Rangers.</li><li><strong>Half-Orc</strong> — Strong outcasts; a solid fit for Militia, Battlemages, Cult or Assassin.</li><li><strong>Half-Ogre</strong> — The strongest and toughest race, with the weakest minds; tends toward evil. Militia, Cult, Disciples, Thief or Assassin.</li><li><strong>Minotaur</strong> — Sea-faring bull-men. Only special helmets fit over the horns. Mariner is their own guild; Battlemages also take them.</li></ul>
+<ul><li>Infravision: elves have it naturally, and Underdark races (drow, duergar, svirfneblin) see better in the dark than an elf. The Alteration spell Infravision gives elf-level dark vision to anyone.</li><li>Alignment is Good, Neutral or Evil and shifts with what you kill: killing something of your own alignment pushes you toward the opposite. <code>score</code> shows it. Monks are strongest when neutral.</li><li>Some cities' NPCs attack certain races on sight, so check how a city treats your race before walking in.</li></ul>
+
+<h3 id="stats">Stats, restat and hometowns</h3>
+<table>
+<thead><tr><th>Stat</th><th>Average</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Constitution</td><td>12</td><td>HP, and how fast HP grows. 'Vitally important to everyone.'</td></tr>
+<tr><td>Strength</td><td>11</td><td>Damage, carrying weight, doors and obstacles</td></tr>
+<tr><td>Dexterity</td><td>11</td><td>Dodging, reacting to surprises, ranged accuracy</td></tr>
+<tr><td>Intelligence</td><td>10</td><td>Higher-level spells, casting checks, seeing through illusions</td></tr>
+<tr><td>Wisdom</td><td>11</td><td>Resistance to magical attack</td></tr>
+<tr><td>Charisma</td><td>-</td><td>Shop prices when haggling; some creatures react badly to low Charisma</td></tr>
+</tbody>
+</table>
+<ul><li><code>restat</code> only works in the Adventurer's Guild, with at least 1 exp, before you join a guild, at 900 exp or less, and at most 3 times. It shows your race's stat ranges. Set it to beat your target guild's minimums.</li><li>Hometowns: Kalinport, Deepwater and Threshold, plus Jaarmin Keep, Dunagin and Zahkar for advanced players. Pick one near your guild, because <code>homeland</code> takes you there. Some hometowns grant special abilities, and you can change hometown later.</li></ul>
+
+<h3 id="guilds">Guilds</h3>
+<p class="wiki-lede">From the in-game guild help files and the official site. Join at 500+ exp (Merchants are the exception); at the recruiter, type <code>info</code> for the joining task.</p>
+<h4>Fighters</h4>
+<table>
+<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Threshold Militia</td><td>Human, Half-Elf, Half-Orc, Half-Ogre</td><td>Str 14, Con 13</td><td>Threshold</td></tr>
+<tr><td>Knights of Nereka</td><td>Human</td><td>Str 16, Con 15</td><td>Castle Brightsword, Plains of Nereka</td></tr>
+<tr><td>Elinost Elite</td><td>Elf</td><td>Str 15, Dex 15</td><td>Elinost (the Merevia branch doesn't take joiners)</td></tr>
+<tr><td>Stronghold Honor Guard</td><td>Dwarf</td><td>Str 15, Con 14</td><td>Kal-Thax Stronghold, or Kelton on Merevia</td></tr>
+<tr><td>Dunkrist Homeguard</td><td>Duergar</td><td>Str 15, Con 13</td><td>Dunkrist</td></tr>
+<tr><td>Melee-Magthere</td><td>Drow (males)</td><td>Dex 15, Str 14</td><td>Nal Shaddar</td></tr>
+<tr><td>Northmen</td><td>Human (males)</td><td>Str 17, Con 15, Dex 14</td><td>Northwest of Cerene</td></tr>
+<tr><td>Mariner</td><td>Minotaur</td><td>Str 16, Dex 15</td><td>Minot</td></tr>
+<tr><td>Monks of Aber</td><td>Human</td><td>Str 15, Wis 15, Dex 15, Con 11</td><td>Absinthe Mountains, between Threshold and Kal-Thax</td></tr>
+<tr><td>Highlander Clan</td><td>Human</td><td>Str 15, Con 15, Wis 12, Int 12</td><td>Highlands, Plains of Nereka</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Threshold Militia</strong> — Town defenders with charging, dual wield and offhand. Members pay less for most Threshold services. An easy first guild for a human-ish fighter.</li><li><strong>Knights of Nereka</strong> — Mounted knights with riding, lancing, shield bash, triple attack and advanced defense. Three orders (Circle, Blade, Kingfisher); the top order gets clerical spells from Kertaine. The knighthood distrusts non-clerical magic.</li><li><strong>Elinost Elite</strong> — Guards of the Speaker of the Moon. Advanced melee, dual and offhand, plus hide and sneak.</li><li><strong>Stronghold Honor Guard</strong> — Dwarven defenders with dual, triple, offhand and advanced melee.</li><li><strong>Dunkrist Homeguard</strong> — Ambush fighters: backstab, dual, unarmed dual and triple, and epic slash, blunt and unarmed.</li><li><strong>Melee-Magthere</strong> — Drow warrior school: dual, advanced melee and unarmed, hide, sneak and backstab.</li><li><strong>Northmen</strong> — Barbarians of Bhalt with natural defense, unarmed up to quadruple and epic slash. For experienced players.</li><li><strong>Mariner</strong> — Sailors and brawlers: sailing, fishing, unarmed up to quadruple, epic pierce. Bonus to sailing and resistance to water damage. For experienced players.</li><li><strong>Monks of Aber</strong> — Unarmed masters (up to quadruple), evasion, hide, sneak and natural defense. Very limited armour. Strongest when neutral; they regenerate without food or drink.</li><li><strong>Highlander Clan</strong> — Immortal swordsmen. Help says the clan is closed to new members.</li></ul>
+<h4>Stealth</h4>
+<table>
+<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Thieves' Guild</td><td>All 12 races</td><td>Dex 15</td><td>Threshold; branches in Deepwater, Jaarmin Keep, Kalinport</td></tr>
+<tr><td>Assassin's Guild</td><td>Human, Half-Elf, Half-Orc, Half-Ogre, Halfling, Drow, Duergar, Gnome, Minotaur, Svirfneblin</td><td>Dex 17, Str 15</td><td>Kalinport (under the Dune Ave manhole); branch in Dunkrist</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Thieves' Guild</strong> — Pickpockets and backstabbers: larceny, extortion, spying, dirty fighting, backstab, hide, sneak.</li><li><strong>Assassin's Guild</strong> — The School of Stealth: hide, sneak, assassination, dodging, offhand. Dinien recruits and trains in Kalinport. Hide costs 750 and assassinate 2,000 drakaan to learn. For experienced players.</li></ul>
+<h4>Hybrids</h4>
+<table>
+<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Celtian Battlemages</td><td>Human, Half-Elf, Half-Orc, Minotaur</td><td>Int 15, Con 13, Str 11, Dex 11, Wis 10</td><td>Gloriath Castle, north of Dunagin</td></tr>
+<tr><td>Rangers</td><td>Human, Half-Elf, Elf, Halfling</td><td>Dex 15, Wis 14, Con 13, Str 13</td><td>Great Forest (west of Threshold, east of Elinost), southern Merevia</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Celtian Battlemages</strong> — Fighter-wizards with slash, blunt, pierce and ranged plus Alteration, Conjuration, Divination and Evocation. Join by bringing the quill pen from the Receiving Clerk at the Dunagin docks. Spells include Burning Hands (10 SP), Shocking Grasp (15), Fireball (45) and Blade Circle (60).</li><li><strong>Rangers</strong> — Followers of Felli: ranged and two-weapon fighting without penalty, plus skinning, fishing, cooking, fire starting, riding and woodworking. No guild house; recruiters are Rexiate (woods west of Threshold), Lorn (forests east of Elinost) and Greeu (southern shore of Merevia). For experienced players.</li></ul>
+<h4>Mages</h4>
+<table>
+<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Bastion of High Sorcery</td><td>Human, Elf, Half-Elf</td><td>Int 15, Wis 13</td><td>A moving tower; look for an Obsidian Mirror in the forests west of Threshold (a second is rumoured south of Elinost)</td></tr>
+<tr><td>Sorcere</td><td>Drow</td><td>Int 15, Wis 14, Dex 13</td><td>Nal Shaddar</td></tr>
+<tr><td>Illusionists</td><td>Gnome, Svirfneblin</td><td>Dex 15, Int 14</td><td>Gnomish Citadel, Granei</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Bastion of High Sorcery</strong> — The strongest general wizards, with seven schools including Enchantment and Illusion, plus scribing.</li><li><strong>Sorcere</strong> — Drow mage school with seven schools of magic.</li><li><strong>Illusionists</strong> — Tricksters: Illusion, Conjuration, Divination, Alteration and Enchantment, with dodging.</li></ul>
+<h4>Clerics</h4>
+<table>
+<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Church of Kertaine</td><td>Human, Half-Elf, Half-Orc, Halfling, Dwarf</td><td>Wis 14, Int 11</td><td>Main church in Deepwater; also Threshold (Kalinport's doesn't take joiners)</td></tr>
+<tr><td>Cult of Be'juak</td><td>Human, Half-Elf, Half-Orc, Half-Ogre</td><td>Wis 14, Dex 13, Int 12</td><td>Kalinport Ruins, Threshold Catacombs</td></tr>
+<tr><td>Priests of Eli</td><td>Elf</td><td>Wis 15, Dex 15, Int 13</td><td>The Life Tree, south of Elinost</td></tr>
+<tr><td>Arach-Tillith</td><td>Drow (females)</td><td>Wis 16, Int 13</td><td>Nal Shaddar</td></tr>
+<tr><td>Dark Trinity</td><td>Duergar</td><td>Wis 14, Str 14</td><td>Dunkrist</td></tr>
+<tr><td>Disciples of Xenei</td><td>Human, Half-Elf, Half-Orc, Half-Ogre</td><td>Wis 10, Int 10</td><td>Jaarmin Keep</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Church of Kertaine</strong> — Clerics of Kertaine: faith, blunt, ranged; Necromancy, Abjuration, Conjuration, Divination.</li><li><strong>Cult of Be'juak</strong> — Evil clerics whose patron grants spells of disease and destruction.</li><li><strong>Priests of Eli</strong> — Nature priests who fight evil in the forests; faith plus hide, slash and pierce.</li><li><strong>Arach-Tillith</strong> — Priestesses of Loth, with dual wield and faith.</li><li><strong>Dark Trinity</strong> — Priests of Remoah with healing and cursing spells.</li><li><strong>Disciples of Xenei</strong> — A political order that governs Jaarmin Keep. Low stat bar. For experienced players.</li></ul>
+<h4>Trade</h4>
+<table>
+<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Merchant's Guild</td><td>All</td><td>Cha 11, Int 10</td><td>Kalinport, Deepwater, Kal-Thax, Nal Shaddar, Dunkrist, Granei</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Merchant's Guild</strong> — Haggling, appraising, brewing potions, alchemy and concoctions; sells at much better rates. The only guild you can join before 500 exp. For experienced players.</li></ul>
+<div class="wiki-callout"><strong>Skills don't always carry over.</strong> Some skills stop working when you join a guild. For example, a mage guild loses Slash, so check <code>help &lt;guild&gt;</code> before you train a weapon type in the arena. Blunt and Pierce carry into almost every guild.</div>
+
+<h3 id="race-guild">Which race for which guild</h3>
+<p class="wiki-lede">The joinable-guilds list from <code>help guilds</code>.</p>
+<table>
+<thead><tr><th>Race</th><th>Guilds it can join</th></tr></thead>
+<tbody>
+<tr><td>Human</td><td>Militia, Thief, Knights of Nereka, Church of Kertaine, Bastion, Merchant, Assassin, Cult of Be'juak, Northmen, Monks of Aber, Rangers, Disciples of Xenei, Battlemages</td></tr>
+<tr><td>Half-Elf</td><td>Militia, Thief, Bastion, Assassin, Church of Kertaine, Cult of Be'juak, Merchant, Rangers, Disciples of Xenei, Battlemages</td></tr>
+<tr><td>Half-Orc</td><td>Militia, Thief, Church of Kertaine, Cult of Be'juak, Assassin, Merchant, Disciples of Xenei, Battlemages</td></tr>
+<tr><td>Half-Ogre</td><td>Militia, Thief, Cult of Be'juak, Assassin, Merchant, Disciples of Xenei</td></tr>
+<tr><td>Elf</td><td>Priests of Eli, Merchant, Thief, Elinost Elite, Bastion, Rangers</td></tr>
+<tr><td>Drow</td><td>Sorcere, Merchant, Melee-Magthere (males), Arach-Tillith (females), Thief, Assassin</td></tr>
+<tr><td>Duergar</td><td>Dunkrist Homeguard, Merchant, Assassin, Dark Trinity, Thief</td></tr>
+<tr><td>Dwarf</td><td>Stronghold Honor Guard, Merchant, Thief, Church of Kertaine</td></tr>
+<tr><td>Gnome</td><td>Illusionist, Merchant, Thief, Assassin</td></tr>
+<tr><td>Svirfneblin</td><td>Merchant, Illusionist, Thief, Assassin</td></tr>
+<tr><td>Halfling</td><td>Thief, Merchant, Assassin, Church of Kertaine, Rangers</td></tr>
+<tr><td>Minotaur</td><td>Merchant, Thief, Assassin, Mariner, Battlemages</td></tr>
+</tbody>
+</table>
+<ul><li><strong>Want to hit things?</strong> — Human Militia or Knights, Dwarf Honor Guard, Half-Ogre Militia, Minotaur Mariner, or male Drow Melee-Magthere.</li><li><strong>Want stealth and burst damage?</strong> — Halfling or Human Assassin or Thief (high Dex and Str), or Duergar Homeguard.</li><li><strong>Want spells?</strong> — Human, Elf or Half-Elf Bastion; Drow Sorcere; Gnome Illusionist. Raise Int and Wis, and train Blunt or Pierce, not Slash.</li><li><strong>Want to heal and buff?</strong> — Church of Kertaine (5 races), Priests of Eli (Elf), Arach-Tillith (female Drow), Dark Trinity (Duergar).</li><li><strong>Want a bit of both?</strong> — Celtian Battlemages (Human, Half-Elf, Half-Orc, Minotaur) or Rangers (Human, Half-Elf, Elf, Halfling).</li></ul>
+
+<h3 id="professions">Professions</h3>
+<p>Once you're established in a guild you can learn professions: specialisations that add or boost skills, sometimes at a cost to others. Lower professions are easier; each upper profession needs a related lower one first. Every profession has its own help file.</p>
+<table>
+<thead><tr><th>Tier</th><th>Professions</th></tr></thead>
+<tbody>
+<tr><td>Lower</td><td>Alchemist, Animal Trainer, Aristocrat, Artificer, Auger, Bard, Brawler, Chef, Dragon Hunter, Herbalist, Inditar, Lumberjack, Miner, Muse, Outdoorsman, Sailor, Salesman, Scholar, Tactician, Tumbler, Undead Hunter</td></tr>
+<tr><td>Upper</td><td>Acrobat, Archer, Blacksmith, Bladesman, Blind-Fighter, Carpenter, Doctor, Dragon Slayer, Duelist, Gladiator, Horseman, Politician, Sapper, Shikari, Spy, Troubadour, Undead Slayer</td></tr>
+<tr><td>Psionic only</td><td>Aegis, Afrontist, Lucidor, Mentalist, Phrenic</td></tr>
+</tbody>
+</table>
+<p>Examples of upper paths: Herbalist then Doctor (needs Int 12 and Dex 12; adds succor, harvest and intensify), Tumbler then Acrobat, Dragon Hunter then Dragon Slayer, Artificer or Miner then Blacksmith, Bard then Troubadour.</p>
+
+<h3 id="houses">Drow houses and Bey-Sandrax</h3>
+<p>Drow belong to noble houses in Nal Shaddar. One player got into House Bey-Sandrax as a non-noble member by asking an admin by tell. The admin then said to request a medallion in the house join room.</p>
+<ol><li><strong>Enter through the gates.</strong> From the gates, go northeast to the room 'almost directly below a large marble balcony'.</li><li><strong>Climb to the balcony.</strong> <code>l at balcony</code> says you can climb it, or reach it while levitating. <code>climb up</code> works ('After a bit of scrambling…'), and <code>climb down</code> brings you back.</li><li><strong>Go in.</strong> <code>in</code> leads to the Nobles' sanctuary. It has a Small plaque, the Donation Scale, a Bulletin Board and three LOCKED adamantite doors. North is a hallway with three more locked doors.</li><li><strong>Request your medallion.</strong> <code>request medallion</code> in the sanctuary gives a platinum medallion. It answered 'What ?' in the courtyard and temple rooms.</li><li><strong>Wear it and use its powers.</strong> <code>wear medallion</code>, then <code>medallion list</code>: protect (protection from good), bless, darkness and levitate. Use <code>medallion &lt;power&gt;</code> in lower case.</li></ol>
+<ul><li><strong><code>list</code> at the plaque</strong> — Shows the house roster: the Matron Mother, priestesses, House Mage, Weaponmaster, Battle Generals and the non-nobles.</li><li><strong>Donation Scale</strong> — Takes drakaan donations to the house. <code>peruse</code> its sign for details.</li><li><strong>Bulletin Board</strong> — 25 old posts. A 2008 post says a member paid for a house smithy so 'repairing is much cheaper'.</li><li><strong>Rest of the compound</strong> — Temple of Loth to the east (an altar 'covered in what looks like blood'), commoners' barracks to the north, and a smithy exit by the gates.</li></ul>
+<div class="wiki-callout"><strong>Think before you commit.</strong> House commands like joining and <code>forsake house</code> can't be undone.</div>
+
+<h3 id="combat">Combat basics</h3>
+<ul><li>Fights go in rounds. With two weapons you swing twice, and a health meter shows after each round.</li><li>Matchup lines, from easiest to hardest: 'They can't seem to hit you!', 'You should win with some extra effort', 'very close, but you should win', 'It is even!', 'fairly close, but you should lose', 'You should lose in a breakneck speed'.</li><li><code>gauge</code> rates an NPC's skills (from 'perfect' down to 'almost nonexistent'), not its danger, so don't use it to pick targets.</li><li>Assassins open with <code>hide</code>, then <code>assassinate &lt;mob&gt;</code>. 'It seems that you are being observed' means wait and hide again.</li><li>'thoroughly bored with hiding' only blocks hiding in that room, so move on.</li><li>Watch group size. Myconids and kobold villagers help each other, so start with mobs that are alone.</li><li>Mostly evil NPCs attack on sight; good ones usually don't.</li><li>NPCs come back on 15-minute marks of the MUD's <code>uptime</code> clock, not 15 minutes after you kill them.</li><li>Your gear wears down ('Your shortsword takes some damage'), so repair at a smith now and then.</li></ul>
+
+<h3 id="healing">Healing and resting</h3>
+<table>
+<thead><tr><th>Method</th><th>Where / cost</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Bread</td><td>Repiv the Waiter, back room of the Viper's Nest, Threshold: 1 drakaan</td><td>Fastest cheap heal. Keep buying until it stops healing.</td></tr>
+<tr><td>Potato soup</td><td>Repiv: 5 drakaan</td><td>Type <code>list</code> at any waiter for the menu</td></tr>
+<tr><td>Beer</td><td>Viper's Nest bar: 2 drakaan</td><td>Use it when bread stops working. It stops when you're too drunk.</td></tr>
+<tr><td>Myconid soup</td><td>UnderDark Jewel tavern, Nal Shaddar</td><td>Main HP heal for drow</td></tr>
+<tr><td>Potions</td><td>Merchant players, some Merchant shops, or Bobe in the Gnomish Citadel</td><td>Handy before a hard fight</td></tr>
+<tr><td><code>rest now</code></td><td>Anywhere safe</td><td>Fast SP regen in a trance. <code>wake</code> and <code>stand</code> afterwards.</td></tr>
+<tr><td>Pete</td><td>Newbie Arena</td><td><code>say heal me</code> (newbies only)</td></tr>
+</tbody>
+</table>
+<ul><li>A good rule: leave and heal at 55% HP, don't start a new fight under about 70%, and top up to 95% before a hard area.</li><li>Set wimpy to 40%. It runs on the game's side, so it can still save you if your connection drops.</li><li>'Your stomach rumbles' means you're hungry. Eating at a waiter fixes it.</li></ul>
+
+<h3 id="death">Death and getting lost</h3>
+<ul><li>When you die you become a ghost. <code>pray</code> brings you back, and then you can go back and loot your corpse.</li><li>Quest progress resets when you die or log out, so finish a quest in one session.</li><li>In the dark, light a torch, wait for daytime (<code>time</code>) or use <code>homeland</code> (4,000 exp or less).</li><li>Many road rooms share the same description, especially on the Threshold to Kalinport road. Count your moves and look for landmarks.</li><li>Squirrels on the road can trip you ('tripping you!'), and that move doesn't happen. That throws off a long alias, so check where you ended up.</li></ul>
+
+<h3 id="training">Training skills</h3>
+<table>
+<thead><tr><th>What</th><th>Where</th><th>How</th></tr></thead>
+<tbody>
+<tr><td>Raise skills</td><td>Your guild trainer (for Assassins, Dinien in Kalinport)</td><td><code>train all</code> ('You increase your skill in X'). <code>cost</code> shows the price.</td></tr>
+<tr><td>New skills</td><td>Guild trainer</td><td><code>list</code> for prices, then <code>learn &lt;skill&gt;</code>. Without enough money you get 'It will cost you…'.</td></tr>
+<tr><td>Spells</td><td>Your guild</td><td><code>listspells</code> shows your guild's spells</td></tr>
+<tr><td>Climbing (surface races)</td><td>Johans the Climber, north of Threshold</td><td><code>practice climbing</code>, about 35 coins. You're locked for a few seconds, and there's a random cooldown.</td></tr>
+<tr><td>Climbing (drow, duergar, svirfneblin)</td><td>Drakkay the Climber, Underdark</td><td>About 45 drakaan, about 30 seconds locked. Try again every 8 to 10 minutes.</td></tr>
+<tr><td>Languages</td><td>Demetrii the sage, House of Demetrii, northern Gateway Road, Threshold</td><td><code>read sign</code>, <code>list</code>. Costs drakaan.</td></tr>
+<tr><td>Woodworking</td><td>Woodshop Workroom, down from Murphye's Woodshop, Threshold</td><td>The Wandering Woodworker trains it</td></tr>
+</tbody>
+</table>
+<p>Quest points (QP) give an exp bonus on every kill. Known quests include Traveller Aid (2 QP), Merchant Token (5), Leprechaun's Gold (4) and Psionics (36). The rules forbid sharing quest solutions, and quest NPCs keep anything you hand them while hidden.</p>
+
+<h3 id="hunting">Where to hunt</h3>
+<p class="wiki-lede">Exp/h rates were measured on 31 Oct 2026 by a character at about 5,000 exp.</p>
+<h4>Under 500 exp</h4>
+<table>
+<thead><tr><th>Area</th><th>Targets</th><th>Watch out</th></tr></thead>
+<tbody>
+<tr><td>Newbie Arena (any start city)</td><td>Rats and easy mobs; Pete heals, blesses and trains you</td><td>Under 500 exp only; you are moved out at 500</td></tr>
+<tr><td>Kalinport poor section</td><td>Beggars on Dune Ave, Quark Rd, Sorele Ave, Garnet St</td><td>Guards wander nearby; never fight next to one</td></tr>
+<tr><td>Kalinport Merchant's Diamond</td><td>Merchants: about 10 exp and 35 to 55 drakaan each</td><td>Fights run 4 to 5 minutes and can take you to half HP</td></tr>
+<tr><td>Reptiloid Village (south of Threshold)</td><td>Male and Female reptiloids, Reptiloid children</td><td>Swamp lizard men attack on sight; the game says when you've outgrown it</td></tr>
+</tbody>
+</table>
+<h4>Early</h4>
+<table>
+<thead><tr><th>Area</th><th>Targets</th><th>Watch out</th></tr></thead>
+<tbody>
+<tr><td>Nymph Forest (off the Kalinport road)</td><td>Dryads (+8 exp), Sprites (+4), Pixies (+3)</td><td>Best measured rate: about 712 exp/h</td></tr>
+<tr><td>Kobold Village (north of Threshold)</td><td>Villagers (Child, Male, Female) and the Kobold Cook</td><td>About 475 exp/h. Skip any room with a Large kobold; Large kobolds guard the room east of the centre</td></tr>
+<tr><td>Goat Landing (north of Threshold)</td><td>Mountain goats ('It is even!') and baby goats in the pen</td><td>About 468 exp/h. Never attack Simien the Goat Herder</td></tr>
+</tbody>
+</table>
+<h4>Intermediate</h4>
+<table>
+<thead><tr><th>Area</th><th>Targets</th><th>Watch out</th></tr></thead>
+<tbody>
+<tr><td>Bandit Camp trail (off the Kalinport road)</td><td>Bandits and Lookouts; Lookouts hit hard</td><td>Stay south of the second Lookout room; the camp has guards and a leader</td></tr>
+<tr><td>Nal Shaddar market and Rothe Island</td><td>Merchants, orc slaves on the shore, rothe herds</td><td>Underdark drow city; never attack Dante the shopkeeper</td></tr>
+<tr><td>Nal Shaddar faerny tunnels</td><td>Miners and Cave Faernies (pairs are manageable)</td><td>Not the Fire golem past the nexus gate</td></tr>
+<tr><td>Myconid grove (north of the faerny tunnels)</td><td>Myconids; they defend each other</td><td>Start with lone ones. Never the Myconid Chief behind the guarded wall</td></tr>
+</tbody>
+</table>
+
+<h3 id="travel">Getting around</h3>
+<p>Threshold's Main Square is the hub. Gateway Road runs north (mountains) and south (swamp), and Frontiers Street runs east (docks) and west (forests). Directions below start from the square. You can send them as one line with <code>;</code> between moves, or save them as your own aliases.</p>
+<table>
+<thead><tr><th>Destination</th><th>Route from Threshold square</th></tr></thead>
+<tbody>
+<tr><td>Goat Landing</td><td>6n, nw, n, 4ne, 2nw, w, n, ne, e, n, nw, 4n, ne, n, e, 4ne, u</td></tr>
+<tr><td>Kobold Village</td><td>6n, nw, n, 4ne, 3ne, n, w, nw, n, nw, w, n, e, e, ne, e, s, se, e, s, e, s</td></tr>
+<tr><td>Johans (climbing)</td><td>6n, nw, n, 4ne, 5nw, w, n, ne, e, n, nw, 2n, e</td></tr>
+<tr><td>Nymph Forest</td><td>6w, sw, nw, 14s, 4se, 4s, 3sw, 14s, 6se, 28s to 'one path leading west through the forest', then the hidden w, nw, w, sw, w</td></tr>
+<tr><td>Reptiloid Village</td><td>South down Gateway Road into the swamp, then follow the swamp path se, se, s, e to the old wooden gates</td></tr>
+<tr><td>Kalinport</td><td>About 259 moves south along the caravan road</td></tr>
+<tr><td>Bandit trail</td><td>About 34 road rooms south of the Nymph Forest turn-off, west of the road</td></tr>
+<tr><td>Nal Shaddar (Underdark)</td><td>Reached through the Underdark; also linked by road to Dunkrist</td></tr>
+</tbody>
+</table>
+<p>Other destinations worth learning later: Dunkrist, Elinost, Deepwater, Zahkar (from Kalinport), the lich, Serpico, Waefus, herb runs and the dragon lairs. Caravans also run from Threshold (<code>request caravan</code>, <code>cboard caravan</code>).</p>
+
+<h3 id="money">Money, selling and gear</h3>
+<ul><li>Loot every corpse with <code>get all from corpse</code>. To sell things lying on the floor, use <code>get all</code>, then <code>sell all</code>.</li><li><code>sell all</code> keeps worn gear. Don't <code>sell &lt;keyword&gt;</code>, because it can match something you're wearing.</li><li>Threshold's general shop is north of Frontiers Street (one east of the square, then north). The keeper keeps hours, so come back later if he's away.</li><li>In Kalinport, Collin Grokker's smithy buys gear and repairs. The Garnet St shops say 'You cannot sell anything here!'</li><li>In Nal Shaddar, the general Shopkeeper buys loot and the Gem Dealer just south of him buys gems.</li><li>Banks: Threshold has one, and Kalinport's is next to the smithy. Keep about 100 drakaan on you for food and climbing.</li><li>Willen Noggler in Threshold sells weapons; <code>judge</code> them before you buy. Murphye's Woodshop sells wood (28 to 48 drakaan).</li><li>Magic items need 1,000 exp before you can use them or keep them through a logout. A bag keeps your inventory tidy. Use <code>secure</code> on anything you'd hate to lose.</li><li>High Charisma gets better prices when haggling, and Merchants sell at much better rates than anyone else.</li></ul>
+
+<h3 id="dangers">Dangers to avoid</h3>
+<table>
+<thead><tr><th>Danger</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Zerif Pit, Nal Shaddar</td><td><code>d</code> from one market room drops you in. The only way out is <code>climb up</code>, which usually fails and has a cooldown. It's the main real hazard in Nal Shaddar.</td></tr>
+<tr><td>Dante the shopkeeper</td><td>House Do'Urtye shopkeeper in Nal Shaddar. Never attack him.</td></tr>
+<tr><td>Kalinport guards</td><td>They help whatever you attack. Never start a fight in a room with a guard or next to one. Admins notice guard attacks.</td></tr>
+<tr><td>Kulajo Mines</td><td>The 'killing fields' between Goat Landing and Kobold Village. Go around them.</td></tr>
+<tr><td>Large kobolds and the chief</td><td>Three guard the room east of the village centre ('A guard is right in your way!'). Fight one alone, never in a group.</td></tr>
+<tr><td>Simien the Goat Herder</td><td>'You should lose in a breakneck speed.'</td></tr>
+<tr><td>Bandit Camp proper</td><td>North of the last Lookout: Bandit Guards, the Head Guard and the Bandit Leader</td></tr>
+<tr><td>Swamp lizard men</td><td>They attack on sight. A Threshold guard blocks the south gate with an off-limits order.</td></tr>
+<tr><td>Myconid Chief, Fire golem</td><td>End bosses of the grove and the faerny colony</td></tr>
+<tr><td>Dragons</td><td>Endgame. A character with about 2,200 HP died to the black dragon. Never cast nova flare there. Flee early, and only rebuff in the antechamber.</td></tr>
+<tr><td>Red stone in Kalinport</td><td>Best left alone until you're well established.</td></tr>
+</tbody>
+</table>
+
+<h3 id="community">Community and etiquette</h3>
+<ul><li>The admins are active and helpful: they write the news, help with houses and guilds, and shout in chat. Keep replies to admins short and polite.</li><li><code>who</code> shows who's online, including staff.</li><li>Regular players share tips freely and sometimes give away gear or cast buffs on newer players.</li><li>Player-killing is opt-in.</li><li>Say 'nice' for news and 'grats' only for a real achievement. Keep shouts short.</li><li>Don't share quest walkthroughs, which the rules forbid. Don't type commands other players ask you to type, or give away items or account details.</li><li>The leaderboards on powermud.com update at noon and midnight Central.</li></ul>
+
+<h3 id="leads">Tips to explore</h3>
+<p class="wiki-lede">Tips from other players and things worth a look. Player tips are unverified.</p>
+<ul><li><strong>A 'new castle'</strong> (Unverified) — From the Knights of Nereka turn-off: 6n to the north sign, 2n past it, 2e to the ogre, then 1e more and a path appears.</li><li><strong>Back door into a drow house</strong> (Unverified) — A non-drow player reportedly got into a house through a back door, possibly in the drow tower on Myconid Island or in the pit.</li><li><strong>House join spot</strong> (Unverified) — 'Near the house with a gate, somewhere along the side.'</li><li><strong>Inheriting a house rank</strong> (Unverified) — Taking a former house member's name might grant their position.</li><li><strong>Gleaming Ring</strong> (Unverified) — Said to save once you reach about 10k exp.</li><li><strong>Bey-Sandrax's locked doors</strong> — Six adamantite doors in the Nobles' rooms, and a blood-covered altar in the Temple of Loth to examine.</li><li><strong>Bastion's Obsidian Mirror</strong> — Search the forests west of Threshold, or south of Elinost, for the mirror that leads to the moving tower.</li><li><strong>Small Sign on the Great Forest Caravan Route</strong> — Worth a <code>read</code> on your way past.</li></ul>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>
