@@ -24,6 +24,7 @@ export function collectPlaypowermudLocalStorage(
   for (let i = 0; i < storage.length; i++) {
     const key = storage.key(i);
     if (!key || !key.startsWith(LOCAL_STORAGE_PREFIX)) continue;
+    if (key === "playpowermud-world-graph") continue;
     const val = storage.getItem(key);
     if (val !== null) out[key] = val;
   }
