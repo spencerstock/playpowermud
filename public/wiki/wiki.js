@@ -41,13 +41,6 @@ const WIKI_NAV_SECTIONS = [
     title: "Professions",
     links: [["Doctor", "/wiki/reference/help/herbs-doctor.html"]],
   },
-  {
-    title: "About this wiki",
-    links: [
-      ["Game wiki home", "/wiki/reference/"],
-      ["Behind the scenes data", "/wiki/reference/data-caches.html"],
-    ],
-  },
   WIKI_CLIENT_SECTION,
 ];
 
