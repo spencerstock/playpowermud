@@ -62,9 +62,20 @@ export function wikiUrlFromPath(relPath) {
   return `/wiki/${posix}`;
 }
 
+/**
+ * Drop spoiler bodies so search results never reveal them; keep the summary line.
+ * @param {string} fragment
+ */
+export function stripSpoilers(fragment) {
+  return fragment.replace(
+    /<details\b[^>]*\bclass=["'][^"']*\bwiki-spoiler\b[^"']*["'][^>]*>\s*(<summary[^>]*>[\s\S]*?<\/summary>)?[\s\S]*?<\/details>/gi,
+    (_, summary) => ` ${summary ?? ""} `,
+  );
+}
+
 /** @param {string} html @param {string} url */
 export function indexEntryFromHtml(html, url) {
-  const main = mainInnerHtml(html);
+  const main = stripSpoilers(mainInnerHtml(html));
   const headings = extractHeadings(main);
   const text = stripHtml(main).slice(0, 12000);
   return {

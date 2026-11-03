@@ -565,3 +565,55 @@ details.wiki-nav-client .wiki-nav-client-body section h2 {
   border-left-color: #c9a227;
   background: color-mix(in srgb, #c9a227 12%, var(--ui-surface-raised));
 }
+
+/* Spoilers: <details class="wiki-spoiler"><summary>Spoiler: …</summary>…</details>
+   Closed by default; click the bar to reveal. Spoiler bodies are left out of the search index. */
+details.wiki-spoiler {
+  margin: 0.6rem 0;
+  border: 1px dashed var(--ui-border-strong);
+  border-radius: 6px;
+  background: var(--ui-surface-raised);
+}
+
+details.wiki-spoiler > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ui-hint);
+}
+
+details.wiki-spoiler > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.wiki-spoiler > summary::before {
+  content: "▸ ";
+  font-weight: 400;
+}
+
+details.wiki-spoiler[open] > summary::before {
+  content: "▾ ";
+}
+
+details.wiki-spoiler > summary:hover {
+  text-decoration: underline;
+}
+
+details.wiki-spoiler > :not(summary) {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
+
+details.wiki-spoiler[open] {
+  padding-bottom: 0.15rem;
+}
+
+main.wiki-main blockquote {
+  margin: 0.6rem 0;
+  padding: 0.1rem 0.85rem;
+  border-left: 3px solid var(--ui-border-strong);
+  color: var(--ui-meta);
+  font-style: italic;
+}

@@ -5,6 +5,7 @@ import {
   indexEntryFromHtml,
   isRedirectPage,
   stripHtml,
+  stripSpoilers,
   wikiPageTitle,
   wikiUrlFromPath,
 } from "./build-wiki-search.mjs";
@@ -41,4 +42,21 @@ test("stripHtml removes tags", () => {
 
 test("extractHeadings collects h2 and h3", () => {
   assert.deepEqual(extractHeadings("<h2>A</h2><h3>B</h3>"), ["A", "B"]);
+});
+
+test("stripSpoilers hides spoiler bodies but keeps the summary", () => {
+  const out = stripHtml(
+    stripSpoilers('<p>Hint</p><details class="wiki-spoiler"><summary>Spoiler: answer</summary><p>pry stone</p></details><p>After</p>'),
+  );
+  assert.equal(out, "Hint Spoiler: answer After");
+});
+
+test("indexEntryFromHtml leaves spoiler text out of the index", () => {
+  const html = `<title>Q — Play Powermud wiki</title><main id="wiki-main"><h2>Q</h2>
+<details class="wiki-spoiler">
+  <summary>Spoiler: route</summary><h3>Secret</h3><p>jump through the mirror</p></details></main>`;
+  const entry = indexEntryFromHtml(html, "/wiki/reference/q.html");
+  assert.doesNotMatch(entry.text, /jump through/);
+  assert.deepEqual(entry.headings, ["Q"]);
+  assert.match(entry.text, /Spoiler: route/);
 });

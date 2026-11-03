@@ -35,6 +35,7 @@ const WIKI_NAV_SECTIONS = [
       ["Quest system", "/wiki/reference/help/quests.html"],
       ["Quest notes & clues", "/wiki/reference/quests-corpus.html"],
       ["Player guides", "/wiki/reference/guides.html"],
+      ["Bastion of High Sorcery", "/wiki/reference/bastion.html"],
     ],
   },
   {
