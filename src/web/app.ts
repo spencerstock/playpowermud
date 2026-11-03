@@ -147,6 +147,7 @@ const sidePanel = createSidePanel({
 let worldPanel: ReturnType<typeof createWorldPanel> | null = null;
 
 const wikiOverlay = createWikiOverlay({
+  defaultPath: "/wiki/reference/",
   onClose: () => {
     mudTerm.scrollToBottom();
     input.focus();

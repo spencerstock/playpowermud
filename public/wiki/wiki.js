@@ -1,17 +1,18 @@
 const SKIN_LS = "playpowermud-skin";
 
 /** Single source for wiki sidebar navigation. */
+const WIKI_CLIENT_SECTION = {
+  title: "Using the client",
+  links: [
+    ["Getting started", "/wiki/client/getting-started.html"],
+    ["Terminal & colors", "/wiki/client/terminal.html"],
+    ["Aliases", "/wiki/client/aliases.html"],
+    ["Comms", "/wiki/client/comms.html"],
+    ["World map", "/wiki/client/map.html"],
+  ],
+};
+
 const WIKI_NAV_SECTIONS = [
-  {
-    title: "Using the client",
-    links: [
-      ["Getting started", "/wiki/client/getting-started.html"],
-      ["Terminal & colors", "/wiki/client/terminal.html"],
-      ["Aliases", "/wiki/client/aliases.html"],
-      ["Comms", "/wiki/client/comms.html"],
-      ["World map", "/wiki/client/map.html"],
-    ],
-  },
   {
     title: "Characters",
     links: [
@@ -47,7 +48,12 @@ const WIKI_NAV_SECTIONS = [
       ["Behind the scenes data", "/wiki/reference/data-caches.html"],
     ],
   },
+  WIKI_CLIENT_SECTION,
 ];
+
+function isClientWikiPath() {
+  return window.location.pathname.startsWith("/wiki/client/");
+}
 
 function applySkin(name) {
   const skin = name === "light" ? "light" : "dark";
@@ -75,7 +81,7 @@ function renderWikiNav() {
   details.append(summary);
   const body = document.createElement("div");
   body.className = "wiki-nav-body";
-  for (const section of WIKI_NAV_SECTIONS) {
+  function appendNavSection(parent, section) {
     const sec = document.createElement("section");
     const h2 = document.createElement("h2");
     h2.textContent = section.title;
@@ -90,7 +96,25 @@ function renderWikiNav() {
       ul.append(li);
     }
     sec.append(ul);
-    body.append(sec);
+    parent.append(sec);
+  }
+
+  for (const section of WIKI_NAV_SECTIONS) {
+    if (section === WIKI_CLIENT_SECTION) {
+      const clientFold = document.createElement("details");
+      clientFold.className = "wiki-nav-client";
+      if (isClientWikiPath()) clientFold.open = true;
+      const clientSummary = document.createElement("summary");
+      clientSummary.textContent = section.title;
+      clientFold.append(clientSummary);
+      const clientBody = document.createElement("div");
+      clientBody.className = "wiki-nav-client-body";
+      appendNavSection(clientBody, section);
+      clientFold.append(clientBody);
+      body.append(clientFold);
+      continue;
+    }
+    appendNavSection(body, section);
   }
   details.append(body);
   mount.replaceWith(details);

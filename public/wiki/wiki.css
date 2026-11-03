@@ -438,6 +438,86 @@ main.wiki-main th {
   line-height: 1.45;
 }
 
+details.wiki-client-fold {
+  margin: 2rem 0 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ui-surface-raised) 70%, transparent);
+  font-size: 0.82rem;
+  color: var(--ui-meta);
+}
+
+details.wiki-client-fold > summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ui-meta);
+}
+
+details.wiki-client-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.wiki-client-fold > summary::before {
+  content: "+ ";
+  font-weight: 400;
+}
+
+details.wiki-client-fold[open] > summary::before {
+  content: "− ";
+}
+
+.wiki-client-fold-note {
+  margin: 0.35rem 0 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+ul.wiki-inline-links {
+  margin: 0;
+  padding: 0 0 0.15rem 1.1rem;
+  font-size: 0.84rem;
+}
+
+ul.wiki-inline-links a {
+  color: var(--ui-meta);
+  text-decoration: none;
+}
+
+ul.wiki-inline-links a:hover {
+  color: var(--ui-hint);
+  text-decoration: underline;
+}
+
+details.wiki-nav-client {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--ui-border);
+}
+
+details.wiki-nav-client > summary {
+  list-style: none;
+  cursor: pointer;
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ui-meta);
+}
+
+details.wiki-nav-client > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.wiki-nav-client .wiki-nav-client-body section h2 {
+  display: none;
+}
+
 .wiki-foot {
   margin-top: 2.5rem;
   padding-top: 1rem;
