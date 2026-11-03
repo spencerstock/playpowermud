@@ -39,6 +39,7 @@
           <tr><th>Shortcut</th><th>Action</th></tr>
         </thead>
         <tbody>
+          <tr><td><kbd>Alt</kbd>+<kbd>W</kbd></td><td>Toggle wiki overlay</td></tr>
           <tr><td><kbd>Alt</kbd>+<kbd>M</kbd></td><td>Toggle <a href="/wiki/client/map.html">world map</a> panel</td></tr>
           <tr><td><kbd>Alt</kbd>+<kbd>C</kbd></td><td>Toggle <a href="/wiki/client/comms.html">comms</a> panel</td></tr>
           <tr><td><kbd>Alt</kbd>+<kbd>D</kbd></td><td>Focus terminal: scroll log to bottom and focus the command line</td></tr>
@@ -59,10 +60,10 @@
 
       <h3>Wiki while you play</h3>
       <p>
-        Open the <a href="/wiki/">wiki</a> from the header to read help or game reference in the same tab.
-        Your MUD connection stays open in a shared background worker while you browse the wiki, so you do not
-        go link-dead just from checking a page. When you return to <a href="/">Play</a>, you are still connected
-        (new output appears in the terminal; text you missed while reading is not replayed).
+        Click <strong>Wiki</strong> in the header (or press <kbd>Alt</kbd>+<kbd>W</kbd>) to open help and game
+        reference in an overlay on top of the client. Your MUD connection stays open underneath — close the wiki
+        or press <kbd>Escape</kbd> to return to the terminal (new output appears when you close; text you missed
+        while reading is not replayed).
       </p>
 
       <h3>Session length (Vercel)</h3>

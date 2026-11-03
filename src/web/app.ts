@@ -25,6 +25,7 @@ import { createMudTerminal } from "./mudTerminal.js";
 import { createSidePanel } from "./sidePanel.js";
 import { applyTelnetKeyAction, TelnetLineEditor } from "./telnetLineEditor.js";
 import { createWorldPanel } from "./worldPanel.js";
+import { createWikiOverlay } from "./wikiOverlay.js";
 
 /** Replaced at build time (scripts/build.mjs); empty = this site's own /api/ws. */
 declare const __RELAY_URL__: string;
@@ -49,6 +50,7 @@ const aliasAcEl = byId("alias-ac");
 const wireHintEl = byId("wire-hint");
 const mapPanelMount = byId("map-panel-mount");
 const sidePanelMount = byId("chat-panel-mount");
+const wikiOpenBtn = byId<HTMLButtonElement>("wiki-open");
 
 const mudTerm = createMudTerminal(logEl, 10_000);
 const aliases = new AliasStore();
@@ -144,9 +146,26 @@ const sidePanel = createSidePanel({
 
 let worldPanel: ReturnType<typeof createWorldPanel> | null = null;
 
+const wikiOverlay = createWikiOverlay({
+  onClose: () => {
+    mudTerm.scrollToBottom();
+    input.focus();
+  },
+});
+
+wikiOpenBtn.addEventListener("click", () => wikiOverlay.toggle());
+
 document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && wikiOverlay.isOpen()) {
+    e.preventDefault();
+    wikiOverlay.close();
+    return;
+  }
   if (!(e.altKey && !e.metaKey && !e.ctrlKey && !e.shiftKey)) return;
-  if (e.code === "KeyM" && worldPanel) {
+  if (e.code === "KeyW") {
+    e.preventDefault();
+    wikiOverlay.toggle();
+  } else if (e.code === "KeyM" && worldPanel) {
     e.preventDefault();
     worldPanel.toggleExpanded();
   } else if (e.code === "KeyC") {

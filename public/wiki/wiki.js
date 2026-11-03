@@ -336,6 +336,24 @@ function mountWikiSearch() {
 
 mountWikiSearch();
 
+(function wireWikiEmbedMode() {
+  if (window.parent === window) return;
+  document.documentElement.classList.add("wiki-embedded");
+  const closeParent = () => {
+    window.parent.postMessage({ type: "playpowermud-wiki-close" }, window.location.origin);
+  };
+  for (const a of document.querySelectorAll('a[href="/"]')) {
+    a.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      closeParent();
+    });
+  }
+  const playTop = document.querySelector(".wiki-top-actions a.primary");
+  if (playTop instanceof HTMLAnchorElement && playTop.getAttribute("href") === "/") {
+    playTop.textContent = "Back to game";
+  }
+})();
+
 if (typeof SharedWorker !== "undefined") {
   const keep = document.createElement("script");
   keep.type = "module";
