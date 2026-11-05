@@ -16,7 +16,6 @@ The public wiki is the reference. Personal character sheets, client config, prox
 
 | Wiki page | Topic |
 |-----------|--------|
-| [Areas](../public/wiki/world/areas.html) | Threshold, zones, dragon notes |
 | [Walking directions](../public/wiki/world/directions.html) | Overworld routes, steps copied as written |
 | [Underdark directions](../public/wiki/world/underdark.html) | Underdark routes, steps copied as written |
 

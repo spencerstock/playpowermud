@@ -95,9 +95,9 @@ nw,n,sw,*search bushes*`,
 test("walking directions is linked from wiki navigation and the old URL redirects", async () => {
   const href = "/wiki/world/directions.html";
   const nav = await read("public/wiki/wiki.js");
-  const areas = await read("public/wiki/world/areas.html");
+  const underdark = await read("public/wiki/world/underdark.html");
   const old = await read("public/wiki/reference/walking-directions.html");
   assert.match(nav, new RegExp(href.replaceAll("/", "\\/")));
-  assert.match(areas, new RegExp(href.replaceAll("/", "\\/")));
+  assert.match(underdark, new RegExp(href.replaceAll("/", "\\/")));
   assert.match(old, /http-equiv="refresh" content="0;url=\/wiki\/world\/directions"/);
 });

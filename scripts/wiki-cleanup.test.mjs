@@ -67,7 +67,7 @@ test("old wiki URLs redirect at the new pages", async () => {
     ["public/wiki/reference/professions.html", "/wiki/mechanics/professions"],
     ["public/wiki/reference/content-notes.html", "/wiki/about"],
     ["public/wiki/reference/quests-corpus.html", "/wiki/quests/notes"],
-    ["public/wiki/powermud/zones.html", "/wiki/world/areas#zones"],
+    ["public/wiki/powermud/zones.html", "/wiki/world/directions"],
   ];
   for (const [rel, url] of cases) {
     const html = await readFile(path.join(root, rel), "utf8");

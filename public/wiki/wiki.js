@@ -24,7 +24,6 @@ const WIKI_NAV_SECTIONS = [
   {
     title: "World",
     links: [
-      ["Areas", "/wiki/world/areas.html"],
       ["Walking directions", "/wiki/world/directions.html"],
       ["Underdark directions", "/wiki/world/underdark.html"],
     ],
