@@ -2,51 +2,68 @@ const SKIN_LS = "playpowermud-skin";
 
 /** Single source for wiki sidebar navigation. */
 const WIKI_CLIENT_SECTION = {
-  title: "Using the client",
+  title: "Browser client",
   links: [
     ["Getting started", "/wiki/client/getting-started.html"],
     ["Terminal & colors", "/wiki/client/terminal.html"],
+    ["Colors (eset)", "/wiki/reference/help/eset.html"],
     ["Aliases", "/wiki/client/aliases.html"],
     ["Comms", "/wiki/client/comms.html"],
     ["World map", "/wiki/client/map.html"],
+    ["Map data", "/wiki/reference/explored-world.html"],
+    ["Site data", "/wiki/reference/data-caches.html"],
   ],
 };
 
 const WIKI_NAV_SECTIONS = [
   {
-    title: "Characters",
-    links: [
-      ["Races", "/wiki/reference/help/races.html"],
-      ["Stats & builds", "/wiki/reference/characters-and-stats.html"],
-      ["Battlemages", "/wiki/reference/help/battlemage.html"],
-    ],
-  },
-  {
-    title: "Items & combat",
-    links: [
-      ["Items & equipment", "/wiki/reference/items-and-equipment.html"],
-      ["Combat", "/wiki/reference/combat.html"],
-      ["PK areas", "/wiki/reference/help/pk-areas.html"],
-    ],
-  },
-  {
-    title: "Quests & crafting",
-    links: [
-      ["Quest system", "/wiki/reference/help/quests.html"],
-      ["Quest notes & clues", "/wiki/reference/quests-corpus.html"],
-      ["Player guides", "/wiki/reference/guides.html"],
-      ["Bastion of High Sorcery", "/wiki/reference/bastion.html"],
-    ],
-  },
-  {
-    title: "Professions",
-    links: [["Doctor", "/wiki/reference/help/herbs-doctor.html"]],
+    title: "Getting started",
+    links: [["Beginner's guide", "/wiki/guide/beginners-guide.html"]],
   },
   {
     title: "World",
     links: [
-      ["World & directions", "/wiki/reference/world-and-directions.html"],
-      ["Walking directions", "/wiki/reference/walking-directions.html"],
+      ["Areas", "/wiki/world/areas.html"],
+      ["Walking directions", "/wiki/world/directions.html"],
+      ["Underdark directions", "/wiki/world/underdark.html"],
+    ],
+  },
+  {
+    title: "Guilds",
+    links: [
+      ["Guilds", "/wiki/guilds/index.html"],
+      ["Races", "/wiki/guilds/races.html"],
+    ],
+  },
+  {
+    title: "Equipment",
+    links: [
+      ["Items", "/wiki/items/index.html"],
+      ["Normal equipment", "/wiki/items/normal-equipment.html"],
+      ["Magic items", "/wiki/items/magic-items.html"],
+      ["Crafting components", "/wiki/items/components.html"],
+    ],
+  },
+  {
+    title: "NPCs & drops",
+    links: [["Magical drops", "/wiki/npcs/drops.html"]],
+  },
+  {
+    title: "Quests",
+    links: [
+      ["Quest system", "/wiki/quests/index.html"],
+      ["Quest notes", "/wiki/quests/notes.html"],
+      ["Bastion of High Sorcery", "/wiki/quests/bastion.html"],
+    ],
+  },
+  {
+    title: "Mechanics",
+    links: [
+      ["Combat", "/wiki/mechanics/combat.html"],
+      ["Stats & ranks", "/wiki/mechanics/stats.html"],
+      ["Professions", "/wiki/mechanics/professions.html"],
+      ["Doctor & herbs", "/wiki/mechanics/doctor.html"],
+      ["PK areas", "/wiki/mechanics/pk-areas.html"],
     ],
   },
   WIKI_CLIENT_SECTION,

@@ -11,7 +11,7 @@ async function read(rel) {
 }
 
 test("walking directions page keeps every route step verbatim", async () => {
-  const page = await read("public/wiki/reference/walking-directions.html");
+  const page = await read("public/wiki/world/directions.html");
   const blocks = [...page.matchAll(/<pre><code>([\s\S]*?)<\/code><\/pre>/g)].map((m) => m[1]);
   assert.equal(blocks.length, 35);
 
@@ -92,12 +92,12 @@ nw,n,sw,*search bushes*`,
   }
 });
 
-test("walking directions is linked from wiki navigation and indexes", async () => {
-  const href = "/wiki/reference/walking-directions.html";
+test("walking directions is linked from wiki navigation and the old URL redirects", async () => {
+  const href = "/wiki/world/directions.html";
   const nav = await read("public/wiki/wiki.js");
-  const home = await read("public/wiki/index.html");
-  const gameHome = await read("public/wiki/reference/index.html");
+  const areas = await read("public/wiki/world/areas.html");
+  const old = await read("public/wiki/reference/walking-directions.html");
   assert.match(nav, new RegExp(href.replaceAll("/", "\\/")));
-  assert.match(home, new RegExp(href.replaceAll("/", "\\/")));
-  assert.match(gameHome, new RegExp(href.replaceAll("/", "\\/")));
+  assert.match(areas, new RegExp(href.replaceAll("/", "\\/")));
+  assert.match(old, /http-equiv="refresh" content="0;url=\/wiki\/world\/directions\.html"/);
 });

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="How plus is counted, sacrifice notes, and where the equipment lists live." />
+    <title>Items — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Items</h2>
+      <p class="wiki-lede">Plus is an item's magical power, not a weapon skill. The lists on this wiki are player catalogs of gear people had seen in game.</p>
+      <ul>
+        <li><a href="/wiki/items/magic-items.html">Magic items</a> — slot, plus, and effects</li>
+        <li><a href="/wiki/items/normal-equipment.html">Normal equipment</a> — mundane gear, quality, and where it was seen</li>
+        <li><a href="/wiki/items/components.html">Crafting components</a></li>
+        <li><a href="/wiki/npcs/drops.html">Magical drops</a> — which NPCs were seen dropping which items</li>
+      </ul>
+
+      <h3>How plus adds up</h3>
+      <p>A player formula for reading an item's plus from its effects. Confirm with <code>judge</code> in game.</p>
+      <table>
+        <thead><tr><th>Effect</th><th>Plus</th></tr></thead>
+        <tbody>
+          <tr><td>Each plus to an ability (str, int, and so on)</td><td>+1</td></tr>
+          <tr><td>Per 20 points of HP or SP</td><td>+1</td></tr>
+          <tr><td>Per 20 points of a non-melee resistance (cold, fire, psionics, and so on)</td><td>+1</td></tr>
+          <tr><td>Per 20 points of find traps</td><td>+1</td></tr>
+          <tr><td>Per 10 points of a melee resistance (slash, and so on)</td><td>+1</td></tr>
+          <tr><td>Per 10 points of a skill bonus (hide, sneak)</td><td>+1</td></tr>
+          <tr><td>Per 10 points of protection from good, evil, or undead</td><td>+1</td></tr>
+          <tr><td>Per 10 points of musician bonus</td><td>+1</td></tr>
+          <tr><td>Per 10 points of dragonfear resistance</td><td>+1</td></tr>
+          <tr><td>Per 2 points of damage bonus (non-weapons)</td><td>+1</td></tr>
+          <tr><td>Per 5 points of to-hit bonus</td><td>+1</td></tr>
+          <tr><td>Per 2 points of Blessed</td><td>+1</td></tr>
+          <tr><td>Per special command</td><td>+1</td></tr>
+          <tr><td>Free action</td><td>+3</td></tr>
+          <tr><td>Water breathing</td><td>+4</td></tr>
+          <tr><td>Levitates</td><td>+2</td></tr>
+          <tr><td>Allows flight</td><td>+4</td></tr>
+          <tr><td>Detect alignment</td><td>+3</td></tr>
+          <tr><td>Detect invisibility</td><td>+5</td></tr>
+          <tr><td>Spider climbed</td><td>+1</td></tr>
+          <tr><td>Healing, per random(10) points</td><td>+1</td></tr>
+          <tr><td>Transport (teleport or recall)</td><td>+4</td></tr>
+          <tr><td>Per 10 points of regeneration</td><td>+1</td></tr>
+          <tr><td>Per 20 points of to-hit versus a specific race</td><td>+1</td></tr>
+          <tr><td>Per 10 points of damage versus a specific race</td><td>+1</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Sacrifice by plus</h3>
+      <p>A short player note of sacrifice return by plus. The note did not name the unit.</p>
+      <table>
+        <thead><tr><th>Plus</th><th>Recorded return</th></tr></thead>
+        <tbody>
+          <tr><td>+1</td><td>1–2</td></tr>
+          <tr><td>+2</td><td>3–5</td></tr>
+          <tr><td>+3</td><td>7–10</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Shops</h3>
+      <p>Where to buy and sell, including Murphye's Woodshop, is in the <a href="/wiki/guide/beginners-guide.html#money">beginner's guide</a>.</p>
+
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>
