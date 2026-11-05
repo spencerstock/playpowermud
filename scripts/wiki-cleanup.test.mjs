@@ -1,0 +1,108 @@
+import assert from "node:assert/strict";
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const wiki = path.join(root, "public/wiki");
+
+async function walk(dir) {
+  const out = [];
+  for (const ent of await readdir(dir, { withFileTypes: true })) {
+    const full = path.join(dir, ent.name);
+    if (ent.isDirectory()) out.push(...await walk(full));
+    else if (ent.name.endsWith(".html") || ent.name.endsWith(".js")) out.push(full);
+  }
+  return out;
+}
+
+test("wiki copy is not tied to the Link client or to files the wiki does not contain", async () => {
+  const banned = [
+    /link prof/i,
+    /Link profession/,
+    /link\.cfg/i,
+    /Hemligt/,
+    /\bcorpus\b/i,
+    /docs\/powermud/,
+    /official item list/i,
+    /quests\.txt/,
+    /doctor\.txt/,
+    /psionicsquest/,
+  ];
+  const hits = [];
+  for (const file of await walk(wiki)) {
+    const text = await readFile(file, "utf8");
+    for (const re of banned) {
+      if (re.test(text)) hits.push(`${path.relative(root, file)} matches ${re}`);
+    }
+  }
+  assert.deepEqual(hits, []);
+});
+
+test("sidebar sections are even-handed and in reading order", async () => {
+  const nav = await readFile(path.join(wiki, "wiki.js"), "utf8");
+  const titles = [...nav.matchAll(/title: "([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(titles.slice(0, 8), [
+    "Browser client",
+    "Getting started",
+    "World",
+    "Guilds",
+    "Equipment",
+    "NPCs & drops",
+    "Quests",
+    "Mechanics",
+  ]);
+  assert.equal(nav.includes("Battlemages"), false);
+  assert.match(nav, /\/wiki\/reference\/data-caches\.html/);
+  assert.match(nav, /\/wiki\/reference\/help\/eset\.html/);
+  assert.match(nav, /\/wiki\/reference\/explored-world\.html/);
+});
+
+test("old wiki URLs redirect at the new pages", async () => {
+  const cases = [
+    ["public/wiki/reference/beginners-guide.html", "/wiki/guide/beginners-guide.html"],
+    ["public/wiki/reference/help/battlemage.html", "/wiki/guilds/index.html#battlemages"],
+    ["public/wiki/reference/professions.html", "/wiki/mechanics/professions.html"],
+    ["public/wiki/reference/content-notes.html", "/wiki/about.html"],
+    ["public/wiki/reference/quests-corpus.html", "/wiki/quests/notes.html"],
+    ["public/wiki/powermud/zones.html", "/wiki/world/areas.html#zones"],
+  ];
+  for (const [rel, url] of cases) {
+    const html = await readFile(path.join(root, rel), "utf8");
+    assert.match(html, new RegExp(`url=${url.replaceAll("/", "\\/")}`));
+  }
+});
+
+test("underdark directions keep the routes that share a line with the banner", async () => {
+  const page = await readFile(path.join(wiki, "world/underdark.html"), "utf8");
+  const blocks = [...page.matchAll(/<pre><code>([\s\S]*?)<\/code><\/pre>/g)].map((m) => m[1]);
+  assert.equal(blocks.length, 15);
+  assert.ok(blocks.some((b) => b.includes("*climb hatch*(supply room)")));
+  assert.ok(blocks.some((b) => b.includes("2swim s")));
+  assert.ok(blocks.some((b) => b.includes("n, sw,s,se,sw")));
+  assert.match(page, /Nal Shaddar to Rothe Island/);
+  assert.match(page, /<p>\(very newbie safe\)<\/p>/);
+  assert.equal(page.includes("(very newbie safe)\n(arena)"), false);
+});
+
+test("crafting components keep wrapped names", async () => {
+  const page = await readFile(path.join(wiki, "items/components.html"), "utf8");
+  assert.match(page, /Silk of the Spider Parasite/);
+  assert.match(page, /Mithril Encrusted Onyx Gemstone/);
+});
+
+test("guild pages do not single out a best guild", async () => {
+  const guilds = await readFile(path.join(wiki, "guilds/index.html"), "utf8");
+  const guide = await readFile(path.join(wiki, "guide/beginners-guide.html"), "utf8");
+  const races = await readFile(path.join(wiki, "guilds/races.html"), "utf8");
+  for (const page of [guilds, guide, races]) {
+    assert.equal(page.includes("safest pick"), false);
+    assert.equal(page.includes("Want to hit"), false);
+    assert.equal(page.includes("Battlemage-eligible"), false);
+    assert.equal(page.includes("easy first guild"), false);
+    assert.equal(page.includes("strongest general"), false);
+  }
+  assert.match(guilds, /id="battlemages"/);
+  assert.match(guilds, /id="race-guild"/);
+});
