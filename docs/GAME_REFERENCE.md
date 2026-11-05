@@ -26,6 +26,7 @@ The public wiki is the reference. Personal character sheets, client config, prox
 |-----------|--------|
 | [Guilds](../public/wiki/guilds/index.html) | Every guild: races, minimums, location |
 | [Races](../public/wiki/guilds/races.html) | `help races` |
+| [Drow](../public/wiki/guilds/drow.html) | Noble houses in Nal Shaddar |
 
 ## Equipment
 
@@ -57,6 +58,7 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | [Combat](../public/wiki/mechanics/combat.html) | Hit words, stun, dragon notes |
 | [Stats and ranks](../public/wiki/mechanics/stats.html) | Abilities and rank names |
 | [Professions](../public/wiki/mechanics/professions.html) | Lower and upper professions |
+| [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Trainer locations, costs, stat reqs |
 | [Doctor and herbs](../public/wiki/mechanics/doctor.html) | Doctor, harvest, intensify |
 | [PK areas](../public/wiki/mechanics/pk-areas.html) | `help pkareas` |
 

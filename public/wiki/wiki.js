@@ -33,6 +33,7 @@ const WIKI_NAV_SECTIONS = [
     links: [
       ["Guilds", "/wiki/guilds/index.html"],
       ["Races", "/wiki/guilds/races.html"],
+      ["Drow", "/wiki/guilds/drow.html"],
     ],
   },
   {
@@ -62,6 +63,7 @@ const WIKI_NAV_SECTIONS = [
       ["Combat", "/wiki/mechanics/combat.html"],
       ["Stats & ranks", "/wiki/mechanics/stats.html"],
       ["Professions", "/wiki/mechanics/professions.html"],
+      ["Profession trainers", "/wiki/mechanics/profession-trainers.html"],
       ["Doctor & herbs", "/wiki/mechanics/doctor.html"],
       ["PK areas", "/wiki/mechanics/pk-areas.html"],
     ],

@@ -183,6 +183,8 @@ document.addEventListener("keydown", (e) => {
 // ---- connection -------------------------------------------------------------------------
 
 let serverEcho = false;
+/** Once true, the primary action is labeled Reconnect (including while live). */
+let mudSessionEstablished = false;
 
 function renderStatus(status: RelayStatus): void {
   const [label, tone] =
@@ -198,9 +200,20 @@ function renderStatus(status: RelayStatus): void {
   statusEl.classList.add(tone);
   connectBtn.disabled = status === "connected" || status === "connecting";
   disconnectBtn.disabled = !(status === "connected" || status === "connecting");
+  if (status === "connecting") {
+    connectBtn.textContent = "Connecting…";
+    connectBtn.title = "Connecting to powermud.com";
+  } else if (mudSessionEstablished) {
+    connectBtn.textContent = "Reconnect";
+    connectBtn.title = "Reconnect to powermud.com";
+  } else {
+    connectBtn.textContent = "Connect";
+    connectBtn.title = "Connect to powermud.com";
+  }
 }
 
 connection.on("status", (status, reason) => {
+  if (status === "connected") mudSessionEstablished = true;
   renderStatus(status);
   if (status === "connected") {
     meta("Connected to Powermud.");
@@ -208,7 +221,7 @@ connection.on("status", (status, reason) => {
   } else if (status === "closed") {
     serverEcho = false;
     syncPasswordMode();
-    meta(`Disconnected${reason ? ` (${reason})` : ""}. Press Enter or Connect to reconnect.`);
+    meta(`Disconnected${reason ? ` (${reason})` : ""}. Press Enter or Reconnect to reconnect.`);
     runtime?.onDisconnected();
   }
 });
@@ -646,6 +659,7 @@ async function boot(): Promise<void> {
     if (document.visibilityState === "hidden") void store.flush();
   });
   if (connection.connected) {
+    mudSessionEstablished = true;
     renderStatus("connected");
     runtime.onConnected();
   } else {
