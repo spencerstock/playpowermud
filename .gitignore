@@ -6,3 +6,4 @@ public/build/
 *.log
 .DS_Store
 .vercel
+.env*

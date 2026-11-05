@@ -62,7 +62,8 @@ test("sidebar sections are even-handed and in reading order", async () => {
 test("old wiki URLs redirect at the new pages", async () => {
   const cases = [
     ["public/wiki/reference/beginners-guide.html", "/wiki/guide/beginners-guide.html"],
-    ["public/wiki/reference/help/battlemage.html", "/wiki/guilds/index.html#battlemages"],
+    ["public/wiki/reference/help/battlemage.html", "/wiki/guilds/celtian-battlemages.html"],
+    ["public/wiki/quests/bastion.html", "/wiki/guilds/bastion.html"],
     ["public/wiki/reference/professions.html", "/wiki/mechanics/professions.html"],
     ["public/wiki/reference/content-notes.html", "/wiki/about.html"],
     ["public/wiki/reference/quests-corpus.html", "/wiki/quests/notes.html"],
@@ -105,4 +106,17 @@ test("guild pages do not single out a best guild", async () => {
   }
   assert.match(guilds, /id="battlemages"/);
   assert.match(guilds, /id="race-guild"/);
+  assert.match(guilds, /href="\/wiki\/guilds\/threshold-militia\.html"/);
+});
+
+test("each joinable guild has a dedicated page", async () => {
+  const { GUILD_SECTIONS } = await import("./guild-data.mjs");
+  const { readdir } = await import("node:fs/promises");
+  const names = new Set(await readdir(path.join(wiki, "guilds")));
+  for (const section of GUILD_SECTIONS) {
+    for (const guild of section.guilds) {
+      const file = guild.page ?? `${guild.slug}.html`;
+      assert.ok(names.has(file), `missing guild page ${file}`);
+    }
+  }
 });

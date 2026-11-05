@@ -54,7 +54,6 @@ const WIKI_NAV_SECTIONS = [
     links: [
       ["Quest system", "/wiki/quests/index.html"],
       ["Quest notes", "/wiki/quests/notes.html"],
-      ["Bastion of High Sorcery", "/wiki/quests/bastion.html"],
     ],
   },
   {

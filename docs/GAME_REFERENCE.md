@@ -25,8 +25,10 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | Wiki page | Topic |
 |-----------|--------|
 | [Guilds](../public/wiki/guilds/index.html) | Every guild: races, minimums, location |
+| [Guild pages](../public/wiki/guilds/) | One page per joinable guild (see index) |
 | [Races](../public/wiki/guilds/races.html) | `help races` |
 | [Drow](../public/wiki/guilds/drow.html) | Noble houses in Nal Shaddar |
+| [Bastion of High Sorcery](../public/wiki/guilds/bastion.html) | Mage guild and joining quest |
 
 ## Equipment
 
@@ -49,7 +51,6 @@ The public wiki is the reference. Personal character sheets, client config, prox
 |-----------|--------|
 | [Quest system](../public/wiki/quests/index.html) | `help quests` |
 | [Quest notes](../public/wiki/quests/notes.html) | Older notes, spoilers closed |
-| [Bastion of High Sorcery](../public/wiki/quests/bastion.html) | Joining notes |
 
 ## Mechanics
 
