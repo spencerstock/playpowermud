@@ -61,13 +61,13 @@ test("sidebar sections are even-handed and in reading order", async () => {
 
 test("old wiki URLs redirect at the new pages", async () => {
   const cases = [
-    ["public/wiki/reference/beginners-guide.html", "/wiki/guide/beginners-guide.html"],
-    ["public/wiki/reference/help/battlemage.html", "/wiki/guilds/celtian-battlemages.html"],
-    ["public/wiki/quests/bastion.html", "/wiki/guilds/bastion.html"],
-    ["public/wiki/reference/professions.html", "/wiki/mechanics/professions.html"],
-    ["public/wiki/reference/content-notes.html", "/wiki/about.html"],
-    ["public/wiki/reference/quests-corpus.html", "/wiki/quests/notes.html"],
-    ["public/wiki/powermud/zones.html", "/wiki/world/areas.html#zones"],
+    ["public/wiki/reference/beginners-guide.html", "/wiki/guide/beginners-guide"],
+    ["public/wiki/reference/help/battlemage.html", "/wiki/guilds/celtian-battlemages"],
+    ["public/wiki/quests/bastion.html", "/wiki/guilds/bastion"],
+    ["public/wiki/reference/professions.html", "/wiki/mechanics/professions"],
+    ["public/wiki/reference/content-notes.html", "/wiki/about"],
+    ["public/wiki/reference/quests-corpus.html", "/wiki/quests/notes"],
+    ["public/wiki/powermud/zones.html", "/wiki/world/areas#zones"],
   ];
   for (const [rel, url] of cases) {
     const html = await readFile(path.join(root, rel), "utf8");
@@ -106,7 +106,26 @@ test("guild pages do not single out a best guild", async () => {
   }
   assert.match(guilds, /id="battlemages"/);
   assert.match(guilds, /id="race-guild"/);
-  assert.match(guilds, /href="\/wiki\/guilds\/threshold-militia\.html"/);
+  assert.match(guilds, /href="\/wiki\/guilds\/threshold-militia"/);
+});
+
+test("each guild help topic has a wiki route", async () => {
+  const { GUILD_SECTIONS } = await import("./guild-data.mjs");
+  for (const section of GUILD_SECTIONS) {
+    for (const guild of section.guilds) {
+      const html = await readFile(path.join(wiki, "reference/help", `${guild.help}.html`), "utf8");
+      const target = guild.page?.replace(/\.html$/i, "") ?? guild.slug;
+      assert.match(html, new RegExp(`url=/wiki/guilds/${target.replaceAll("-", "\\-")}`));
+    }
+  }
+});
+
+test("vercel serves extensionless wiki URLs", async () => {
+  const vercel = JSON.parse(await readFile(path.join(root, "vercel.json"), "utf8"));
+  assert.equal(vercel.cleanUrls, true);
+  const dests = new Set(vercel.rewrites.map((r) => r.destination));
+  assert.ok(dests.has("/wiki/guilds/index.html"));
+  assert.ok(dests.has("/wiki/items/index.html"));
 });
 
 test("each joinable guild has a dedicated page", async () => {

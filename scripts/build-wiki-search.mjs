@@ -56,10 +56,31 @@ export function extractHeadings(fragment) {
   return headings;
 }
 
-/** @param {string} relPath e.g. client/foo.html */
+/** Canonical extensionless wiki URL for a file under public/wiki/. */
 export function wikiUrlFromPath(relPath) {
   const posix = relPath.split(path.sep).join("/");
+  if (posix === "index.html") return "/wiki/";
+  if (posix.endsWith("/index.html")) return `/wiki/${posix.slice(0, -"/index.html".length)}`;
+  if (posix.endsWith(".html")) return `/wiki/${posix.slice(0, -".html".length)}`;
   return `/wiki/${posix}`;
+}
+
+/** Extensionless public URL for wiki paths (hash and query preserved). */
+export function normalizeWikiPublicUrl(url) {
+  const u = new URL(url, "https://local");
+  if (!u.pathname.startsWith("/wiki")) return url;
+  let p = u.pathname;
+  if (p.endsWith("/index.html")) p = p.slice(0, -"/index.html".length) || "/wiki";
+  else if (p.endsWith(".html")) p = p.slice(0, -".html".length);
+  if (p === "/wiki/index") p = "/wiki";
+  return `${p}${u.search}${u.hash}`;
+}
+
+/** @param {string} html */
+export function normalizeWikiRedirectHtml(html) {
+  return html
+    .replace(/(\burl=)(\/wiki[^"'\s>]+)/gi, (_, prefix, target) => `${prefix}${normalizeWikiPublicUrl(target)}`)
+    .replace(/(\bhref=")(\/wiki[^"]+)(")/gi, (_, pre, target, post) => `${pre}${normalizeWikiPublicUrl(target)}${post}`);
 }
 
 /**
@@ -99,6 +120,18 @@ async function walkHtml(dir, base = dir) {
 
 async function main() {
   const files = await walkHtml(WIKI_ROOT);
+  let redirects = 0;
+  for (const file of files) {
+    const html = await readFile(file, "utf8");
+    if (!isRedirectPage(html)) continue;
+    const next = normalizeWikiRedirectHtml(html);
+    if (next !== html) {
+      await writeFile(file, next, "utf8");
+      redirects += 1;
+    }
+  }
+  if (redirects) console.log(`wiki redirects: normalized ${redirects} stub URLs`);
+
   /** @type {ReturnType<typeof indexEntryFromHtml>[]} */
   const entries = [];
 

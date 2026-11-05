@@ -18,18 +18,33 @@ const TYPES: Record<string, string> = {
   ".ico": "image/x-icon",
 };
 
+function resolvePublicFile(pathname: string): string | null {
+  let rel = decodeURIComponent(pathname);
+  if (rel.endsWith("/")) rel += "index.html";
+  /** @type {string[]} */
+  const candidates = [rel];
+  if (!path.extname(rel)) {
+    candidates.push(path.join(rel, "index.html"));
+    candidates.push(`${rel}.html`);
+  }
+  for (const candidate of candidates) {
+    const file = path.join(root, candidate);
+    if (!file.startsWith(root + path.sep)) continue;
+    try {
+      if (fs.statSync(file).isFile()) return file;
+    } catch {
+      /* try next candidate */
+    }
+  }
+  return null;
+}
+
 const server = http.createServer((req, res) => {
   const url = new URL(req.url ?? "/", "http://local");
-  let rel = decodeURIComponent(url.pathname);
-  if (rel.endsWith("/")) rel += "index.html";
-  let file = path.join(root, rel);
-  if (!path.extname(rel) && !rel.endsWith("index.html")) {
-    const asDir = path.join(root, rel, "index.html");
-    if (fs.existsSync(asDir)) file = asDir;
-  }
-  if (!file.startsWith(root + path.sep)) {
-    res.writeHead(403);
-    res.end();
+  const file = resolvePublicFile(url.pathname);
+  if (!file) {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not found\n");
     return;
   }
   fs.readFile(file, (err, body) => {

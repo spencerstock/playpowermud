@@ -143,15 +143,18 @@ renderWikiNav();
 
 /** @type {Map<string, string>} */
 const WIKI_NAV_SECTION_BY_HREF = new Map();
+function wikiPathKey(url) {
+  return url.replace(/\/index\.html$/i, "").replace(/\.html$/i, "").replace(/\/$/, "") || "/";
+}
+
 for (const section of WIKI_NAV_SECTIONS) {
   for (const [, href] of section.links) {
-    WIKI_NAV_SECTION_BY_HREF.set(href.replace(/\/$/, ""), section.title);
+    WIKI_NAV_SECTION_BY_HREF.set(wikiPathKey(href), section.title);
   }
 }
 
 function wikiSectionForUrl(url) {
-  const norm = url.replace(/\/index\.html$/i, "").replace(/\/$/, "");
-  return WIKI_NAV_SECTION_BY_HREF.get(norm) ?? "";
+  return WIKI_NAV_SECTION_BY_HREF.get(wikiPathKey(url)) ?? "";
 }
 
 function wikiSearchTerms(query) {
@@ -405,12 +408,11 @@ if (typeof SharedWorker !== "undefined") {
 }
 
 (function highlightWikiNav() {
-  const norm = (p) => p.replace(/\/index\.html$/i, "").replace(/\/$/, "") || "/";
-  const here = norm(window.location.pathname);
+  const here = wikiPathKey(window.location.pathname);
   for (const a of document.querySelectorAll(".wiki-nav a[href]")) {
     const href = a.getAttribute("href");
     if (!href || !href.startsWith("/")) continue;
-    const link = norm(new URL(href, window.location.origin).pathname);
+    const link = wikiPathKey(new URL(href, window.location.origin).pathname);
     const match =
       here === link ||
       (here === "/wiki/reference" && link === "/wiki/reference") ||

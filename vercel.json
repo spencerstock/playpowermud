@@ -2,9 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "yarn build",
   "outputDirectory": "public",
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/wiki", "destination": "/wiki/index.html" },
-    { "source": "/wiki/reference", "destination": "/wiki/reference/index.html" }
+    { "source": "/wiki/reference", "destination": "/wiki/reference/index.html" },
+    { "source": "/wiki/guilds", "destination": "/wiki/guilds/index.html" },
+    { "source": "/wiki/quests", "destination": "/wiki/quests/index.html" },
+    { "source": "/wiki/items", "destination": "/wiki/items/index.html" }
   ],
   "functions": {
     "api/ws.ts": { "maxDuration": 300 }

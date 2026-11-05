@@ -9,6 +9,14 @@ import { GUILD_SECTIONS, RACE_GUILD_ROWS, guildPageHref } from "./guild-data.mjs
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GUILDS_DIR = path.join(__dirname, "..", "public", "wiki", "guilds");
+const HELP_DIR = path.join(__dirname, "..", "public", "wiki", "reference", "help");
+
+/** @param {string} title @param {string} url */
+function wikiRedirectHtml(title, url) {
+  const safeUrl = url.replace(/"/g, "&quot;");
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta http-equiv="refresh" content="0;url=${safeUrl}" />
+<link rel="canonical" href="${safeUrl}" /><title>Moved</title></head><body><p>Moved to <a href="${safeUrl}">${title}</a>.</p></body></html>`;
+}
 
 /** @param {string} title @param {string} description */
 function wikiShell(title, description, mainHtml) {
@@ -70,9 +78,9 @@ function renderGuildPage(guild, category) {
       <div class="wiki-see-also">
         <h2>See also</h2>
         <ul>
-          <li><a href="/wiki/guilds/index.html">All guilds</a></li>
-          <li><a href="/wiki/guilds/races.html">Races</a></li>
-          <li><a href="/wiki/guilds/index.html#race-guild">Which race for which guild</a></li>
+          <li><a href="/wiki/guilds">All guilds</a></li>
+          <li><a href="/wiki/guilds/races">Races</a></li>
+          <li><a href="/wiki/guilds#race-guild">Which race for which guild</a></li>
         </ul>
       </div>`;
   return wikiShell(guild.name, desc, body);
@@ -117,8 +125,8 @@ ${raceRows}</tbody>
       <div class="wiki-see-also">
         <h2>See also</h2>
         <ul>
-          <li><a href="/wiki/guilds/races.html">Races</a></li>
-          <li><a href="/wiki/mechanics/professions.html">Professions</a></li>
+          <li><a href="/wiki/guilds/races">Races</a></li>
+          <li><a href="/wiki/mechanics/professions">Professions</a></li>
         </ul>
       </div>`;
 
@@ -141,7 +149,22 @@ async function main() {
       count += 1;
     }
   }
-  console.log(`guild pages: wrote index + ${count - 1} guild pages → ${path.relative(process.cwd(), GUILDS_DIR)}`);
+  let helpRedirects = 0;
+  for (const section of GUILD_SECTIONS) {
+    for (const guild of section.guilds) {
+      const target = guildPageHref(guild);
+      await writeFile(
+        path.join(HELP_DIR, `${guild.help}.html`),
+        wikiRedirectHtml(guild.name, target),
+        "utf8",
+      );
+      helpRedirects += 1;
+    }
+  }
+
+  console.log(
+    `guild pages: wrote index + ${count - 1} guild pages + ${helpRedirects} help routes → ${path.relative(process.cwd(), GUILDS_DIR)}`,
+  );
 }
 
 const isMain =

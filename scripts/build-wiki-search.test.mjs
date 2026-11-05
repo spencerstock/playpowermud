@@ -7,6 +7,7 @@ import {
   stripHtml,
   stripSpoilers,
   wikiPageTitle,
+  normalizeWikiPublicUrl,
   wikiUrlFromPath,
 } from "./build-wiki-search.mjs";
 
@@ -33,7 +34,14 @@ test("indexEntryFromHtml extracts main text and headings", () => {
 });
 
 test("wikiUrlFromPath", () => {
-  assert.equal(wikiUrlFromPath("client/map.html"), "/wiki/client/map.html");
+  assert.equal(wikiUrlFromPath("index.html"), "/wiki/");
+  assert.equal(wikiUrlFromPath("guilds/index.html"), "/wiki/guilds");
+  assert.equal(wikiUrlFromPath("client/map.html"), "/wiki/client/map");
+});
+
+test("normalizeWikiPublicUrl strips .html from wiki paths", () => {
+  assert.equal(normalizeWikiPublicUrl("/wiki/world/areas.html#zones"), "/wiki/world/areas#zones");
+  assert.equal(normalizeWikiPublicUrl("/wiki/guilds/bastion"), "/wiki/guilds/bastion");
 });
 
 test("stripHtml removes tags", () => {

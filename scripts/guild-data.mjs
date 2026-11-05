@@ -314,6 +314,6 @@ export const RACE_GUILD_ROWS = [
 
 /** @param {Guild & { page?: string }} guild */
 export function guildPageHref(guild) {
-  const file = guild.page ?? `${guild.slug}.html`;
-  return `/wiki/guilds/${file}`;
+  const slug = guild.page?.replace(/\.html$/i, "") ?? guild.slug;
+  return `/wiki/guilds/${slug}`;
 }

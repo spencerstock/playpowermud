@@ -99,5 +99,5 @@ test("walking directions is linked from wiki navigation and the old URL redirect
   const old = await read("public/wiki/reference/walking-directions.html");
   assert.match(nav, new RegExp(href.replaceAll("/", "\\/")));
   assert.match(areas, new RegExp(href.replaceAll("/", "\\/")));
-  assert.match(old, /http-equiv="refresh" content="0;url=\/wiki\/world\/directions\.html"/);
+  assert.match(old, /http-equiv="refresh" content="0;url=\/wiki\/world\/directions"/);
 });
