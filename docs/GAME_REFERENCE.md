@@ -55,6 +55,15 @@ This file tracks how **Powermud** knowledge is organized on the Play Powermud wi
 
 ---
 
+## World
+
+| Wiki page | Source notes |
+|-----------|----------------|
+| [World & directions](../public/wiki/reference/world-and-directions.html) | Threshold layout, short zone notes |
+| [Walking directions](../public/wiki/reference/walking-directions.html) | Spencer's 2008 route list (steps copied as written) |
+
+---
+
 ## About the wiki
 
 | Wiki page | Purpose |

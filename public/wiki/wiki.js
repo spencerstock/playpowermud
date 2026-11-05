@@ -42,6 +42,13 @@ const WIKI_NAV_SECTIONS = [
     title: "Professions",
     links: [["Doctor", "/wiki/reference/help/herbs-doctor.html"]],
   },
+  {
+    title: "World",
+    links: [
+      ["World & directions", "/wiki/reference/world-and-directions.html"],
+      ["Walking directions", "/wiki/reference/walking-directions.html"],
+    ],
+  },
   WIKI_CLIENT_SECTION,
 ];
 
