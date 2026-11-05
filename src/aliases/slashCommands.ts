@@ -1,5 +1,13 @@
 /** Client slash commands (shown in input autocomplete). Everything else goes to the MUD. */
-export const CLIENT_SLASH_COMMANDS = ["/alias", "/aliases", "/unalias"] as const;
+export const CLIENT_SLASH_COMMANDS = [
+  "/alias",
+  "/aliases",
+  "/unalias",
+  "/hotkey",
+  "/unhotkey",
+  "/when",
+  "/unwhen",
+] as const;
 
 export type ClientSlashCommand = (typeof CLIENT_SLASH_COMMANDS)[number];
 
@@ -27,7 +35,7 @@ export function filterSlashCommands(
  */
 export function isSlashCommandArgsEntry(text: string): boolean {
   const t = text.trimStart();
-  return /^\/(?:alias|unalias|aliases)\s/i.test(t);
+  return /^\/(?:alias|unalias|aliases|hotkey|unhotkey|when|unwhen)\s/i.test(t);
 }
 
 /** `/aliases` (optionally with a filter word) lists the alias table. */

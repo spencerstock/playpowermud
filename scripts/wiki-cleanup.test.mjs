@@ -81,7 +81,7 @@ test("underdark directions keep the routes that share a line with the banner", a
   assert.equal(blocks.length, 15);
   assert.ok(blocks.some((b) => b.includes("*climb hatch*(supply room)")));
   assert.ok(blocks.some((b) => b.includes("2swim s")));
-  assert.ok(blocks.some((b) => b.includes("n, sw,s,se,sw")));
+  assert.ok(blocks.some((b) => b.includes("2w,nw,s,se,sw")));
   assert.match(page, /Nal Shaddar to Rothe Island/);
   assert.match(page, /<p>\(very newbie safe\)<\/p>/);
   assert.equal(page.includes("(very newbie safe)\n(arena)"), false);

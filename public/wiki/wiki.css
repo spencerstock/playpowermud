@@ -448,6 +448,122 @@ main.wiki-main h3 {
   font-size: 1rem;
 }
 
+body.wiki-directions main.wiki-main h2[id],
+body.wiki-directions main.wiki-main h3.wiki-route-title {
+  scroll-margin-top: 4.5rem;
+}
+
+body.wiki-directions main.wiki-main h3.wiki-route-title {
+  margin-top: 1.35rem;
+  margin-bottom: 0.25rem;
+}
+
+body.wiki-directions .wiki-route-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.4rem;
+}
+
+body.wiki-directions .wiki-route-tag {
+  font-size: 0.75rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-surface);
+  color: var(--ui-meta);
+}
+
+body.wiki-directions .wiki-route {
+  margin: 0 0 0.85rem;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 8px;
+  background: var(--ui-surface-raised);
+  overflow: hidden;
+}
+
+body.wiki-directions .wiki-route-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  padding: 0.4rem 0.55rem;
+  border-bottom: 1px solid var(--ui-border);
+  background: color-mix(in srgb, var(--ui-surface) 88%, var(--ui-surface-raised));
+}
+
+body.wiki-directions .wiki-route-copy {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.22rem 0.65rem;
+  border-radius: 5px;
+  border: 1px solid var(--ui-border-strong);
+  background: var(--ui-surface);
+  color: var(--ui-fg);
+  cursor: pointer;
+}
+
+body.wiki-directions .wiki-route-copy:hover {
+  border-color: var(--ui-hint);
+  color: var(--ui-hint);
+}
+
+body.wiki-directions .wiki-route-copy.is-done {
+  border-color: var(--ui-agent-accent);
+  color: var(--ui-agent-fg);
+}
+
+body.wiki-directions .wiki-route-hint {
+  font-size: 0.72rem;
+  color: var(--ui-meta);
+  flex: 1 1 8rem;
+}
+
+body.wiki-directions .wiki-route-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border: none;
+  border-radius: 0;
+  resize: vertical;
+  min-height: 2.75rem;
+  max-height: 12rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--ui-fg);
+  background: transparent;
+}
+
+body.wiki-directions .wiki-route-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--ui-agent-accent) 55%, transparent);
+  outline-offset: -2px;
+}
+
+body.wiki-directions main.wiki-main > h3:first-of-type + ul {
+  columns: 1;
+  column-gap: 2rem;
+}
+
+@media (min-width: 40rem) {
+  body.wiki-directions main.wiki-main > h3:first-of-type + ul {
+    columns: 2;
+  }
+}
+
+@media (min-width: 56rem) {
+  body.wiki-directions main.wiki-main > h3:first-of-type + ul {
+    columns: 2;
+  }
+
+  body.wiki-directions main.wiki-main > h3:first-of-type + ul > li {
+    break-inside: avoid;
+  }
+}
+
 main.wiki-main p,
 main.wiki-main ul,
 main.wiki-main ol {

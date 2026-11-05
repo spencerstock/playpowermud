@@ -493,3 +493,108 @@ if (typeof SharedWorker !== "undefined") {
   nav.append(ol);
   main.insertBefore(nav, main.firstChild);
 })();
+
+(function mountWikiRouteBlocks() {
+  const main = document.getElementById("wiki-main");
+  if (!main || !document.body.classList.contains("wiki-directions")) return;
+
+  /** @param {string} raw */
+  function normalizeRouteText(raw) {
+    return raw
+      .replace(/\r\n/g, "\n")
+      .split("\n")
+      .map((line) => line.trim())
+      .join("")
+      .trim();
+  }
+
+  for (const pre of main.querySelectorAll("pre:has(code)")) {
+    const code = pre.querySelector("code");
+    if (!code) continue;
+    const normalized = normalizeRouteText(code.textContent ?? "");
+    if (!normalized) continue;
+
+    const heading = pre.previousElementSibling;
+    let label = "Route steps";
+    if (heading?.matches("h3[id]")) label = heading.textContent?.trim() || label;
+
+    const wrap = document.createElement("div");
+    wrap.className = "wiki-route";
+
+    const head = document.createElement("div");
+    head.className = "wiki-route-head";
+
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "wiki-route-copy";
+    copyBtn.textContent = "Copy";
+
+    const hint = document.createElement("span");
+    hint.className = "wiki-route-hint";
+    hint.textContent = "One line — paste into the game or an alias";
+
+    head.append(copyBtn, hint);
+
+    const ta = document.createElement("textarea");
+    ta.className = "wiki-route-input";
+    ta.readOnly = true;
+    ta.spellcheck = false;
+    ta.rows = Math.min(6, Math.max(2, Math.ceil(normalized.length / 88)));
+    ta.value = normalized;
+    ta.setAttribute("aria-label", label);
+
+    const flashCopied = () => {
+      copyBtn.textContent = "Copied!";
+      copyBtn.classList.add("is-done");
+      window.setTimeout(() => {
+        copyBtn.textContent = "Copy";
+        copyBtn.classList.remove("is-done");
+      }, 1600);
+    };
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(normalized);
+        flashCopied();
+      } catch {
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand("copy");
+          flashCopied();
+        } catch {
+          copyBtn.textContent = "Select text";
+        }
+      }
+    });
+
+    ta.addEventListener("click", () => ta.select());
+
+    wrap.append(head, ta);
+    pre.replaceWith(wrap);
+  }
+
+  for (const h3 of main.querySelectorAll("h3[id]")) {
+    h3.classList.add("wiki-route-title");
+    const tags = [];
+    let el = h3.nextElementSibling;
+    while (el && !el.matches("pre, .wiki-route, .wiki-callout, h2, h3")) {
+      if (el.matches("p") && /^\([^)]+\)$/.test(el.textContent?.trim() ?? "")) {
+        tags.push(el);
+      }
+      el = el.nextElementSibling;
+    }
+    if (tags.length) {
+      const row = document.createElement("div");
+      row.className = "wiki-route-tags";
+      for (const p of tags) {
+        const span = document.createElement("span");
+        span.className = "wiki-route-tag";
+        span.textContent = p.textContent?.trim() ?? "";
+        row.append(span);
+        p.remove();
+      }
+      h3.insertAdjacentElement("afterend", row);
+    }
+  }
+})();

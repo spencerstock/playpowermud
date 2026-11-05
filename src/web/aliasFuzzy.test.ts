@@ -21,5 +21,5 @@ test("mergeAutocompleteNames prefers slash commands on bare /", () => {
   const names = ["cad", "ca", "cast"];
   const merged = mergeAutocompleteNames("", names, 20);
   assert.ok(merged.every((n) => n.startsWith("/")));
-  assert.deepEqual(merged, ["/alias", "/aliases", "/unalias"]);
+  assert.deepEqual(merged, ["/alias", "/aliases", "/hotkey", "/unalias", "/unhotkey", "/unwhen", "/when"]);
 });

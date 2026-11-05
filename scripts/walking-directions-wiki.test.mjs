@@ -10,7 +10,7 @@ async function read(rel) {
   return readFile(path.join(root, rel), "utf8");
 }
 
-test("walking directions page keeps every route step verbatim", async () => {
+test("walking directions page keeps every route step", async () => {
   const page = await read("public/wiki/world/directions.html");
   const blocks = [...page.matchAll(/<pre><code>([\s\S]*?)<\/code><\/pre>/g)].map((m) => m[1]);
   assert.equal(blocks.length, 35);
@@ -27,7 +27,7 @@ e,4se,2s,sw,2s,se,2s,3se,s,e,4se,s,2e,se(small sign),8n,11nw(small sign),w`,
     `(guardhouse)2e,se,e,se,2e(small sign),2s,se,5s,5se,2s,
 4se,2s,se,2s,2e,se,3s,sw,8s,5se,s,2se,4s,2se,5s,2s,4s,6se,4s,2se,s,
 e,4se,2s,sw,2s,se,2s,3se,s,e,4se,s,2e,se(small sign),s,2se,s,se,19s,
-10se,30s(edge of town),15s(top of diamond`,
+10se,30s(edge of town),15s(top of diamond)`,
     `(guardhouse)2w,10n,w,nw,w,s,*purchase 3*,5w,*board ship*,*ready*,
 ne,3s,2e,4s,10e,n(arena)`,
     `(guardhouse)2e,se,e,se,2e(small sign),2s,se,5s,5se,2s,
@@ -39,18 +39,18 @@ nw,w,sw,w`,
 e,se,s,2se,w,s,2w,sw,s`,
     `(guardhouse)2e,se,e,se,2e(small sign),2s,se,5s,5se,2s,
 4se,2s,se,2s,2e,se,3s,sw,8s,5se,e`,
-    `(top of diamdond)15n(edge of town),30n,10nw,19n,nw,n,2nw,1n(small sign),2n,w,n`,
-    `(top of diamdond)15n(edge of town),30n,10nw,19n,nw,n,2nw,n(small sign),
+    `(top of diamond)15n(edge of town),30n,10nw,19n,nw,n,2nw,1n(small sign),2n,w,n`,
+    `(top of diamond)15n(edge of town),30n,10nw,19n,nw,n,2nw,n(small sign),
 8n,11nw(small sign),w`,
-    `(top of diamdond)15n(edge of town),30n,10nw,19n,nw,n,2nw,n(small sign),
+    `(top of diamond)15n(edge of town),30n,10nw,19n,nw,n,2nw,n(small sign),
 nw,2w,n,4nw,w,n,3nw,2n,nw,2n,ne,2n,4nw,w,n,2nw,4n,6nw,4n,2n,5n,2nw,4n,
 2nw,n,5nw,8n,ne,3n,nw,2w,2n,nw,2n,nw,2n,4nw,2n,5nw,5n,nw,2n(small sign),
 2w,nw,w,nw,2w(guardhouse)`,
     `(top of diamond)3se,s,3e,2s,4e,2s,sw,*purchase 5*,sw,3w,sw,s,
-*board ship*,*ready*ne,3s,2e,4s,10e,n(arena)`,
-    `(top of diamdond)15n(edge of town),30n,10nw,19n,nw,n,2nw,1n(small sign),
+*board ship*,*ready*,ne,3s,2e,4s,10e,n(arena)`,
+    `(top of diamond)15n(edge of town),30n,10nw,19n,nw,n,2nw,1n(small sign),
 8n,11nw(small sign),6n,w,nw,w,sw,w`,
-    `(top of diamdond)15n(edge of town),30n,10nw,19n,nw,n,2nw,1n(small sign),
+    `(top of diamond)15n(edge of town),30n,10nw,19n,nw,n,2nw,1n(small sign),
 nw,2w,n,4nw,w,n,3nw,2n,nw,2n,ne,2n,4nw,w,n,2nw,4n,6nw,4n,2n,5n,2nw,4n,
 2nw,n,e`,
     `(arena)s,10w,2n,3e,*move leaves*`,
@@ -76,11 +76,13 @@ nw,n,sw,*search bushes*`,
     `(Main square)6w,sw,nw,5s,2w,s,w`,
     `(Main square)2s,sw,*pry floorboard*,s`,
     `(Main square)6w,sw,nw(small sign),2n(small sign),4w,nw,w,nw,2w,10n(small sign),
-2w,sw,w,nw,2n,8w,nw,3w,2nw,3w,4n,2w,2nww,2nw,
+2w,sw,w,nw,2n,8w,nw,3w,2nw,3w,4n,2w,2nw,2nw,
 4w(small sign),2s,se,5s,5se,2s,4se,2s,se,2s,2e,se,3s,sw,8s,5se,e`,
   ];
   assert.deepEqual(blocks, expected);
-  assert.equal(page.split("diamdond").length - 1, 5);
+  assert.equal(page.includes("diamdond"), false);
+  assert.match(page, /wiki-directions/);
+  assert.equal(page.includes("original typos"), false);
   assert.equal(page.toLowerCase().includes("catocombs"), false);
   assert.equal(page.includes("samuria"), false);
   assert.equal(page.includes("unaccesible"), false);

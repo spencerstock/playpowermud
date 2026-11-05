@@ -16,8 +16,8 @@ The public wiki is the reference. Personal character sheets, client config, prox
 
 | Wiki page | Topic |
 |-----------|--------|
-| [Walking directions](../public/wiki/world/directions.html) | Overworld routes, steps copied as written |
-| [Underdark directions](../public/wiki/world/underdark.html) | Underdark routes, steps copied as written |
+| [Walking directions](../public/wiki/world/directions.html) | Overworld walking routes |
+| [Underdark directions](../public/wiki/world/underdark.html) | Underdark walking routes |
 
 ## Guilds
 

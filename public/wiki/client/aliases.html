@@ -57,6 +57,37 @@
         are not interrupted.
       </p>
 
+      <h3>Hotkeys</h3>
+      <table>
+        <thead>
+          <tr><th>Input</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/hotkey "KEY" "COMMAND"</code></td><td>Bind a key chord to send a command (alias-expanded, echoed like typing it)</td></tr>
+          <tr><td><code>/unhotkey NUMBER</code></td><td>Remove a binding by list number</td></tr>
+          <tr><td><code>/hotkey</code></td><td>List hotkeys (numbered; same order as <code>/unhotkey</code>)</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Use <strong>F1–F12</strong> or a chord with <strong>Ctrl</strong>, <strong>Alt</strong>, <strong>Shift</strong>, or
+        <strong>Meta</strong> (plain letters are not allowed — they would conflict with typing).
+        <kbd>Alt</kbd>+<kbd>W</kbd>/<kbd>M</kbd>/<kbd>C</kbd>/<kbd>D</kbd> stay reserved for built-in panel shortcuts.
+        Stored in <code>localStorage</code> as <code>playpowermud-hotkey</code>.
+      </p>
+
+      <h3>When commands</h3>
+      <table>
+        <thead>
+          <tr><th>Input</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/when "TRIGGER" "COMMAND"</code></td><td>Auto-send a command when MUD output contains the trigger text</td></tr>
+          <tr><td><code>/unwhen NUMBER</code></td><td>Remove a rule by list number</td></tr>
+          <tr><td><code>/when</code></td><td>List when rules (numbered)</td></tr>
+        </tbody>
+      </table>
+      <p>Stored in <code>localStorage</code> as <code>playpowermud-when</code>.</p>
+
       <h3>Storage</h3>
       <p>
         Aliases live in this browser’s <code>localStorage</code> under

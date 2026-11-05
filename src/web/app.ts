@@ -1,5 +1,7 @@
 import { parseSlashAliasesLine } from "../aliases/slashCommands.js";
 import { AliasStore } from "../client/aliases.js";
+import { HotkeyRulesStore } from "../client/hotkeyRules.js";
+import { WhenRulesStore } from "../client/whenRules.js";
 import {
   applyClientConfigToLocalStorage,
   buildClientConfig,
@@ -21,6 +23,18 @@ import {
   parseSlashAliasLine,
   parseSlashAliasUndefineLine,
 } from "./aliasAutocomplete.js";
+import { formatHotkeyListText } from "../hotkey/formatList.js";
+import {
+  isSlashHotkeyManageLine,
+  parseSlashHotkeyLine,
+  parseSlashUnhotkeyLine,
+} from "../hotkey/slashHotkey.js";
+import { formatWhenListText } from "../when/formatList.js";
+import {
+  isSlashWhenManageLine,
+  parseSlashUnwhenLine,
+  parseSlashWhenLine,
+} from "../when/slashWhen.js";
 import { createMudTerminal } from "./mudTerminal.js";
 import { createSidePanel } from "./sidePanel.js";
 import { applyTelnetKeyAction, TelnetLineEditor } from "./telnetLineEditor.js";
@@ -54,6 +68,8 @@ const wikiOpenBtn = byId<HTMLButtonElement>("wiki-open");
 
 const mudTerm = createMudTerminal(logEl, 10_000);
 const aliases = new AliasStore();
+const whenRules = new WhenRulesStore();
+const hotkeyRules = new HotkeyRulesStore();
 const connection = createMudConnection(defaultRelayUrl(location, __RELAY_URL__));
 
 const META_ANSI = "\x1b[90m";
@@ -162,6 +178,15 @@ document.addEventListener("keydown", (e) => {
     wikiOverlay.close();
     return;
   }
+  if (!passwordMode()) {
+    const hotkeyCmd = hotkeyRules.commandForEvent(e);
+    if (hotkeyCmd) {
+      e.preventDefault();
+      e.stopPropagation();
+      submitLine(hotkeyCmd, hotkeyCmd);
+      return;
+    }
+  }
   if (!(e.altKey && !e.metaKey && !e.ctrlKey && !e.shiftKey)) return;
   if (e.code === "KeyW") {
     e.preventDefault();
@@ -228,6 +253,9 @@ connection.on("status", (status, reason) => {
 connection.on("data", (text) => {
   mudTerm.write(text);
   runtime?.onMudData(text);
+  if (!passwordMode() && runtime?.state.phase === "in-game") {
+    for (const wire of whenRules.commandsForOutput(text)) sendAutomationLine(wire);
+  }
 });
 connection.on("echo", (on) => {
   serverEcho = on;
@@ -480,6 +508,21 @@ document.addEventListener(
 
 // ---- submit -------------------------------------------------------------------------------
 
+/** Alias-expanded send without echo (for `/when` auto-replies). */
+function sendAutomationLine(wire: string): void {
+  if (!connection.connected) return;
+  try {
+    const { commands, error } = aliases.resolve(wire);
+    if (error) {
+      errorLine(error);
+      return;
+    }
+    connection.sendLines(commands.length ? commands : [""]);
+  } catch (err) {
+    errorLine(err instanceof Error ? err.message : String(err));
+  }
+}
+
 /** Expand aliases and write to the MUD; echo what you typed (never a password). */
 function submitLine(wire: string, display: string): void {
   if (!connection.connected) {
@@ -508,8 +551,44 @@ function submitLine(wire: string, display: string): void {
   mudTerm.scrollToBottom();
 }
 
-/** `/alias`, `/unalias`, `/aliases` are handled here; true when the line was one of them. */
+/** Client slash commands (`/alias`, `/when`, …); true when the line was handled locally. */
 function handleSlashCommand(line: string): boolean {
+  const unhotkey = parseSlashUnhotkeyLine(line);
+  if (unhotkey) {
+    if (!unhotkey.ok) errorLine(unhotkey.reason);
+    else if (hotkeyRules.removeAt(unhotkey.index)) meta(`Hotkey #${unhotkey.index} removed.`);
+    else errorLine(`No hotkey #${unhotkey.index}. Type /hotkey to list.`);
+    return true;
+  }
+  const hotkey = parseSlashHotkeyLine(line);
+  if (hotkey) {
+    if (hotkey.kind === "error") errorLine(hotkey.reason);
+    else if (hotkey.kind === "list") meta(formatHotkeyListText(hotkeyRules.all()));
+    else {
+      const saved = hotkeyRules.add(hotkey.key, hotkey.command);
+      if (!saved.ok) errorLine(saved.reason);
+      else meta(`Hotkey saved: ${hotkey.key} → ${hotkey.command}`);
+    }
+    return true;
+  }
+  const unwhen = parseSlashUnwhenLine(line);
+  if (unwhen) {
+    if (!unwhen.ok) errorLine(unwhen.reason);
+    else if (whenRules.removeAt(unwhen.index)) meta(`When command #${unwhen.index} removed.`);
+    else errorLine(`No when command #${unwhen.index}. Type /when to list.`);
+    return true;
+  }
+  const when = parseSlashWhenLine(line);
+  if (when) {
+    if (when.kind === "error") errorLine(when.reason);
+    else if (when.kind === "list") meta(formatWhenListText(whenRules.all()));
+    else {
+      const saved = whenRules.add(when.trigger, when.command);
+      if (!saved.ok) errorLine(saved.reason);
+      else meta(`When saved: "${when.trigger}" → ${when.command}`);
+    }
+    return true;
+  }
   const undef = parseSlashAliasUndefineLine(line);
   if (undef) {
     if (!undef.ok) errorLine(undef.reason);
@@ -555,7 +634,14 @@ form.addEventListener("submit", (e) => {
     return;
   }
   const display = lineEditor.text.trim();
-  if (!passwordMode() && (isSlashAliasDefinePrefix(display) || isSlashAliasUndefinePrefix(display) || parseSlashAliasesLine(display))) {
+  if (
+    !passwordMode() &&
+    (isSlashAliasDefinePrefix(display) ||
+      isSlashAliasUndefinePrefix(display) ||
+      parseSlashAliasesLine(display) ||
+      isSlashHotkeyManageLine(display) ||
+      isSlashWhenManageLine(display))
+  ) {
     pushCommandHistory({ wire: display, display });
     clearHistoryBrowse();
     handleSlashCommand(display);
