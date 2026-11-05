@@ -16,6 +16,7 @@ const WIKI_CLIENT_SECTION = {
 };
 
 const WIKI_NAV_SECTIONS = [
+  WIKI_CLIENT_SECTION,
   {
     title: "Getting started",
     links: [["Beginner's guide", "/wiki/guide/beginners-guide.html"]],
@@ -31,7 +32,7 @@ const WIKI_NAV_SECTIONS = [
   {
     title: "Guilds",
     links: [
-      ["Guilds", "/wiki/guilds/index.html"],
+      ["All guilds", "/wiki/guilds/index.html"],
       ["Races", "/wiki/guilds/races.html"],
       ["Drow", "/wiki/guilds/drow.html"],
     ],
@@ -39,7 +40,7 @@ const WIKI_NAV_SECTIONS = [
   {
     title: "Equipment",
     links: [
-      ["Items", "/wiki/items/index.html"],
+      ["Items overview", "/wiki/items/index.html"],
       ["Normal equipment", "/wiki/items/normal-equipment.html"],
       ["Magic items", "/wiki/items/magic-items.html"],
       ["Crafting components", "/wiki/items/components.html"],
@@ -67,12 +68,19 @@ const WIKI_NAV_SECTIONS = [
       ["PK areas", "/wiki/mechanics/pk-areas.html"],
     ],
   },
-  WIKI_CLIENT_SECTION,
 ];
 
-function isClientWikiPath() {
-  return window.location.pathname.startsWith("/wiki/client/");
-}
+/** @type {Map<string, string>} */
+const WIKI_NAV_PREFIX_SECTION = new Map([
+  ["/wiki/client", "Browser client"],
+  ["/wiki/guide", "Getting started"],
+  ["/wiki/world", "World"],
+  ["/wiki/guilds", "Guilds"],
+  ["/wiki/items", "Equipment"],
+  ["/wiki/npcs", "NPCs & drops"],
+  ["/wiki/quests", "Quests"],
+  ["/wiki/mechanics", "Mechanics"],
+]);
 
 function applySkin(name) {
   const skin = name === "light" ? "light" : "dark";
@@ -89,22 +97,73 @@ document.getElementById("wiki-skin")?.addEventListener("click", () => {
   applySkin(next);
 });
 
+function wikiPathKey(url) {
+  return url.replace(/\/index\.html$/i, "").replace(/\.html$/i, "").replace(/\/$/, "") || "/";
+}
+
+/** @type {Map<string, string>} */
+const WIKI_NAV_SECTION_BY_HREF = new Map();
+for (const section of WIKI_NAV_SECTIONS) {
+  for (const [, href] of section.links) {
+    WIKI_NAV_SECTION_BY_HREF.set(wikiPathKey(href), section.title);
+  }
+}
+
+function wikiNavSectionTitleForPath(here) {
+  const direct = WIKI_NAV_SECTION_BY_HREF.get(here);
+  if (direct) return direct;
+  for (const [prefix, title] of WIKI_NAV_PREFIX_SECTION) {
+    if (here === prefix || here.startsWith(`${prefix}/`)) return title;
+  }
+  return "";
+}
+
+function wikiSectionForUrl(url) {
+  return wikiNavSectionTitleForPath(wikiPathKey(url));
+}
+
 function renderWikiNav() {
   const mount = document.getElementById("wiki-nav-root");
   if (!mount) return;
-  const details = document.createElement("details");
-  details.className = "wiki-nav";
-  details.open = true;
-  const summary = document.createElement("summary");
-  summary.textContent = "Browse wiki";
-  details.append(summary);
-  const body = document.createElement("div");
-  body.className = "wiki-nav-body";
-  function appendNavSection(parent, section) {
-    const sec = document.createElement("section");
-    const h2 = document.createElement("h2");
-    h2.textContent = section.title;
-    sec.append(h2);
+
+  const here = wikiPathKey(window.location.pathname);
+  const activeSection = wikiNavSectionTitleForPath(here);
+  const onHome = here === "/wiki" || here === "/wiki/index";
+
+  const aside = document.createElement("aside");
+  aside.className = "wiki-sidebar";
+  aside.id = "wiki-sidebar";
+
+  const shell = document.createElement("details");
+  shell.className = "wiki-nav-shell";
+  shell.open = true;
+
+  const shellSummary = document.createElement("summary");
+  shellSummary.textContent = "Navigation";
+  shell.append(shellSummary);
+
+  const nav = document.createElement("nav");
+  nav.className = "wiki-nav";
+  nav.setAttribute("aria-label", "Wiki sections");
+
+  const homeP = document.createElement("p");
+  homeP.className = "wiki-nav-home";
+  const homeA = document.createElement("a");
+  homeA.href = "/wiki/";
+  homeA.textContent = "Main page";
+  if (onHome) homeA.setAttribute("aria-current", "page");
+  homeP.append(homeA);
+  nav.append(homeP);
+
+  for (const section of WIKI_NAV_SECTIONS) {
+    const group = document.createElement("details");
+    group.className = "wiki-nav-group";
+    if (onHome || section.title === activeSection) group.open = true;
+
+    const summary = document.createElement("summary");
+    summary.textContent = section.title;
+    group.append(summary);
+
     const ul = document.createElement("ul");
     for (const [label, href] of section.links) {
       const li = document.createElement("li");
@@ -114,48 +173,16 @@ function renderWikiNav() {
       li.append(a);
       ul.append(li);
     }
-    sec.append(ul);
-    parent.append(sec);
+    group.append(ul);
+    nav.append(group);
   }
 
-  for (const section of WIKI_NAV_SECTIONS) {
-    if (section === WIKI_CLIENT_SECTION) {
-      const clientFold = document.createElement("details");
-      clientFold.className = "wiki-nav-client";
-      if (isClientWikiPath()) clientFold.open = true;
-      const clientSummary = document.createElement("summary");
-      clientSummary.textContent = section.title;
-      clientFold.append(clientSummary);
-      const clientBody = document.createElement("div");
-      clientBody.className = "wiki-nav-client-body";
-      appendNavSection(clientBody, section);
-      clientFold.append(clientBody);
-      body.append(clientFold);
-      continue;
-    }
-    appendNavSection(body, section);
-  }
-  details.append(body);
-  mount.replaceWith(details);
+  shell.append(nav);
+  aside.append(shell);
+  mount.replaceWith(aside);
 }
 
 renderWikiNav();
-
-/** @type {Map<string, string>} */
-const WIKI_NAV_SECTION_BY_HREF = new Map();
-function wikiPathKey(url) {
-  return url.replace(/\/index\.html$/i, "").replace(/\.html$/i, "").replace(/\/$/, "") || "/";
-}
-
-for (const section of WIKI_NAV_SECTIONS) {
-  for (const [, href] of section.links) {
-    WIKI_NAV_SECTION_BY_HREF.set(wikiPathKey(href), section.title);
-  }
-}
-
-function wikiSectionForUrl(url) {
-  return WIKI_NAV_SECTION_BY_HREF.get(wikiPathKey(url)) ?? "";
-}
 
 function wikiSearchTerms(query) {
   return query
@@ -420,4 +447,50 @@ if (typeof SharedWorker !== "undefined") {
     if (match) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   }
+})();
+
+(function mountWikiBreadcrumb() {
+  const here = wikiPathKey(window.location.pathname);
+  if (here === "/wiki" || here === "/wiki/index") return;
+  const main = document.getElementById("wiki-main");
+  if (!main) return;
+
+  const section = wikiNavSectionTitleForPath(here);
+  const pageTitle = document.title.replace(/\s*—\s*Play Powermud wiki\s*$/i, "").trim();
+
+  const nav = document.createElement("nav");
+  nav.className = "wiki-breadcrumb";
+  nav.setAttribute("aria-label", "Breadcrumb");
+
+  const ol = document.createElement("ol");
+  const addCrumb = (label, href) => {
+    const li = document.createElement("li");
+    if (href) {
+      const a = document.createElement("a");
+      a.href = href;
+      a.textContent = label;
+      li.append(a);
+    } else {
+      li.textContent = label;
+      li.setAttribute("aria-current", "page");
+    }
+    ol.append(li);
+  };
+
+  addCrumb("Main page", "/wiki/");
+  if (section) {
+    const sectionLink = WIKI_NAV_SECTIONS.find((s) => s.title === section)?.links[0]?.[1];
+    const onSectionHub = sectionLink && wikiPathKey(sectionLink) === here;
+    if (onSectionHub) addCrumb(section, null);
+    else {
+      if (sectionLink) addCrumb(section, sectionLink);
+      else addCrumb(section, null);
+      if (pageTitle && pageTitle !== section) addCrumb(pageTitle, null);
+    }
+  } else if (pageTitle) {
+    addCrumb(pageTitle, null);
+  }
+
+  nav.append(ol);
+  main.insertBefore(nav, main.firstChild);
 })();
