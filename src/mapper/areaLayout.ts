@@ -339,3 +339,33 @@ export function computeAreaOverlaysForMapView(
 
   return computeAreaOverlays(layoutRows, { z });
 }
+
+/** Area labels for a topology layout (`viewLayout.ts`): rooms sit at their view cells, not stored coordinates. */
+export function computeAreaOverlaysForLayout(
+  map: WorldMap,
+  cells: ReadonlyMap<string, { x: number; y: number; z: number }>,
+  z: number,
+): AreaOverlay[] {
+  const onLevel = new Set([...cells].filter(([, p]) => p.z === z).map(([id]) => id));
+  const rows: AreaLayoutRoom[] = [];
+  for (const id of onLevel) {
+    const r = map.room(id);
+    if (!r) continue;
+    const linkIds = new Set<string>();
+    for (const l of Object.values(r.links)) {
+      const to = l.to && l.kind !== "teleport" ? map.canonicalId(l.to) : undefined;
+      if (to && onLevel.has(to)) linkIds.add(to);
+    }
+    for (const inc of map.incomingRooms(r.id)) if (onLevel.has(inc.id)) linkIds.add(inc.id);
+    rows.push({
+      id: r.id,
+      area: effectiveAreaId(r),
+      areaLabel: areaDisplayLabel(map.doc, r),
+      pos: { ...cells.get(id)! },
+      linkIds: [...linkIds],
+      title: r.title,
+      description: r.description,
+    });
+  }
+  return computeAreaOverlays(rows, { z });
+}

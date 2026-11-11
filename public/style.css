@@ -146,6 +146,19 @@ h1 {
   cursor: pointer;
 }
 
+a.header-wiki-link {
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 4px;
+  background: var(--ui-surface);
+}
+
+a.header-wiki-link:hover {
+  border-color: var(--ui-hint);
+  color: var(--ui-hint);
+}
+
 .wiki-overlay {
   position: fixed;
   inset: 0;

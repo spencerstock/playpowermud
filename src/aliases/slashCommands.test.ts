@@ -6,7 +6,7 @@ import { filterSlashCommands, isSlashCommandArgsEntry, parseSlashAliasesLine } f
 test("filterSlashCommands ranks alias commands", () => {
   assert.deepEqual(filterSlashCommands("al", 12, fuzzyAliasScore).slice(0, 2), ["/alias", "/aliases"]);
   assert.deepEqual(filterSlashCommands("un", 12, fuzzyAliasScore).sort(), ["/unalias", "/unhotkey", "/unwhen"]);
-  assert.equal(filterSlashCommands("to", 12, fuzzyAliasScore).includes("/to" as never), false);
+  assert.ok(filterSlashCommands("to", 12, fuzzyAliasScore).includes("/to"));
 });
 
 test("isSlashCommandArgsEntry hides suggestions once arguments start", () => {

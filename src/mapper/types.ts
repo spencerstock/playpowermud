@@ -22,11 +22,49 @@ export type MapLink = {
   /** Extra path cost (default 1). Large values make pathfinding avoid this exit. */
   weight?: number;
   blocked?: { reason: string; at: string };
-  /** Consecutive failed move attempts on this exit; at threshold the link is removed. */
+  /**
+   * Consecutive failed moves on this exit. Reset to 0 on a successful traversal.
+   * Pathing marks the link blocked at `BLOCK_AFTER_CONSECUTIVE_FAILS`; repeated hard
+   * refusals can still remove the link at `NAV_FAILURES_BEFORE_HEAL`.
+   */
   failCount?: number;
+  /**
+   * Times a move along this exit was eaten without moving (`The small boy trips you!`). The exit
+   * works; batch speedwalks send this step on its own and repeat it until it goes through.
+   */
+  hindered?: number;
   uses: number;
   lastUsedAt?: string;
   note?: string;
+  /**
+   * Proven by something stronger than one walk: `alias` — a travel alias round trip only works
+   * on the map with this link (see `aliasTruth.ts`). Heal never prunes it as redundant and a
+   * single contradicting arrival never rewrites it.
+   */
+  verified?: "alias";
+  /**
+   * An arrival along this (well-used) exit that led somewhere else. The link is only re-pointed
+   * when the same other room shows up again; one bad observation does not rewrite the map.
+   */
+  contested?: { to: string; count: number };
+  /**
+   * A ride, not a walk (ship, ferry — profile `transits`). Stored as `kind: "teleport"` so it
+   * never shapes the layout; pathing takes it only when `allowLinks` opts in (`transit`, `*`,
+   * the command or `roomId:cmd`).
+   */
+  transit?: MapTransit;
+};
+
+export type MapTransit = {
+  /** Profile rule id (`kendrite-ship`). */
+  rule: string;
+  label: string;
+  /** Destination named on the ticket (`Merevia`). */
+  place?: string;
+  /** Last measured board → arrive time. */
+  seconds?: number;
+  /** What to do before the link's command (buy a pass…). */
+  howTo?: string;
 };
 
 export type MapPos = { plane: string; x: number; y: number; z: number };
@@ -39,6 +77,8 @@ export type StoredContent = {
   lastCount: number;
   seenCount: number;
   lastSeenAt: string;
+  /** Last seen only as a hidden mob (`You notice X skulking around…`). */
+  hidden?: boolean;
 };
 
 export type MapRoom = {
@@ -83,6 +123,11 @@ export type MapPlane = {
   kind: "surface" | "aside";
   /** For aside planes: where it hangs off its parent plane. */
   parent?: { plane: string; fromRoom: string; via: string };
+  /**
+   * A landmass reached only by a transit (the Merevia ship): no walking link, merge or
+   * description match crosses into or out of it. Aside planes inherit it from their parent.
+   */
+  continent?: string;
   createdAt: string;
 };
 
@@ -90,6 +135,13 @@ export type MapArea = {
   label: string;
   notes: string[];
   meta: Record<string, unknown>;
+};
+
+export type MapWaypoint = {
+  roomId: string;
+  /** Display name as typed (may differ in case from the map key). */
+  label?: string;
+  setAt: string;
 };
 
 export type WorldGraphDocument = {
@@ -101,6 +153,8 @@ export type WorldGraphDocument = {
   rooms: Record<string, MapRoom>;
   planes: Record<string, MapPlane>;
   areas: Record<string, MapArea>;
+  /** User labels → room id (`/wp name` then `/to name`). Keys are lowercase. */
+  waypoints?: Record<string, MapWaypoint>;
   /** Merged-away room id → surviving id, so old references keep resolving. */
   redirects?: Record<string, string>;
 };
@@ -118,6 +172,7 @@ export type PathOptions = {
    * `roomId:cmd` key, or `*` for all of them.
    */
   allowLinks?: string[];
+  /* `transit` in `allowLinks` opts in to every ride link (ships); see `MapLink.transit`. */
   /** Extra cost to traverse these room ids or tags; still used when no alternate exists. */
   preferAvoid?: string[];
   /** Use inferred (unconfirmed) links (default true). */

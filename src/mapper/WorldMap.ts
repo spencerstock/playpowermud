@@ -10,17 +10,21 @@ import {
 } from "../game/directions.js";
 import { descriptionWithDoorStates, OPEN_DOOR_COMMAND, parseDoors } from "../game/doors.js";
 import { cleanseRoomDescription, isRoomDescriptionNoiseLine } from "../game/roomDescriptionNoise.js";
+import { isLearnedSpecial, looksLikeTravelCommand } from "./specialExits.js";
 import type { DoorState, RoomDoor, RoomObservation } from "../game/types.js";
 import { areaDisplayLabel, propagateAreas } from "./areaInfer.js";
-import { linkNeverPathed, PREFER_AVOID_ROOM_COST } from "./pathPolicy.js";
+import { buildNoiseContext, type NoiseContext, scrubDescription } from "./descriptionIntegrity.js";
+import { CONTRADICTED_GUESS_COST, isTeleportOnlyCommand, linkNeverPathed, PREFER_AVOID_ROOM_COST, transitLinkAllowed } from "./pathPolicy.js";
 import { npcMatchFor, npcNamesForRoom, syncRoomNpcs } from "./npcs.js";
 import { isNumericRoomIdQuery } from "./roomIdQuery.js";
+import { ensureWaypoints, normalizeWaypointName, remapWaypointRoomIds } from "./waypoints.js";
 import type {
   ExitKind,
   MapLink,
   MapPlane,
   MapPos,
   MapRoom,
+  MapTransit,
   PathOptions,
   PathStep,
   StoredContent,
@@ -38,10 +42,17 @@ const CHAIN_MERGE_MIN_DESC = 120;
 /** A compass link neither end lists that no listed exit explains, kept only as a costly guess. */
 export const SUSPECT_LINK_NOTE = "neither room lists this exit";
 const SUSPECT_LINK_WEIGHT = 8;
+/** Least path cost of a ride (ships cost a pass and minutes; walking wins when it exists). */
+const TRANSIT_MIN_WEIGHT = 20;
 /** Same-plane copies farther apart than this are look-alikes (a road reusing prose), not copies. */
 const CHAIN_MERGE_MAX_CELLS = 2;
 /** How long a failed move stays off pathing and the unmapped-exit frontier. */
 export const BLOCK_TTL_MS = 10 * 60_000;
+/**
+ * Consecutive failed moves on one link before pathing treats it as blocked.
+ * One miss (a crawl that didn't take, a mob in the way) stays usable so the walker retries.
+ */
+export const BLOCK_AFTER_CONSECUTIVE_FAILS = 20;
 /** Failed compass moves on the same link before it is removed and the map is healed. */
 export const NAV_FAILURES_BEFORE_HEAL = 20;
 /** The game's flat "no exit that way" answers (not a guard, door or fight in the way). */
@@ -115,10 +126,28 @@ function isFlavorPrefix(prefix: string): boolean {
 }
 
 /**
+ * `prefix` stands apart from the prose that follows it: it ends at a blank line, or its last line
+ * ends a sentence while the next word would still have fit on it (a hard break — wrapped prose
+ * never does that). A prefix that runs on in the same wrapped paragraph is a real first line.
+ */
+export function isDetachedPrefix(prefix: string, rest: string): boolean {
+  if (!prefix.endsWith("\n")) return false;
+  if (/\n\s*\n$/.test(prefix)) return true;
+  const last = prefix.trimEnd().split("\n").pop()!.trimEnd();
+  const firstWord = rest.trimStart().split(/\s+/)[0] ?? "";
+  return /[.!?'")\]]$/.test(last) && last.length + 1 + firstWord.length <= 77 && /^[A-Z]/.test(rest.trimStart());
+}
+
+/**
  * Which description to keep when a room is seen again. Travel flavor is prepended to arrival
  * displays, so a shorter view may be the clean one — but a view whose start was cut off (replayed
- * buffer, partial capture) is also shorter. Drop a prefix only when it is flavor lines; a longer
- * view that restores a cut-off start wins.
+ * buffer, partial capture) is also shorter.
+ *
+ * A prefix is dropped when it is known flavor or when it is *detached* from the prose (see
+ * {@link isDetachedPrefix}); a longer view wins only when its extra start runs on in the same
+ * wrapped paragraph (it restores a cut-off first line). The old rule — "longer wins unless the
+ * prefix is on the denylist" — let every unknown message (`You are no longer blessed.`) replace a
+ * clean description; scripts/map-integrity.ts found 107 rooms dirtied that way in two days.
  */
 export function preferDescription(
   stored: string | undefined,
@@ -127,8 +156,14 @@ export function preferDescription(
 ): string {
   if (!stored || !matches(stored)) return next;
   if (stored === next) return stored;
-  if (stored.endsWith(next)) return isFlavorPrefix(stored.slice(0, -next.length)) ? next : stored;
-  if (next.endsWith(stored)) return isFlavorPrefix(next.slice(0, -stored.length)) ? stored : next;
+  if (stored.endsWith(next)) {
+    const prefix = stored.slice(0, -next.length);
+    return isFlavorPrefix(prefix) || isDetachedPrefix(prefix, next) ? next : stored;
+  }
+  if (next.endsWith(stored)) {
+    const prefix = next.slice(0, -stored.length);
+    return isFlavorPrefix(prefix) || isDetachedPrefix(prefix, stored) ? stored : next;
+  }
   return next.length < stored.length ? next : stored;
 }
 
@@ -202,6 +237,8 @@ export type HealReport = {
   areasInferred: number;
   /** Stored verbose descriptions scrubbed of leaked game lines. */
   descriptionsCleaned: number;
+  /** Self-learned secret exits that only duplicated a better-attested way to the same room. */
+  redundantSpecials?: number;
   /** Two records of one room merged on neighbor evidence (same cell / exit back and forth). */
   conflictsResolved?: number;
   /** Redirects to rooms that no longer exist, dropped; chains flattened. */
@@ -210,6 +247,8 @@ export type HealReport = {
   planesRegistered?: number;
   /** Descriptions whose leading lines were chatter another room's clean copy proves. */
   prefixesStripped?: number;
+  /** Descriptions with leaked edge lines found by shape + map evidence (descriptionIntegrity.ts). */
+  leakedLinesScrubbed?: number;
   /** Copies of one room (rare prose, same exits, neighbors that agree) merged. */
   chainsMerged?: number;
   /** Thin look-alike fragments folded into their well-wired original. */
@@ -228,6 +267,9 @@ export class WorldMap {
   private byDesc = new Map<string, Set<string>>();
   private incoming = new Map<string, Set<string>>();
   private dirty = false;
+  /** Map-wide evidence for leaked-line detection; rebuilt by heal() and every N observations. */
+  private noiseCtx: NoiseContext | null = null;
+  private noiseCtxAge = 0;
 
   constructor(readonly doc: WorldGraphDocument) {
     this.reindex();
@@ -249,6 +291,7 @@ export class WorldMap {
     this.doc.planes = empty.planes;
     this.doc.areas = empty.areas;
     delete this.doc.redirects;
+    delete this.doc.waypoints;
     this.reindex();
     this.touch();
   }
@@ -368,6 +411,23 @@ export class WorldMap {
     this.doc.planes[id] = plane;
     this.touch();
     return plane;
+  }
+
+  /** The transit-only landmass a plane belongs to (its own mark, or its parent chain's). */
+  continentOf(planeId: string | undefined): string | undefined {
+    const seen = new Set<string>();
+    let p = planeId ? this.doc.planes[planeId] : undefined;
+    while (p && !seen.has(p.id)) {
+      if (p.continent) return p.continent;
+      seen.add(p.id);
+      p = p.parent ? this.doc.planes[p.parent.plane] : undefined;
+    }
+    return undefined;
+  }
+
+  /** Both rooms on the same landmass: walking, merging and matching may join them. */
+  sameContinent(a: MapRoom, b: MapRoom): boolean {
+    return this.continentOf(a.pos?.plane) === this.continentOf(b.pos?.plane);
   }
 
   createRoom(pos: MapPos, obs?: RoomObservation): MapRoom {
@@ -547,7 +607,7 @@ export class WorldMap {
       room.dark = undefined;
       if (obs.title) room.title = obs.title;
       if (obs.description) {
-        const cleaned = cleanseRoomDescription(obs.description.trim());
+        const cleaned = this.scrubLeakedLines(cleanseRoomDescription(obs.description.trim()), room.id, obs);
         if (cleaned) {
           const key = descKey(cleaned);
           const normCleaned = normalizeDescription(cleaned);
@@ -571,6 +631,8 @@ export class WorldMap {
         );
       }
       for (const c of obs.contents) {
+        // Players walk around; they are not room metadata (and `/to <player>` should not route).
+        if (c.kind === "player") continue;
         const path = c.path?.replace(/#\d+$/, "");
         const key = path ?? c.name;
         const prev = room.contents[key];
@@ -581,6 +643,7 @@ export class WorldMap {
           lastCount: c.count,
           seenCount: (prev?.seenCount ?? 0) + 1,
           lastSeenAt: at,
+          ...(c.hidden ? { hidden: true } : {}),
         };
         room.contents[key] = stored;
       }
@@ -695,6 +758,8 @@ export class WorldMap {
     this.unindexRoom(from);
     const prev = from.links[cmd];
     const keepPrev = prev && prev.confirmed && !opts.confirmed && prev.to;
+    // Re-pointed at another room: what was learned about the old destination does not carry over.
+    const retarget = !!prev?.to && !!toId && this.canonicalId(prev.to) !== toId;
     const link: MapLink = keepPrev
       ? prev
       : {
@@ -703,15 +768,39 @@ export class WorldMap {
           kind: opts.kind,
           hidden: opts.hidden || undefined,
           confirmed: opts.confirmed || (prev?.confirmed === true && prev.to === toId),
-          uses: prev?.uses ?? 0,
+          uses: retarget ? 0 : (prev?.uses ?? 0),
           blocked: undefined,
         };
+    if (!keepPrev && retarget) {
+      delete link.contested;
+      delete link.verified;
+      delete link.failCount;
+    }
     if (opts.confirmed) {
       link.uses += 1;
       link.lastUsedAt = nowIso();
+      // A traversal that landed clears the consecutive-failure streak. `blocked` is already
+      // dropped above; expiry of an older block is otherwise unchanged.
+      if (link.failCount) link.failCount = 0;
     }
     from.links[cmd] = link;
     this.indexRoom(from);
+    this.touch();
+    return link;
+  }
+
+  /**
+   * Record a ride (`MapLink.transit`) from `fromId` by `cmd` to `toId`. Teleport-kind (never
+   * part of the layout), hidden, costed by the voyage time so paths prefer walking.
+   */
+  linkTransit(fromId: string, cmd: string, toId: string, transit: MapTransit): MapLink {
+    const link = this.link(fromId, cmd, toId, { kind: "teleport", confirmed: true, hidden: true });
+    const prev = link.transit;
+    link.transit = { ...prev, ...transit, seconds: transit.seconds ?? prev?.seconds };
+    if (!link.transit.seconds) delete link.transit.seconds;
+    link.weight = Math.max(TRANSIT_MIN_WEIGHT, Math.round((link.transit.seconds ?? 0) / 10));
+    const how = transit.howTo ? `: ${transit.howTo}` : "";
+    link.note = `${transit.label}${transit.place ? ` to ${transit.place}` : ""}${how}`;
     this.touch();
     return link;
   }
@@ -722,6 +811,15 @@ export class WorldMap {
     this.unindexRoom(from);
     delete from.links[cmd];
     this.indexRoom(from);
+    this.touch();
+    return true;
+  }
+
+  /** A move along `cmd` was eaten without moving (tripped); see `MapLink.hindered`. */
+  recordHindrance(fromId: string, cmd: string): boolean {
+    const link = this.doc.rooms[fromId]?.links[cmd];
+    if (!link?.to) return false;
+    link.hindered = (link.hindered ?? 0) + 1;
     this.touch();
     return true;
   }
@@ -744,7 +842,44 @@ export class WorldMap {
   }
 
   /**
-   * Record a failed navigation on `cmd` from `fromId`. After {@link NAV_FAILURES_BEFORE_HEAL}
+   * One failed move on `cmd` (`did not move`, `in your way`, `You cannot go that direction`, …).
+   * Increments the consecutive-failure counter. Sets `blocked` only at
+   * {@link BLOCK_AFTER_CONSECUTIVE_FAILS}. A live block is left alone so its expiry does not move.
+   */
+  noteConsecutiveFailure(fromId: string, cmd: string, reason: string): { failures: number; blocked: boolean } {
+    const from = this.doc.rooms[fromId];
+    if (!from) return { failures: 0, blocked: false };
+    const tracked = from.exits.includes(cmd) || !!from.links[cmd]?.to || !!from.links[cmd];
+    if (!tracked) return { failures: 0, blocked: false };
+    let link = from.links[cmd];
+    if (!link) {
+      link = from.links[cmd] = {
+        to: null,
+        kind: exitKindFor(cmd, from.exits),
+        confirmed: false,
+        uses: 0,
+      };
+    }
+    link.failCount = (link.failCount ?? 0) + 1;
+    const failures = link.failCount;
+    const blockFresh = !!link.blocked && Date.now() - Date.parse(link.blocked.at) < BLOCK_TTL_MS;
+    if (failures >= BLOCK_AFTER_CONSECUTIVE_FAILS && !blockFresh) this.markBlocked(fromId, cmd, reason);
+    else this.touch();
+    const nowBlocked = !!link.blocked && Date.now() - Date.parse(link.blocked.at) < BLOCK_TTL_MS;
+    return { failures, blocked: nowBlocked };
+  }
+
+  /** A successful traversal of `cmd`: the consecutive-failure streak ends. */
+  clearConsecutiveFailures(fromId: string, cmd: string): void {
+    const link = this.doc.rooms[fromId]?.links[cmd];
+    if (!link?.failCount) return;
+    link.failCount = 0;
+    this.touch();
+  }
+
+  /**
+   * Record a failed navigation on `cmd` from `fromId`. The link stays on the path until
+   * {@link BLOCK_AFTER_CONSECUTIVE_FAILS} consecutive failures. After {@link NAV_FAILURES_BEFORE_HEAL}
    * failures the link is removed and duplicate/orphan destinations are merged or deleted.
    */
   recordNavigationFailure(fromId: string, cmd: string, reason: string): NavFailureResult {
@@ -753,11 +888,8 @@ export class WorldMap {
     const tracked = from.exits.includes(cmd) || !!from.links[cmd]?.to;
     if (!tracked) return { failures: 0, healed: false };
 
-    this.markBlocked(fromId, cmd, reason);
-    const link = from.links[cmd]!;
-    link.failCount = (link.failCount ?? 0) + 1;
-    const failures = link.failCount;
-    this.touch();
+    const noted = this.noteConsecutiveFailure(fromId, cmd, reason);
+    const failures = noted.failures;
 
     // The game flatly refused, again and again, a compass move the room does not even list:
     // the link is a mapping error, not a flaky exit — drop it instead of waiting for 20.
@@ -794,7 +926,10 @@ export class WorldMap {
       this.mergeRooms(fromId, toId);
       return `merged ${toId} into ${fromId}`;
     }
-    if (this.incomingRooms(toId).length === 0) {
+    // Only throw away a throwaway: a room walked many times or carrying notes / tags / meta / contents
+    // (Dante's shop r6, 1478 visits, was deleted 2026-11 after its door link failed) stays, just unlinked.
+    const kept = to.visits > 1 || to.tags.length > 0 || to.notes.length > 0 || Object.keys(to.meta ?? {}).length > 0 || Object.keys(to.contents ?? {}).length > 0;
+    if (this.incomingRooms(toId).length === 0 && !kept) {
       this.deleteRoom(toId);
       return `deleted orphan ${toId}`;
     }
@@ -814,8 +949,7 @@ export class WorldMap {
     for (const id of ids) {
       const room = this.room(id);
       if (!room) continue;
-      const p = addVec(room.pos, delta);
-      if (opts.plane) p.plane = opts.plane;
+      const p: MapPos = { ...addVec(room.pos, delta), plane: opts.plane ?? room.pos.plane };
       this.setPos(room, p);
       n += 1;
     }
@@ -857,6 +991,10 @@ export class WorldMap {
     const dropped = this.doc.planes[drop];
     const kept = this.doc.planes[keep];
     if (kept && dropped?.kind === "surface") kept.kind = "surface";
+    if (kept && dropped) {
+      kept.label ??= dropped.label;
+      kept.continent ??= dropped.continent;
+    }
     delete this.doc.planes[drop];
     this.touch();
   }
@@ -878,15 +1016,22 @@ export class WorldMap {
     this.link(from.id, cmd, to.id, { kind, confirmed: opts.confirmed, hidden: opts.hidden });
     if (!from.pos?.plane || !to.pos?.plane) return false;
     if (!isGeometricDirection(cmd) || from.pos.plane === to.pos.plane) return false;
+    if (this.continentOf(from.pos.plane) !== this.continentOf(to.pos.plane)) return false;
     const expected = this.expectedPos(from, cmd);
     if (!expected) return false;
     const offset = subVec(expected, to.pos);
     // Overlaying the two layouts would stack different rooms on one cell (a wrapping desert
     // around a city, a maze): keep the link but leave the planes apart.
     if (this.planeMergeCollisions(from.pos.plane, to.pos.plane, offset) > 0) return false;
-    // Keep the older plane id so references stay stable.
-    const fromN = Number(from.pos.plane.slice(1));
-    const toN = Number(to.pos.plane.slice(1));
+    // Keep a continent's plane, then a named one ("p-merevia" is not a number: NaN made the
+    // live hub fold Merevia into p222), then the older plane id so references stay stable.
+    const rank = (id: string) => {
+      if (this.doc.planes[id]?.continent) return -2;
+      const n = Number(id.slice(1));
+      return Number.isFinite(n) ? n : -1;
+    };
+    const fromN = rank(from.pos.plane);
+    const toN = rank(to.pos.plane);
     if (fromN <= toN) this.mergePlanes(from.pos.plane, to.pos.plane, offset);
     else this.mergePlanes(to.pos.plane, from.pos.plane, { x: -offset.x, y: -offset.y, z: -offset.z });
     return true;
@@ -1052,6 +1197,7 @@ export class WorldMap {
     keep.visits += drop.visits;
     if (drop.firstSeenAt < keep.firstSeenAt) keep.firstSeenAt = drop.firstSeenAt;
     delete this.doc.rooms[dropId];
+    remapWaypointRoomIds(this.doc, dropId, keepId);
     const redirects = (this.doc.redirects ??= {});
     redirects[dropId] = keepId;
     delete redirects[keepId];
@@ -1136,9 +1282,15 @@ export class WorldMap {
       descriptionsCleaned: 0,
     };
     report.descriptionsCleaned += this.cleanseStoredDescriptions();
+    this.noiseCtx = null;
+    report.leakedLinesScrubbed = this.scrubStoredLeakedLines();
+    report.descriptionsCleaned += report.leakedLinesScrubbed;
     report.prefixesStripped = this.stripKnownPrefixes();
     report.descriptionsCleaned += report.prefixesStripped;
     report.planesRegistered = this.registerMissingPlanes();
+    report.linksPruned += this.pruneTeleportOnlyLinks();
+    report.redundantSpecials = this.pruneRedundantSpecials();
+    report.linksPruned += report.redundantSpecials;
     // Misattributed links first: they would otherwise "prove" wrong merges below.
     report.linksPruned += this.pruneLinks();
     report.merged += this.mergeDoorCopies();
@@ -1158,6 +1310,43 @@ export class WorldMap {
     for (const room of this.rooms()) syncRoomNpcs(room);
     report.areasInferred = propagateAreas(this);
     return report;
+  }
+
+  /** Map-wide evidence for {@link scrubDescription}, cached (about 50 ms to build on 4k rooms). */
+  noiseContext(): NoiseContext {
+    if (!this.noiseCtx || this.noiseCtxAge >= 250) {
+      this.noiseCtx = buildNoiseContext(this.doc);
+      this.noiseCtxAge = 0;
+    }
+    return this.noiseCtx;
+  }
+
+  /**
+   * Drop edge lines that are game output, judged by shape plus map evidence (see
+   * descriptionIntegrity.ts): the denylist in cleanseRoomDescription only knows lines it has seen.
+   */
+  private scrubLeakedLines(text: string | undefined, roomId: string, obs?: RoomObservation): string | undefined {
+    if (!text) return text;
+    const ctx = this.noiseContext();
+    this.noiseCtxAge += 1;
+    // Mobs in this very display count even before they are stored.
+    for (const c of obs?.contents ?? []) if (c.kind === "npc" && c.name.length >= 3) ctx.actors.add(c.name.toLowerCase());
+    return scrubDescription(text, ctx, { roomId }).text || text;
+  }
+
+  /** heal(): scrub leaked edge lines from stored descriptions. */
+  private scrubStoredLeakedLines(): number {
+    let n = 0;
+    const ctx = this.noiseContext();
+    for (const room of this.rooms()) {
+      if (!room.description) continue;
+      const res = scrubDescription(room.description, ctx, { roomId: room.id });
+      if (!res.removed.length || !res.text) continue;
+      this.setDescription(room, res.text);
+      n += 1;
+    }
+    if (n) this.noiseCtx = null;
+    return n;
   }
 
   /** Strip leaked game output from stored verbose descriptions and refresh desc index keys. */
@@ -1186,6 +1375,11 @@ export class WorldMap {
       this.setDescription(room, cleaned);
     }
     return { cleaned: cleanedIds, allJunk };
+  }
+
+  /** Public entry for repair tools: replace a stored description and rebuild its desc keys. */
+  replaceDescription(room: MapRoom, text: string): void {
+    this.setDescription(room, text);
   }
 
   /** Replace a stored description and keep only the desc keys it still explains. */
@@ -1308,6 +1502,68 @@ export class WorldMap {
       if (!survivor?.description) continue;
       const doors = parseDoors(survivor.description);
       if (doors.length) this.applyDoors(survivor, doors);
+    }
+    return n;
+  }
+
+  /**
+   * Drop links for newbie teleports (`homeland`) and similar commands that never represent
+   * walkable topology (see `NEVER_PATH_LINKS`).
+   */
+  private pruneTeleportOnlyLinks(): number {
+    let n = 0;
+    for (const room of this.rooms()) {
+      for (const cmd of Object.keys(room.links)) {
+        if (isTeleportOnlyCommand(cmd) && this.unlink(room.id, cmd)) n += 1;
+      }
+    }
+    return n;
+  }
+
+  /**
+   * Secret exits the mapper learned by itself that only duplicate a better-attested way to the
+   * same room. They come from a display credited to the wrong queued command (travel aliases
+   * spam `enter crack;climb up;…`, attacks are answered late), and once recorded they reinforce
+   * themselves: the stray command now "is" an exit, so the next display is credited to it again.
+   *
+   * - The room lists an exit that was really walked to that same room: the listed exit is the
+   *   game's own word, the secret one goes (r303 `u` and `enter crack`, both → r304).
+   * - Several secret commands lead to one room: the most used stays; others with at most a
+   *   quarter of its walks go (r312 `climb up` ×124 vs `enter crack` ×3).
+   * - A command that is no travel verb at all and was walked at most twice goes when anything
+   *   else leads there.
+   *
+   * Scripted (`pre`), hand-registered and alias-verified links are never touched.
+   */
+  private pruneRedundantSpecials(): number {
+    let n = 0;
+    for (const room of this.rooms()) {
+      const byDest = new Map<string, [string, MapLink][]>();
+      for (const [cmd, link] of Object.entries(room.links)) {
+        if (!link.to || link.kind === "teleport") continue;
+        const to = this.canonicalId(link.to);
+        if (!to || to === room.id) continue;
+        let list = byDest.get(to);
+        if (!list) byDest.set(to, (list = []));
+        list.push([cmd, link]);
+      }
+      for (const group of byDest.values()) {
+        if (group.length < 2) continue;
+        const learned = group.filter(([cmd, l]) => isLearnedSpecial(cmd, l, room));
+        if (!learned.length) continue;
+        const listed = group.some(
+          ([cmd, l]) => room.exits.includes(cmd) && l.confirmed && (l.uses >= 2 || !!l.verified),
+        );
+        const anchored = group.some(([cmd, l]) => !!l.verified || (!isLearnedSpecial(cmd, l, room) && l.confirmed));
+        const top = Math.max(...learned.map(([, l]) => l.uses));
+        // Ties keep the first one recorded.
+        const keep = listed ? undefined : learned.find(([, l]) => l.uses === top)?.[0];
+        for (const [cmd, l] of learned) {
+          const junk = !looksLikeTravelCommand(cmd, room) && l.uses <= 2 && (anchored || cmd !== keep);
+          const minor = cmd !== keep && l.uses * 4 <= top;
+          if ((listed || junk || minor) && this.unlink(room.id, cmd)) n += 1;
+        }
+      }
     }
     return n;
   }
@@ -1446,8 +1702,8 @@ export class WorldMap {
 
   /**
    * Join an unexplored compass exit to the one room on that cell. The neighbor usually
-   * lists the way back. When it does not — a wrapped exits line dropped it, or the MUD
-   * never prints that door — still join if both cells hold a single distinct room.
+   * lists the way back. When it does not, join only a neighbor with no verbose display yet
+   * (a brief exits list may be cut short) and only if both cells hold a single distinct room.
    * Then reciprocate confirmed geometric links so a one-way shop door is walkable back in.
    */
   private stitchExits(): number {
@@ -1462,6 +1718,10 @@ export class WorldMap {
           const back = q.links[rev];
           if (back?.to && this.canonicalId(back.to) !== room.id) return false;
           if (q.exits.includes(rev)) return true;
+          // A full "obvious exits" line that leaves out the way back is the game's word: the
+          // grid just happens to put two unrelated rooms side by side (Merevia's forest path
+          // r4812 under the grasslands). Only a brief-only room may have lost an exit.
+          if (q.description && q.exits.length > 0) return false;
           if (this.roomsAt(room.pos).length !== 1 || this.roomsAt(q.pos).length !== 1) return false;
           if (this.signaturesAgree(room, q)) return false;
           return true;
@@ -1491,6 +1751,9 @@ export class WorldMap {
         const back = dest.links[rev];
         if (back?.to) continue;
         if (!dest.exits.includes(rev) && this.namedWayBack(dest, room.id)) continue;
+        // A verbose display whose compass exits leave out the way back is the game's word (the
+        // Merevia cave dead end r4925 lists only south): do not invent a phantom return.
+        if (!dest.exits.includes(rev) && dest.description && dest.exits.some((e) => isGeometricDirection(e))) continue;
         this.link(dest.id, rev, room.id, { kind: exitKindFor(rev, dest.exits), confirmed: false });
         n += 1;
       }
@@ -1511,6 +1774,7 @@ export class WorldMap {
   }
 
   private signaturesAgree(a: MapRoom, b: MapRoom): boolean {
+    if (!this.sameContinent(a, b)) return false;
     if (!this.titlesAgree(a, b)) return false;
     if (a.descKeys.length && b.descKeys.length && !this.descriptionsAgree(a, b)) return false;
     return sameExitSet(a.exits, b.exits);
@@ -1529,6 +1793,7 @@ export class WorldMap {
    * or, for rooms only seen in brief mode, the same title.
    */
   private samePlace(a: MapRoom, b: MapRoom): boolean {
+    if (!this.sameContinent(a, b)) return false;
     const doors = a.tags.includes("dynamic-exits") || b.tags.includes("dynamic-exits");
     if (!doors && !sameExitSet(a.exits, b.exits)) return false;
     if (a.description && b.description) {
@@ -1783,7 +2048,10 @@ export class WorldMap {
     if (doorState === "locked") return false;
     if (!link.to) return false;
     if (roomId !== undefined && cmd !== undefined && linkNeverPathed(roomId, cmd, opts.allowLinks)) return false;
-    if (link.kind === "teleport") return false;
+    if (link.kind === "teleport") {
+      // Rides (ships) are teleport-kind so they never shape the layout; usable on request.
+      if (!link.transit || roomId === undefined || cmd === undefined || !transitLinkAllowed(roomId, cmd, opts.allowLinks)) return false;
+    }
     if (opts.allowInferred === false && !link.confirmed) return false;
     if (opts.allowSpecial === false && link.kind === "special") return false;
     if (link.blocked && now - Date.parse(link.blocked.at) < BLOCK_TTL_MS) return false;
@@ -1797,6 +2065,20 @@ export class WorldMap {
       if (room.tags.some((t) => opts.avoid!.includes(t))) return true;
     }
     return false;
+  }
+
+  /**
+   * A guessed compass link (unconfirmed, never walked) into a room whose verbose exits list has
+   * compass exits but not the way back — the grid put two unrelated rooms side by side.
+   */
+  guessContradicted(fromId: string, cmd: string, link: MapLink, dest: MapRoom): boolean {
+    if (link.confirmed || (link.uses ?? 0) > 0 || link.kind === "teleport" || link.hidden) return false;
+    if (!isGeometricDirection(cmd)) return false;
+    const rev = reverseDirection(cmd);
+    if (!rev || dest.exits.includes(rev)) return false;
+    if (!dest.description || !dest.exits.some((e) => isGeometricDirection(e))) return false;
+    // A named way back (door, path, etc.) to us explains the missing compass exit.
+    return !Object.values(dest.links).some((l) => l.to === fromId);
   }
 
   /** Dijkstra over known links. Returns null when unreachable. */
@@ -1835,6 +2117,7 @@ export class WorldMap {
         if (!next || done.has(next.id)) continue;
         if (!goal(next) && this.roomAvoided(next, opts)) continue;
         let w = (link.weight ?? 1) + (link.kind === "special" ? 0.5 : 0) + (link.confirmed ? 0 : 0.25);
+        if (this.guessContradicted(room.id, cmd, link, next)) w += CONTRADICTED_GUESS_COST;
         if (opts.preferAvoid?.length) {
           if (opts.preferAvoid.includes(next.id) || next.tags.some((t) => opts.preferAvoid!.includes(t))) {
             w += PREFER_AVOID_ROOM_COST;
@@ -1955,12 +2238,45 @@ export class WorldMap {
     return [...groups.values()].sort((a, b) => b.length - a.length);
   }
 
+  /** Save or overwrite a named waypoint at `roomId`. */
+  setWaypoint(name: string, roomId: string): void {
+    const key = normalizeWaypointName(name);
+    if (!key) throw new Error("waypoint name required");
+    const canon = this.canonicalId(roomId) ?? roomId;
+    if (!this.doc.rooms[canon]) throw new Error(`unknown room ${roomId}`);
+    const wps = ensureWaypoints(this.doc);
+    wps[key] = { roomId: canon, label: name.trim(), setAt: nowIso() };
+    this.touch();
+  }
+
+  listWaypoints(): { name: string; roomId: string; label?: string; setAt: string }[] {
+    const wps = this.doc.waypoints;
+    if (!wps) return [];
+    return Object.entries(wps)
+      .map(([name, wp]) => ({ name, roomId: wp.roomId, label: wp.label, setAt: wp.setAt }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /** Room for an exact waypoint label (case-insensitive), if set. */
+  waypointRoom(name: string): MapRoom | undefined {
+    const key = normalizeWaypointName(name);
+    if (!key) return undefined;
+    const wp = this.doc.waypoints?.[key];
+    if (!wp) return undefined;
+    const id = this.canonicalId(wp.roomId) ?? wp.roomId;
+    return this.room(id);
+  }
+
   /** Free-text search over title, description, area, tags, notes, NPC names and contents. */
   search(query: string, limit = 20): { room: MapRoom; score: number; npcMatch?: string }[] {
     const trimmed = query.trim();
     if (isNumericRoomIdQuery(trimmed)) {
       const room = this.room(trimmed.toLowerCase());
       return room ? [{ room, score: 1000 }] : [];
+    }
+    const wpRoom = this.waypointRoom(trimmed);
+    if (wpRoom) {
+      return [{ room: wpRoom, score: 2000 }];
     }
     const terms = trimmed.toLowerCase().split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
@@ -2004,6 +2320,8 @@ export class WorldMap {
   resolve(ref: string): MapRoom | undefined {
     const r = ref.trim();
     if (this.doc.rooms[r]) return this.doc.rooms[r];
+    const waypoint = this.waypointRoom(r);
+    if (waypoint) return waypoint;
     const tagged = this.rooms().filter((x) => x.tags.includes(r));
     if (tagged.length === 1) return tagged[0];
     const titled = this.roomsWithTitle(r);

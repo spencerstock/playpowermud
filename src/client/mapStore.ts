@@ -67,6 +67,15 @@ export function mergeShippedBaseline(learned: WorldGraphDocument, shipped: World
       changed = true;
     }
   }
+  if (shipped.waypoints) {
+    learned.waypoints ??= {};
+    for (const [name, wp] of Object.entries(shipped.waypoints)) {
+      if (!learned.waypoints[name]) {
+        learned.waypoints[name] = structuredClone(wp);
+        changed = true;
+      }
+    }
+  }
   const nextRoom = Math.max(learned.nextRoom ?? 0, shipped.nextRoom ?? 0);
   const nextPlane = Math.max(learned.nextPlane ?? 0, shipped.nextPlane ?? 0);
   if (nextRoom !== learned.nextRoom) {

@@ -1,4 +1,4 @@
-import { promptStatusFromMatch, type PromptStatus } from "./promptStatus.js";
+import type { PromptStatus } from "./promptStatus.js";
 import { stripAnsi } from "../session/scrollback.js";
 import { parseBriefRoomLine } from "./briefRoom.js";
 import { canonicalDirection, parseExitList } from "./directions.js";
@@ -6,7 +6,7 @@ import { noteDoor, noteDoorsInText, parseDoorLine } from "./doors.js";
 import { contentPathLooksLikePlayer, lookupKnownPlayer, knownPlayerRegistry } from "./players.js";
 import { classifyNpcKind } from "../mapper/npcs.js";
 import { cleanseRoomDescription, isRoomDescriptionNoiseLine, isWrappedContinuationLine } from "./roomDescriptionNoise.js";
-import { defaultGameProfile, type GameProfile } from "./profile.js";
+import { defaultGameProfile, type GameProfile, type TransitPhase } from "./profile.js";
 import type {
   CharacterStatus,
   GameEvent,
@@ -24,11 +24,21 @@ const COUNT_WORDS: Record<string, number> = {
   three: 3,
   four: 4,
   five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
   "a couple": 2,
+  "a couple of": 2,
+  couple: 2,
   "a few": 3,
+  few: 3,
+  some: 3,
   several: 4,
   "lots of": 6,
   many: 6,
+  "tons of": 10,
 };
 
 const NOT_CONTENTS = /^(?:currently|nothing|no |no$)/i;
@@ -38,8 +48,8 @@ export type GameStreamOptions = {
   profile?: GameProfile;
   /** Parse `>>> [who] cmd` hub echo lines (log replay). */
   parseCommandEcho?: boolean;
-  /** Classify Powermud admins in room contents as players (default true). */
-  knownPlayers?: boolean;
+  /** Load Powermud known-player registry (admins) for room contents classification. */
+  repoRoot?: string;
 };
 
 /** A wrapped "obvious exits" remainder: `northeast.` / `and mainland.`, not a sentence. */
@@ -84,7 +94,23 @@ function classifyContent(name: string, path: string | undefined, registry?: Retu
   return classifyNpcKind(name, path, "unknown");
 }
 
-export function parseContentsText(body: string, registry?: ReturnType<typeof knownPlayerRegistry>): RoomContent | null {
+/**
+ * Kind from the MUD's own color when it gives one. `living` true: the name was drawn in the
+ * profile's living-thing color, so it is an NPC/mob whatever words it has (`Gem Dealer`).
+ * `living` false: a colored session drew it without that color, so it is an object (`Egg`,
+ * `Torch`, shop stock). Undefined: no color evidence, keep the name heuristics.
+ */
+function applyLivingColor(kind: RoomContentKind, name: string, path: string | undefined, living: boolean | undefined): RoomContentKind {
+  if (living === undefined || kind === "player" || kind === "corpse") return kind;
+  if (living) return kind === "mob" || kind === "npc" ? kind : classifyNpcKind(name, path, "npc");
+  return kind === "npc" || kind === "mob" || kind === "unknown" ? "item" : kind;
+}
+
+export function parseContentsText(
+  body: string,
+  registry?: ReturnType<typeof knownPlayerRegistry>,
+  living?: boolean,
+): RoomContent | null {
   let t = body.trim().replace(/\.\s*$/, "");
   let path: string | undefined;
   const pathMatch = t.match(/\s*\(([^()\s]*\/[^()\s]*)\)\s*$/);
@@ -108,7 +134,7 @@ export function parseContentsText(body: string, registry?: ReturnType<typeof kno
     t = num[2]!;
   }
   if (!t) return null;
-  return { name: t, count, path, kind: classifyContent(t, path, registry) };
+  return { name: t, count, path, kind: applyLivingColor(classifyContent(t, path, registry), t, path, living) };
 }
 
 type ScoreState = { status: CharacterStatus } | null;
@@ -131,12 +157,14 @@ export class GameStream {
   private lastLine = "";
   /** The last text line was chatter, so an indented line after it is its wrapped tail. */
   private lastNoise = false;
+  /** A contents line carried the profile's living color, so this session has ANSI color on. */
+  private sawLivingColor = false;
   private out: GameEvent[] = [];
 
   constructor(opts?: GameStreamOptions) {
     this.profile = opts?.profile ?? defaultGameProfile();
     this.parseEcho = opts?.parseCommandEcho === true;
-    this.playerRegistry = opts?.knownPlayers === false ? undefined : knownPlayerRegistry();
+    this.playerRegistry = knownPlayerRegistry();
   }
 
   /** Feed raw MUD text (ANSI allowed). Returns events in order. */
@@ -145,7 +173,7 @@ export class GameStream {
     const text = this.partial + chunk;
     const parts = text.split("\n");
     this.partial = parts.pop() ?? "";
-    for (const raw of parts) this.processLine(cleanLine(raw));
+    for (const raw of parts) this.processLine(cleanLine(raw), raw);
     this.processPartialPrompts();
     return this.out;
   }
@@ -156,7 +184,7 @@ export class GameStream {
     if (this.partial) {
       const p = this.partial;
       this.partial = "";
-      this.processLine(cleanLine(p));
+      this.processLine(cleanLine(p), p);
     }
     this.finishRoom();
     this.finishScore();
@@ -173,6 +201,40 @@ export class GameStream {
 
   private emit(ev: GameEvent): void {
     this.out.push(ev);
+  }
+
+  /**
+   * Telnet GA/EOR: the partial line is complete. A recognised prompt is handled as usual;
+   * anything else (pager, menu, question) still ends the command, as a bare prompt.
+   */
+  promptMark(): GameEvent[] {
+    this.out = [];
+    // MUDs that don't promise GA after prompts keep waiting for the newline, as before.
+    if (!this.profile.promptMarks) return this.out;
+    this.processPartialPrompts();
+    const rest = cleanLine(this.partial);
+    this.partial = "";
+    if (rest.trim()) {
+      this.emit({ type: "line", text: rest });
+      if (!this.detectLoginAndMarkers(rest.trim())) this.onPrompt(undefined, true);
+    }
+    return this.out;
+  }
+
+  /** One GMCP message: the profile's translation, then the raw message for listeners. */
+  gmcp(pkg: string, data: unknown): GameEvent[] {
+    this.out = [];
+    for (const ev of this.profile.gmcp?.(pkg, data) ?? []) {
+      if (ev.type === "room") {
+        // A GMCP room replaces whatever text room was still open.
+        this.pendingRoom = null;
+        this.exitListOpen = false;
+        this.descBuf = [];
+      }
+      this.emit(ev);
+    }
+    this.emit({ type: "gmcp", package: pkg, data });
+    return this.out;
   }
 
   /** Prompts and login questions arrive without a trailing newline; emit them immediately. */
@@ -202,16 +264,8 @@ export class GameStream {
     for (;;) {
       const pm = rest.match(this.profile.promptPrefix);
       if (pm) {
-        const vitals: Vitals = {
-          hp: Number(pm[1]),
-          hpMax: pm[2] !== undefined ? Number(pm[2]) : undefined,
-          sp: Number(pm[3]),
-          spMax: pm[4] !== undefined ? Number(pm[4]) : undefined,
-          pp: pm[5] !== undefined ? Number(pm[5]) : undefined,
-          ppMax: pm[6] !== undefined ? Number(pm[6]) : undefined,
-          at: Date.now(),
-        };
-        this.onPrompt(vitals, false, promptStatusFromMatch(pm));
+        const read = this.profile.readPrompt(pm);
+        this.onPrompt(read.vitals ? { ...read.vitals, at: Date.now() } : undefined, false, read.status);
         rest = rest.slice(pm[0].length);
         consumedAny = true;
         continue;
@@ -281,7 +335,19 @@ export class GameStream {
     return cleanseRoomDescription(raw, this.profile) ?? "";
   }
 
-  private processLine(input: string): void {
+  /** Color evidence for a contents line (see {@link applyLivingColor}); `raw` still has ANSI. */
+  private contentLiving(raw: string | undefined): boolean | undefined {
+    const color = this.profile.livingContentColor;
+    if (!color || raw === undefined) return undefined;
+    const at = raw.indexOf("There ");
+    if (color.test(at >= 0 ? raw.slice(at) : raw)) {
+      this.sawLivingColor = true;
+      return true;
+    }
+    return this.sawLivingColor ? false : undefined;
+  }
+
+  private processLine(input: string, raw?: string): void {
     const line = this.consumeLeadingPrompts(input, false) ?? input;
     const t = line.trim();
     const p = this.profile;
@@ -321,11 +387,30 @@ export class GameStream {
       }
       const cm = t.match(p.contentsLine);
       if (cm && !p.noExits.test(t)) {
-        const content = parseContentsText(cm[1]!, this.playerRegistry);
+        const content = parseContentsText(cm[1]!, this.playerRegistry, this.contentLiving(raw));
         if (content) {
           this.pendingRoom.contents.push(content);
           return;
         }
+      }
+      // Hidden mobs and players are part of the listing; ending the room here dropped every
+      // `There is …` line after them, and the hidden mob itself was never recorded.
+      const hidden = p.hiddenContentsLine && t.match(p.hiddenContentsLine);
+      if (hidden) {
+        const name = hidden[1]!.trim();
+        const kind = classifyContent(name, undefined, this.playerRegistry);
+        this.pendingRoom.contents.push({
+          name,
+          count: 1,
+          kind: kind === "player" ? kind : applyLivingColor(kind, name, undefined, true),
+          hidden: true,
+        });
+        return;
+      }
+      const occupant = p.occupantLine && t.match(p.occupantLine);
+      if (occupant) {
+        this.pendingRoom.contents.push({ name: occupant[1]!, count: 1, kind: "player" });
+        return;
       }
       // Players get their own line, no `There is`: `Hogi is a prisoner (std/body/player#11028).`
       if (/\([^()\s]*\/(?:ply|player|users?)[/#][^()\s]*\)\.?\s*$/i.test(t)) {
@@ -336,7 +421,7 @@ export class GameStream {
         }
       }
       if (this.exitListOpen && isExitContinuation(t)) {
-        for (const ex of parseExitList(t)) {
+        for (const ex of (p.parseExits ?? parseExitList)(t)) {
           if (!this.pendingRoom.exits.includes(ex)) this.pendingRoom.exits.push(ex);
         }
         this.exitListOpen = /,\s*$/.test(t);
@@ -358,6 +443,11 @@ export class GameStream {
       this.emit({ type: "move-failed", text: t });
       return;
     }
+    if (p.moveHindered?.some((re) => re.test(t))) {
+      this.descBuf = [];
+      this.emit({ type: "move-hindered", text: t });
+      return;
+    }
     if (p.darkRoom.test(t)) {
       this.descBuf = [];
       this.pendingRoom = { mode: "dark", exits: [], contents: [] };
@@ -374,10 +464,17 @@ export class GameStream {
       this.emit({ type: "flee-failed", text: t });
       return;
     }
-    const killed = t.match(/^You killed (.+?)\.\s*$/i);
+    const killed = t.match(p.killLine);
     if (killed) {
       this.descBuf = [];
       this.emit({ type: "kill", victim: killed[1]!.trim(), text: t });
+      return;
+    }
+
+    if (this.detectTransit(t)) {
+      this.descBuf = [];
+      this.lastNoise = true;
+      this.lastLine = t;
       return;
     }
 
@@ -400,7 +497,8 @@ export class GameStream {
       return;
     }
 
-    const brief = parseBriefRoomLine(t, p);
+    const textRooms = p.roomSource === "text";
+    const brief = textRooms ? parseBriefRoomLine(t, p) : null;
     if (brief) {
       this.descBuf = [];
       this.pendingRoom = {
@@ -412,13 +510,13 @@ export class GameStream {
       return;
     }
 
-    for (const re of p.verboseExits) {
+    for (const re of textRooms ? p.verboseExits : []) {
       const m = t.match(re);
       if (m) {
         this.pendingRoom = {
           mode: "verbose",
           description: this.takeDescription(),
-          exits: parseExitList(m[1]!),
+          exits: (p.parseExits ?? parseExitList)(m[1]!),
           contents: [],
         };
         noteDoorsInText(this.pendingRoom, this.pendingRoom.description ?? "");
@@ -426,7 +524,7 @@ export class GameStream {
         return;
       }
     }
-    if (p.noExits.test(t)) {
+    if (textRooms && p.noExits.test(t)) {
       this.pendingRoom = {
         mode: "verbose",
         description: this.takeDescription(),
@@ -461,6 +559,31 @@ export class GameStream {
     this.lastLine = t;
   }
 
+  /**
+   * A ride's ticket / board / depart / arrive line (see `TransitRule`): emit it and treat it as a
+   * description boundary, so the arrival display is clean and is never read as a compass step.
+   */
+  private detectTransit(t: string): boolean {
+    for (const rule of this.profile.transits ?? []) {
+      const phases: [TransitPhase, RegExp[] | undefined][] = [
+        ["ticket", rule.ticket],
+        ["board", rule.board],
+        ["depart", rule.depart],
+        ["arrive", rule.arrive],
+      ];
+      for (const [phase, list] of phases) {
+        for (const re of list ?? []) {
+          const m = t.match(re);
+          if (!m) continue;
+          const place = phase === "ticket" ? m[1]?.trim() : undefined;
+          this.emit({ type: "transit", rule: rule.id, phase, text: t, ...(place ? { place } : {}) });
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /** Returns true when the line was a login/system marker (a description boundary). */
   private detectLoginAndMarkers(t: string): boolean {
     const p = this.profile;
@@ -483,56 +606,24 @@ export class GameStream {
   }
 
   private startScore(t: string): boolean {
-    const m = t.match(/^You are an? (\S+) (.+?) known as being (.+?)\.?$/);
-    if (!m) return false;
-    const status: CharacterStatus = { sex: m[1], race: m[2], alignment: m[3] };
-    const nameLine = this.lastLine.match(/^You are (\S+?)(?:\s+(.+?))?\.?$/);
-    if (nameLine) {
-      status.name = nameLine[1];
-      status.title = this.lastLine.replace(/^You are /, "").replace(/\.$/, "");
-    }
+    const status = this.profile.score?.start(t, this.lastLine);
+    if (!status) return false;
     this.score = { status };
     return true;
   }
 
   /** Returns true when the line belongs to the score block. */
   private feedScore(t: string): boolean {
-    const s = this.score!.status;
-    let m: RegExpMatchArray | null;
-    if ((m = t.match(/^You are a member of (?:the )?(.+?)\.?$/))) s.guild = m[1];
-    else if ((m = t.match(/^You call (.+?) your home\.?$/))) s.home = m[1];
-    else if ((m = t.match(/^You are (.+? old)\.?$/))) s.age = m[1];
-    else if ((m = t.match(/^You have (\d+) out of (\d+) hit points/i))) {
-      s.hp = Number(m[1]);
-      s.hpMax = Number(m[2]);
-    } else if ((m = t.match(/^You have (\d+) out of (\d+) spell/i))) {
-      s.sp = Number(m[1]);
-      s.spMax = Number(m[2]);
-    } else if ((m = t.match(/^You have (\d+) out of (\d+) Psi/i))) {
-      s.pp = Number(m[1]);
-      s.ppMax = Number(m[2]);
-    } else if (/^STR\s*:/.test(t)) {
-      s.stats = {};
-      for (const sm of t.matchAll(/([A-Z]{3})\s*:\s*(\d+)/g)) s.stats[sm[1]!] = Number(sm[2]);
-    } else if ((m = t.match(/^You have (\d+) experience points/i))) s.exp = Number(m[1]);
-    else if ((m = t.match(/^You need (\d+) more experience points to (.+?)\.?$/i))) {
-      s.expToNext = Number(m[1]);
-      s.nextGain = m[2];
-    } else if ((m = t.match(/^You are carrying (\d+) coins?, worth (\d+)/i))) {
-      s.coins = Number(m[1]);
-      s.coinValue = Number(m[2]);
-    } else if ((m = t.match(/^You have (\d+) \w+ in the bank/i))) s.bank = Number(m[1]);
-    else if ((m = t.match(/^You have amassed (\d+) Quest Points/i))) s.questPoints = Number(m[1]);
-    else if (/^(?:Cmds:|You are in \w+ mode|You are currently carrying|Please use 'help|You feel your)/i.test(t)) {
-      // Known trailing score lines with nothing to extract.
-    } else return false;
-    return true;
+    return this.profile.score?.feed(t, this.score!.status) ?? false;
   }
 }
 
 /** `alias mstoblack => s ; s ; sw` → wire commands; plain `look` → [look]. */
 export function splitEchoCommands(rest: string): string[] {
-  const alias = rest.match(/^alias \S+ => (.*?)(?: \(skipped Mudlet zScript.*\))?$/);
+  // Also `alias n bs lich s => …` (alias called with arguments), `/to ms => w` and smart-alias
+  // echoes like `god chief => e`: the text left of ` => ` is what was typed, never a wire command
+  // (replays used to record `/to ms => w` as a secret exit).
+  const alias = rest.match(/^(?:alias )?[^;]*? => (.*?)(?: \(skipped Mudlet zScript.*\))?$/);
   if (alias) {
     return alias[1]!
       .split(" ; ")

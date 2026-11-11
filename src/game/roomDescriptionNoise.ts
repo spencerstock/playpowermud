@@ -48,6 +48,9 @@ const NOISE_LINE: RegExp[] = [
   /^You move your way around .+[.!]\s*$/i,
   /^Pete takes all your money, counts it, and hands you a new set of coins\.?\s*$/i,
   /^Autosave\.?\s*$/i,
+  // Teleport arrival lines (Zurker 2026-10-31): `homeland` and the Assassin's Guild red stone.
+  /^You vanish and then instantly appear in your homeland\.?\s*$/i,
+  /^You touch the red stone and are transported instantly to .+[.!]\s*$/i,
   /^You sneak stealthily from the area\.?\s*$/i,
   /^You seemingly blend into your surroundings\.?\s*$/i,
   /^You (?:have )?arrived\.?\s*$/i,
@@ -58,6 +61,8 @@ const NOISE_LINE: RegExp[] = [
   /^Ok\.?\s*$/i,
   /^Alright\.?\s*$/i,
   /^You (?:tell|say|shout|chat|gossip|emote|reply)\b.*[.!?]\s*$/i,
+  // Our own speech in a language (`You exclaim in common : Wow that was a fun trip!`).
+  /^You (?:say|ask|exclaim|shout|whisper|yell|reply) in [a-z]+ : .*$/i,
   /^You (?:kill|attack|hit|miss|flee|cast|psi|slash|pierce|stab|kick|punch|dodge|parry|block|backstab|shoot|fire|enter|leave)\b.*[.!?]?\s*$/i,
   /^You (?:killed|slay|slain|defeat|defeated)\b.*[.!?]\s*$/i,
   /^You dodge the .+ attack\b.*[.!?]\s*$/i,
@@ -127,10 +132,33 @@ const NOISE_LINE: RegExp[] = [
   /^.+ leaves (?:to the )?(?:the )?[a-z]+(?: and [a-z]+)?\.?\s*$/i,
   // Walking from the desert into Kalinport's glare (printed instead of, or before, the display).
   /^Your eyes sting from the (?:bright|blinding) light\b.*[.!]\s*$/i,
+  // Spell / skill state changes that tick out between moves (found by scripts/map-integrity.ts
+  // glued to the top of hundreds of stored rooms, 2026-11-07).
+  /^You are no longer (?:blessed|protected|hasted|invisible|flying|shielded|hidden|stoneskinned)\.?\s*$/i,
+  /^You (?:feel less protected|lose your blessed feeling)\.?\s*$/i,
+  /^You stop hiding\.?\s*$/i,
+  /^You float back down to the ground\.?\s*$/i,
+  /^You come out of your trance, as you are full\.?\s*$/i,
+  /^The veil of Darkness lifts\.?\s*$/i,
+  /^You (?:burp|fart) rudely\.?\s*$/i,
+  /^You go '[^']*'\s*$/i,
+  /^[A-Z][\w'-]*(?: [\w'-]+){0,2} emerges from hiding\.?\s*$/,
+  /^You garner some energy from the Weave, feeling refreshed\.?\s*$/i,
+  /^The Weave grants you a bit of power!?\s*$/i,
+  /^The intense cold bites into you, making your teeth chatter!?\s*$/i,
+  /^A new day dawns as the sun rises\.?\s*$/i,
+  /^The moon is somewhere between [A-Z][\w' -]* and [A-Z][\w' -]*\.?\s*$/,
 ];
 
 /** A whole line that is a status prompt (`[HP: 551(620(88%)) SP: …]`), possibly followed by text. */
 const STATUS_PROMPT_LINE_RE = /^\s*(?:\x1b?\[[0-9;]*m)*\[HP:\s*\d+[^\]\n]*\]/i;
+/**
+ * A prompt that ends a line of other output: the LPC pager footer
+ * (`=-=-= More (Line 20 of 53) Enter '?' for command list =-=-=[HP: 116(116(100%)) …]`) glued a
+ * whole help-file map onto r2686. Whatever the prompt follows belongs to the previous command.
+ */
+const TRAILING_STATUS_PROMPT_RE = /\[HP:\s*\d+[^\]\n]*\]\s*$/i;
+const PAGER_FOOTER_RE = /More \(Line \d+ of \d+\)/i;
 
 /**
  * Powermud wraps long speech and emotes onto lines indented by five spaces
@@ -193,6 +221,19 @@ export function isRoomDescriptionNoiseLine(line: string, profile: GameProfile = 
   if (!t) return false;
   if (profile.loginNoise.some((re) => re.test(t))) return true;
   if (NOISE_LINE.some((re) => re.test(t))) return true;
+  if (isTransitLine(t, profile)) return true;
+  return false;
+}
+
+/** A ride's own narration (board, depart, arrive, ambient — see `TransitRule`): never room prose. */
+export function isTransitLine(line: string, profile: GameProfile = defaultGameProfile()): boolean {
+  const t = line.trim();
+  if (!t || !profile.transits?.length) return false;
+  for (const rule of profile.transits) {
+    for (const list of [rule.ticket, rule.board, rule.depart, rule.arrive, rule.ambient]) {
+      if (list?.some((re) => re.test(t))) return true;
+    }
+  }
   return false;
 }
 
@@ -203,8 +244,19 @@ export function cleanseRoomDescription(description: string, profile: GameProfile
   // next room this way.
   const raw = description.split("\n");
   let start = 0;
-  for (let i = 0; i < raw.length; i++) if (STATUS_PROMPT_LINE_RE.test(raw[i]!)) start = i;
-  if (start > 0) description = raw.slice(start).join("\n");
+  let skipLine = false;
+  for (let i = 0; i < raw.length; i++) {
+    if (STATUS_PROMPT_LINE_RE.test(raw[i]!)) {
+      start = i;
+      skipLine = false;
+    } else if (TRAILING_STATUS_PROMPT_RE.test(raw[i]!) || PAGER_FOOTER_RE.test(raw[i]!)) {
+      // Prompt (or pager footer) at the end of other output: the display starts on the next line.
+      start = i;
+      skipLine = true;
+    }
+  }
+  if (skipLine) description = raw.slice(start + 1).join("\n");
+  else if (start > 0) description = raw.slice(start).join("\n");
   let lines = description
     .split("\n")
     .map((l, i) => (i === 0 ? stripLeadingGameNoise(l) : l).trimEnd())

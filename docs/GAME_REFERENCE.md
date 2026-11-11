@@ -2,7 +2,7 @@
 
 This file tracks how **Powermud** knowledge is organized on the Play Powermud wiki (`public/wiki/`). Update wiki HTML when you add or rename topics.
 
-The public wiki is the reference. Personal character sheets, client config, proxies, and cheats are not published.
+The public wiki is the reference. Personal character sheets, client config, proxies, and cheats are not published — see [`docs/personal/`](./personal/).
 
 ---
 

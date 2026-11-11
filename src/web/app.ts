@@ -38,6 +38,14 @@ import {
 import { createMudTerminal } from "./mudTerminal.js";
 import { createSidePanel } from "./sidePanel.js";
 import { applyTelnetKeyAction, TelnetLineEditor } from "./telnetLineEditor.js";
+import {
+  createRoomAutocomplete,
+  parseSlashToLine,
+  parseSlashWpLine,
+  rankRoomHits,
+  roomHitLabel,
+  type RoomSearchHitBrief,
+} from "./roomAutocomplete.js";
 import { createWorldPanel } from "./worldPanel.js";
 import { createWikiOverlay } from "./wikiOverlay.js";
 
@@ -161,6 +169,7 @@ const sidePanel = createSidePanel({
 });
 
 let worldPanel: ReturnType<typeof createWorldPanel> | null = null;
+let mapApiFn: ReturnType<typeof createMapApi> | null = null;
 
 const wikiOverlay = createWikiOverlay({
   defaultPath: "/wiki/reference/",
@@ -352,9 +361,69 @@ const aliasAc = createAliasAutocomplete({
   },
 });
 
+const roomAc = createRoomAutocomplete({
+  listEl: aliasAcEl,
+  getLineText: () => lineEditor.text,
+  applyHit: (hit) => {
+    loadDisplayIntoEditor(`/to ${roomHitLabel(hit)}`);
+    lineEditor.cursor = lineEditor.text.length;
+  },
+  search: async (query) => {
+    if (!mapApiFn) return [];
+    const res = await mapApiFn<{ hits: RoomSearchHitBrief[] }>(
+      `/api/map/search?q=${encodeURIComponent(query)}&limit=40`,
+    );
+    return res.hits ?? [];
+  },
+  onPick: () => syncInputFromEditor(),
+});
+
+async function resolveSlashToRoomId(line: string): Promise<string | null> {
+  const parsed = parseSlashToLine(line);
+  if (!parsed) return null;
+  const q = parsed.query.trim();
+  if (!q || !mapApiFn) return null;
+  const resolved = await mapApiFn<{ room?: { id: string } | null }>(
+    `/api/map/resolve?ref=${encodeURIComponent(q)}`,
+  );
+  if (resolved.room?.id) return resolved.room.id;
+  const res = await mapApiFn<{ hits: RoomSearchHitBrief[] }>(
+    `/api/map/search?q=${encodeURIComponent(q)}&limit=40`,
+  );
+  const hit = rankRoomHits(res.hits ?? [], q, 1)[0];
+  return hit?.id ?? null;
+}
+
 function refreshAliasAutocompleteUi(): void {
-  const open = passwordMode() ? (aliasAc.hide(), false) : aliasAc.refresh();
+  if (passwordMode()) {
+    aliasAc.hide();
+    roomAc.hide(true);
+    input.setAttribute("aria-expanded", "false");
+    return;
+  }
+  if (parseSlashToLine(lineEditor.text)) {
+    aliasAc.hide(false);
+    const open = roomAc.refresh();
+    input.setAttribute("aria-expanded", open ? "true" : "false");
+    return;
+  }
+  roomAc.hide({ clearPending: true });
+  const open = aliasAc.refresh();
   input.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function autocompleteIsOpen(): boolean {
+  return roomAc.isOpen() || aliasAc.isOpen();
+}
+
+function autocompleteMoveSelection(delta: number): boolean {
+  if (parseSlashToLine(lineEditor.text)) return roomAc.moveSelection(delta);
+  return aliasAc.moveSelection(delta);
+}
+
+function autocompleteAcceptSelected(): boolean {
+  if (parseSlashToLine(lineEditor.text)) return roomAc.acceptSelected();
+  return aliasAc.acceptSelected();
 }
 
 function syncInputFromEditor(): void {
@@ -442,14 +511,15 @@ function handleCommandLineKeydown(e: KeyboardEvent): void {
   ensureEditorFromInput();
   if (e.key === "Enter") return;
 
-  if (e.key === "Tab" && aliasAc.isOpen()) {
+  if (e.key === "Tab" && autocompleteIsOpen()) {
     e.preventDefault();
-    aliasAc.acceptSelected();
+    autocompleteAcceptSelected();
     syncInputFromEditor();
     return;
   }
-  if (e.key === "Escape" && aliasAc.isOpen()) {
+  if (e.key === "Escape" && autocompleteIsOpen()) {
     e.preventDefault();
+    roomAc.hide(true);
     aliasAc.hide();
     input.setAttribute("aria-expanded", "false");
     return;
@@ -464,11 +534,11 @@ function handleCommandLineKeydown(e: KeyboardEvent): void {
     else lineEditor.cursorRight();
   } else if (e.key === "ArrowUp") {
     if (isWireArrowKeydown(e)) lineEditor.insertWireCursorUp();
-    else if (aliasAc.isOpen()) aliasAc.moveSelection(-1);
+    else if (autocompleteIsOpen()) autocompleteMoveSelection(-1);
     else browseCommandHistory(true);
   } else if (e.key === "ArrowDown") {
     if (isWireArrowKeydown(e)) lineEditor.insertWireCursorDown();
-    else if (aliasAc.isOpen()) aliasAc.moveSelection(1);
+    else if (autocompleteIsOpen()) autocompleteMoveSelection(1);
     else browseCommandHistory(false);
   } else if (e.key === "Backspace") {
     clearHistoryBrowse();
@@ -618,6 +688,7 @@ function handleSlashCommand(line: string): boolean {
 function resetInputLine(): void {
   lineEditor.reset();
   syncInputFromEditor();
+  roomAc.hide(true);
   aliasAc.hide();
   input.setAttribute("aria-expanded", "false");
 }
@@ -632,6 +703,71 @@ form.addEventListener("submit", (e) => {
     } else if (lastSubmit && !passwordMode()) submitLine(lastSubmit.wire, lastSubmit.display);
     else submitLine("", "");
     return;
+  }
+  const slashWp = parseSlashWpLine(lineEditor.text.trim());
+  if (slashWp && !passwordMode()) {
+    const slashWpLine = lineEditor.text.trim();
+    void (async () => {
+      try {
+        if (!mapApiFn) throw new Error("Map not ready");
+        if (!slashWp.name.trim()) {
+          errorLine('Usage: /wp <name> — save the current room as a waypoint');
+          return;
+        }
+        const r = await mapApiFn<{
+          roomId: string;
+          room?: { label?: string | null; title?: string | null };
+        }>("/api/map/waypoint", { name: slashWp.name });
+        const where = r.room?.label ?? r.room?.title ?? r.roomId;
+        meta(`Waypoint "${slashWp.name.trim()}" → ${where} (${r.roomId})`);
+        pushCommandHistory({ wire: slashWpLine, display: slashWpLine });
+        clearHistoryBrowse();
+        worldPanel?.refresh?.();
+      } catch (err) {
+        errorLine(err instanceof Error ? err.message : String(err));
+      } finally {
+        resetInputLine();
+      }
+    })();
+    return;
+  }
+  const slashToLine = lineEditor.text.trim();
+  if (parseSlashToLine(slashToLine) && !passwordMode()) {
+    void (async () => {
+      try {
+        if (!mapApiFn) throw new Error("Map not ready");
+        const roomId = await resolveSlashToRoomId(slashToLine);
+        if (!roomId) {
+          errorLine("No mapped room matches that /to query.");
+          return;
+        }
+        const path = await mapApiFn<{
+          found: boolean;
+          commands: string[];
+          to?: { title?: string | null; id?: string };
+        }>("/api/map/path", { to: roomId });
+        if (!path.found || path.commands.length === 0) {
+          errorLine("No known path from here to that room.");
+          return;
+        }
+        const dest = path.to?.title ?? path.to?.id ?? roomId;
+        meta(`Path to ${dest} (${path.commands.length} steps): ${path.commands.join("; ")}`);
+        pushCommandHistory({ wire: slashToLine, display: slashToLine });
+        clearHistoryBrowse();
+      } catch (err) {
+        errorLine(err instanceof Error ? err.message : String(err));
+      } finally {
+        resetInputLine();
+      }
+    })();
+    return;
+  }
+  if (
+    autocompleteIsOpen() &&
+    !parseSlashToLine(lineEditor.text) &&
+    autocompleteAcceptSelected()
+  ) {
+    syncInputFromEditor();
   }
   const display = lineEditor.text.trim();
   if (
@@ -735,7 +871,8 @@ async function boot(): Promise<void> {
   });
   runtime.state.on(() => syncPasswordMode());
   sidePanel.syncComms(runtime.commsSnapshot());
-  worldPanel = createWorldPanel({ mount: mapPanelMount, api: createMapApi(runtime) });
+  mapApiFn = createMapApi(runtime);
+  worldPanel = createWorldPanel({ mount: mapPanelMount, api: mapApiFn });
   meta(
     `Map ready: ${store.map.roomCount()} rooms (${source === "saved" ? "with what this browser learned" : source}). ` +
       `Aliases: ${aliases.names().length}. Type /alias NAME EXPANSION to add one.`,

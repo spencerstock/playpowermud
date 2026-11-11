@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 import { WorldMap } from "./WorldMap.js";
-import { botPathOptions, linkNeverPathed, resolvePathOptions, setGlobalPreferAvoid } from "./pathPolicy.js";
+import { botPathOptions, isTeleportOnlyCommand, linkNeverPathed, resolvePathOptions, setGlobalPreferAvoid } from "./pathPolicy.js";
 
 test("resolvePathOptions clears empty avoid lists", () => {
   assert.deepEqual(resolvePathOptions({ avoid: [] }), {});
 });
 
 test("botPathOptions matches mud_goto defaults (topology only)", () => {
-  const map = new WorldMap(JSON.parse(fs.readFileSync("public/data/powermud.graph.json", "utf8")));
+  const map = new WorldMap(JSON.parse(fs.readFileSync("data/world/powermud.graph.json", "utf8")));
   const opts = botPathOptions(1);
   const path = map.findPath("r102", (r) => r.id === "r7", opts);
   assert.ok(path?.length === 7, "gate approach should reach tavern on shared graph policy");
@@ -81,10 +81,63 @@ test("linkNeverPathed matches red stone spellings only", () => {
   assert.equal(linkNeverPathed("r1", "e"), false);
 });
 
+test("isTeleportOnlyCommand matches homeland and red stone only", () => {
+  assert.equal(isTeleportOnlyCommand("homeland"), true);
+  assert.equal(isTeleportOnlyCommand("touch red stone"), true);
+  assert.equal(isTeleportOnlyCommand("e"), false);
+});
+
 test("shared graph: no path out of Kalinport uses the red stone", () => {
-  const map = new WorldMap(JSON.parse(fs.readFileSync("public/data/powermud.graph.json", "utf8")));
+  const map = new WorldMap(JSON.parse(fs.readFileSync("data/world/powermud.graph.json", "utf8")));
   for (const to of ["r1749", "r1751", "r1968"]) {
     const path = map.findPath("r1544", (r) => r.id === to, resolvePathOptions({}));
     assert.ok(!path?.some((s) => /red stone|homeland/.test(s.cmd)), `r1544 → ${to} must not touch the red stone`);
   }
+});
+
+test("a guessed link into a room that does not list the way back loses to the real trail (Merevia /to barb)", () => {
+  const map = WorldMap.empty("t");
+  const mk = (x: number, y: number, exits: string[], description?: string) => {
+    const r = map.createRoom({ plane: "p1", x, y, z: 0 });
+    map.applyObservation(r, { mode: description ? "verbose" : "brief", title: `${x},${y}`, description, exits, contents: [] });
+    return r;
+  };
+  // Grassland g --s (stitched guess)--> trail t; t lists only w/se (no north back to g).
+  const g = mk(0, 0, ["n", "s", "e", "w"], "You continue to walk through the thick and high grass.");
+  const t = mk(0, 1, ["w", "se"], "The path takes a turn to the southeast leading you further into the forest.");
+  map.link(g.id, "s", t.id, { kind: "dir", confirmed: false });
+  // The real way round: six confirmed steps.
+  let prev = g;
+  const chain = [];
+  for (let i = 1; i <= 5; i++) {
+    const r = mk(i, 0, ["e", "w"]);
+    map.link(prev.id, "e", r.id, { kind: "dir", confirmed: true });
+    chain.push(r);
+    prev = r;
+  }
+  map.link(prev.id, "sw", t.id, { kind: "dir", confirmed: true });
+  assert.equal(map.guessContradicted(g.id, "s", map.room(g.id)!.links.s!, t), true);
+  const path = map.findPath(g.id, (r) => r.id === t.id, {})!;
+  assert.equal(path.length, 6, "takes the real trail, not the guessed s");
+  assert.notEqual(path[0]!.cmd, "s");
+  // Still the last resort when it is the only way.
+  map.unlink(prev.id, "sw");
+  assert.deepEqual(map.findPath(g.id, (r) => r.id === t.id, {})!.map((s) => s.cmd), ["s"]);
+  // Once walked (uses > 0) or confirmed it is trusted again.
+  map.room(g.id)!.links.s!.uses = 1;
+  assert.equal(map.guessContradicted(g.id, "s", map.room(g.id)!.links.s!, t), false);
+});
+
+test("a guess is not contradicted when the destination lists the way back or is brief-only", () => {
+  const map = WorldMap.empty("t");
+  const a = map.createRoom({ plane: "p1", x: 0, y: 0, z: 0 });
+  map.applyObservation(a, { mode: "verbose", title: "a", description: "A room.", exits: ["s"], contents: [] });
+  const b = map.createRoom({ plane: "p1", x: 0, y: 1, z: 0 });
+  map.applyObservation(b, { mode: "verbose", title: "b", description: "B room.", exits: ["n"], contents: [] });
+  const c = map.createRoom({ plane: "p1", x: 1, y: 1, z: 0 });
+  map.applyObservation(c, { mode: "brief", title: "c", exits: ["e"], contents: [] });
+  map.link(a.id, "s", b.id, { kind: "dir", confirmed: false });
+  map.link(a.id, "se", c.id, { kind: "dir", confirmed: false });
+  assert.equal(map.guessContradicted(a.id, "s", map.room(a.id)!.links.s!, b), false);
+  assert.equal(map.guessContradicted(a.id, "se", map.room(a.id)!.links.se!, c), false);
 });

@@ -88,7 +88,7 @@ test("search tolerates rooms missing optional arrays", () => {
     visits: 1,
     firstSeenAt: "",
     lastSeenAt: "",
-  } as MapRoom;
+  } as unknown as MapRoom;
   map.reindex();
 
   const hits = map.search("orcish slave", 5);
@@ -198,4 +198,28 @@ test("heal folds an existing thin look-alike into the well-wired original (r2980
   road.doc.rooms.b = room("b", { description, exits: ["e", "nw"], visits: 1, pos: { plane: "p1", x: 9, y: 9, z: 0 }, links: { e: conf("z") } });
   road.reindex();
   assert.equal(road.heal().lookalikesFolded, 0);
+});
+
+test("observed rooms index hidden mobs and singular group names, never players", () => {
+  const map = WorldMap.empty("test");
+  map.doc.rooms.r1 = room("r1", { title: "Desert" });
+  map.reindex();
+  map.applyObservation(map.room("r1")!, {
+    mode: "verbose",
+    description: "Sand everywhere.",
+    exits: ["n"],
+    contents: [
+      { name: "Drow", count: 1, kind: "npc", hidden: true },
+      { name: "Fiz", count: 1, kind: "player" },
+      { name: "Highwaymen", count: 2, kind: "npc" },
+      { name: "Egg", count: 1, kind: "item" },
+    ],
+  });
+  const r1 = map.room("r1")!;
+  assert.deepEqual(r1.npcs, ["Drow", "Highwayman"]);
+  assert.equal(r1.contents.Drow?.hidden, true);
+  assert.equal(r1.contents.Fiz, undefined);
+  assert.equal(map.search("highwayman", 5)[0]?.npcMatch, "Highwayman");
+  assert.equal(map.search("drow", 5)[0]?.room.id, "r1");
+  assert.equal(map.search("fiz", 5).length, 0);
 });

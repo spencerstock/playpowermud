@@ -20,7 +20,7 @@ function docWithRoom(id: string, extra: Partial<WorldGraphDocument> = {}): World
     firstSeenAt: "2026-01-01T00:00:00.000Z",
     lastSeenAt: "2026-01-01T00:00:00.000Z",
   };
-  base.planes.p1 = { id: "p1", name: "surface", origin: { x: 0, y: 0, z: 0 } };
+  base.planes.p1 = { id: "p1", kind: "surface", createdAt: "2026-01-01T00:00:00.000Z" };
   return { ...base, ...extra, rooms: { ...base.rooms, ...(extra.rooms ?? {}) } };
 }
 

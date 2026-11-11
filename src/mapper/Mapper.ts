@@ -6,8 +6,11 @@ import {
   reverseDirection,
   subVec,
 } from "../game/directions.js";
-import { defaultGameProfile, type GameProfile } from "../game/profile.js";
+import { defaultGameProfile, type GameProfile, type TransitRule } from "../game/profile.js";
+import { MenuListParser, recordHealingMenu } from "./healingPlaces.js";
 import { isFlakyTravelCommand, outputSaysMoveFailed } from "./navFailure.js";
+import { isTeleportOnlyCommand } from "./pathPolicy.js";
+import { ESTABLISHED_USES, looksLikeTravelCommand } from "./specialExits.js";
 import {
   OPEN_DOOR_COMMAND,
   outputSaysAlreadyOpen,
@@ -103,6 +106,28 @@ const WARP_BITS = 4;
 /** How far ahead of the runner-up the winning track must be. */
 const MARGIN_BITS = 3;
 const DOOR_COMMANDS = /^(?:open|close|unlock|lock|pick|bash|kick)\s/i;
+/** A ride with no arrival after this long is forgotten (disconnect, missed line). */
+const RIDE_MAX_MS = 30 * 60_000;
+/** Tag on the off-map room that stands for a vessel's deck while we ride it. */
+export const VESSEL_TAG = "vessel";
+
+/**
+ * A ride in progress (profile `transits`): where we boarded, by what command, and whether the
+ * next room display is where it put us.
+ */
+type Ride = {
+  rule: TransitRule;
+  /** Destination named on the ticket. */
+  place?: string;
+  /** Room we boarded from (the dock). */
+  dock: string | null;
+  /** Command that boarded (`board ship`); the transit link is recorded under it. */
+  boardCmd?: string;
+  boardedAt: number;
+  departed: boolean;
+  /** The arrive line came: the next room display is the landing. */
+  arriving: boolean;
+};
 
 /**
  * Live position tracker. Wire commands are queued as they are sent; each prompt completes
@@ -125,6 +150,18 @@ export class Mapper {
   private listeners = new Set<MapperListener>();
   /** Optional trace hook for diagnosing attribution (replay tooling, tests). */
   debug: ((msg: string) => void) | null = null;
+  /** Destination of the last ticket bought (`rule` id + place), until we board. */
+  private ticket: { rule: string; place?: string } | null = null;
+  private ride: Ride | null = null;
+  /** Food/Drink `list` tables: the room they print in is a healing place. */
+  private readonly menus = new MenuListParser();
+  /**
+   * After crossing the sea, known rooms we cannot walk to from the landing are not where we
+   * are, however alike they look (Merevia's docks vs Dunagin's). Lifted by the next jump.
+   */
+  private fenceRoot: string | null = null;
+  private fenceCache: Set<string> | null = null;
+  private eventAt = Date.now();
 
   constructor(
     readonly map: WorldMap,
@@ -162,6 +199,8 @@ export class Mapper {
     this.position = roomId;
     this.history = [];
     this.doubt = 0;
+    this.ride = null;
+    this.fenceRoot = null;
     if (roomId) this.lastKnown = roomId;
     if (roomId) this.emit({ type: "moved", from, to: roomId, how: "relocate", created: false });
     else this.emit({ type: "lost", reason: "position cleared" });
@@ -171,6 +210,14 @@ export class Mapper {
     this.queue = [];
     this.fleeDir = null;
     this.history = [];
+    this.ride = null;
+    this.ticket = null;
+  }
+
+  /** The ride we are on (or just finished and are about to land from), for UIs and bots. */
+  riding(): { rule: string; label: string; place?: string; dock: string | null; departed: boolean } | null {
+    const r = this.ride;
+    return r ? { rule: r.rule.id, label: r.rule.label, place: r.place, dock: r.dock, departed: r.departed } : null;
   }
 
   /**
@@ -194,6 +241,7 @@ export class Mapper {
     if (this.profile.lookCommands.test(n)) return { kind: "look", key: n };
     if (n === "flee") return { kind: "flee", key: n };
     if (this.profile.teleportCommands.test(n)) return { kind: "teleport", key: n };
+    if (isTeleportOnlyCommand(n)) return { kind: "teleport", key: n };
     const cur = this.current();
     if (cur && (cur.exits.includes(n) || cur.links[n])) return { kind: "move", key: n };
     if (this.profile.nonMovementCommands.test(n)) return { kind: "ignore", key: n };
@@ -215,6 +263,7 @@ export class Mapper {
   }
 
   onGameEvent(ev: GameEvent, at = Date.now()): void {
+    this.eventAt = at;
     this.expire(at);
     switch (ev.type) {
       case "prompt": {
@@ -243,9 +292,13 @@ export class Mapper {
       case "move-failed":
         this.onMoveFailed(ev.text);
         return;
+      case "move-hindered":
+        this.onMoveHindered();
+        return;
       case "line":
         if (this.queue[0] && ev.text.trim()) this.queue[0].heard = true;
         this.onDoorResult(ev.text);
+        this.onMenuLine(ev.text);
         return;
       case "flee": {
         this.fleeDir = ev.dir;
@@ -259,9 +312,21 @@ export class Mapper {
       case "command-echo":
         for (const c of ev.commands) this.onCommandSent(c, at);
         return;
+      case "transit":
+        this.onTransit(ev.rule, ev.phase, ev.place, at);
+        return;
       default:
         return;
     }
+  }
+
+  private onMenuLine(text: string): void {
+    const menu = this.menus.feed(text);
+    if (!menu) return;
+    const room = this.position ? this.map.room(this.position) : undefined;
+    if (!room) return;
+    if (recordHealingMenu(room, menu, new Date(this.eventAt).toISOString())) this.map.touch();
+    this.debug?.(`healing ${menu.kind} menu at ${room.id} (${menu.items.length} items)`);
   }
 
   private expire(at: number): void {
@@ -381,6 +446,19 @@ export class Mapper {
     }
   }
 
+  /**
+   * The in-flight move was eaten on the way out (tripped): we did not move, and the exit is not
+   * at fault — no failure charged, no block. Answering it keeps the next display paired with the
+   * command that really produced it instead of an unseen move.
+   */
+  private onMoveHindered(): void {
+    const e = this.inFlight();
+    if (!e || e.kind !== "move") return;
+    e.responded = true;
+    const from = this.current();
+    if (from) this.map.recordHindrance(from.id, e.key);
+  }
+
   private onMoveFailed(text: string): void {
     const e = this.inFlight();
     if (!e) return;
@@ -400,7 +478,175 @@ export class Mapper {
     }
   }
 
+  /**
+   * A ride's own lines (see `TransitRule`). Boarding moves us onto the vessel, off the map;
+   * the arrive line makes the next display a landing instead of the queued command's exit.
+   */
+  private onTransit(ruleId: string, phase: "ticket" | "board" | "depart" | "arrive", place: string | undefined, at: number): void {
+    const rule = this.profile.transits?.find((r) => r.id === ruleId);
+    if (!rule) return;
+    const answer = (kinds: PendingKind[]) => {
+      const q = this.queue.find((e) => !e.responded && kinds.includes(e.kind));
+      if (q) q.responded = true;
+      return q;
+    };
+    switch (phase) {
+      case "ticket":
+        this.ticket = { rule: rule.id, place };
+        answer(["maybe"]);
+        return;
+      case "board": {
+        const q = answer(["maybe", "move"]);
+        const dock = this.position ?? this.lastKnown;
+        const ticket = this.ticket?.rule === rule.id ? this.ticket : null;
+        this.ticket = null;
+        const boardCmd = q?.key ?? (rule.command ? normalizeCommand(rule.command) : undefined);
+        this.ride = { rule, place: ticket?.place, dock, boardCmd, boardedAt: at, departed: false, arriving: false };
+        this.debug?.(`transit board ${rule.id} at=${dock} via=${boardCmd ?? "?"} place=${ticket?.place ?? "?"}`);
+        if (rule.vessel) {
+          const vessel = this.vesselRoom(rule);
+          this.setHere(vessel.id);
+          this.history = [];
+          this.doubt = 0;
+          this.emit({ type: "moved", from: dock, to: vessel.id, via: boardCmd, how: "relocate", created: false });
+        }
+        return;
+      }
+      case "depart":
+        if (this.ride?.rule.id === rule.id) this.ride.departed = true;
+        return;
+      case "arrive":
+        // The command that set off a forced relocation (arena: the step south) or `disembark`
+        // is answered by this line, not by the display that follows.
+        answer(["move", "maybe", "flee"]);
+        if (this.ride?.rule.id === rule.id) this.ride.arriving = true;
+        else this.ride = { rule, dock: this.position ?? this.lastKnown, boardedAt: at, departed: true, arriving: true };
+        this.debug?.(`transit arrive ${rule.id} from=${this.ride.dock}`);
+        return;
+    }
+  }
+
+  /** The off-map room standing for `rule`'s vessel: its own aside plane, never matched to land. */
+  private vesselRoom(rule: TransitRule): MapRoom {
+    const tag = `${VESSEL_TAG}:${rule.id}`;
+    const known = this.map.rooms().find((r) => r.tags.includes(tag));
+    if (known) return known;
+    const plane = this.map.newPlane("aside", undefined, `${rule.label} (vessel)`);
+    const room = this.map.createRoom({ plane: plane.id, x: 0, y: 0, z: 0 });
+    room.title = rule.label;
+    if (rule.vessel?.description) room.description = rule.vessel.description;
+    room.tags.push(VESSEL_TAG, tag);
+    room.notes.push(`Aboard ${rule.label}: not a place on the map. Arrival is recorded as a transit link from the boarding room.`);
+    this.map.reindex();
+    this.map.touch();
+    return room;
+  }
+
+  /** Where the ride put us: the display after the arrive line. */
+  private land(obs: RoomObservation): void {
+    const ride = this.ride!;
+    this.ride = null;
+    const at = this.eventAt;
+    this.fenceRoot = null;
+    this.fenceCache = null;
+    const dock = this.map.room(ride.dock);
+    const from = this.position;
+    this.debug?.(`transit land ${ride.rule.id} dock=${dock?.id} departed=${ride.departed} obs=(${obs.exits})`);
+    // A forced relocation (no boarding): a plain jump, placed by the usual relocation logic.
+    if (!ride.rule.board || obs.mode === "dark") {
+      this.relocate(obs, null);
+      return;
+    }
+    let target: MapRoom | undefined;
+    // Stepped back off before sailing.
+    if (!ride.departed && dock && this.map.compatibility(dock, obs) > 0) target = dock;
+    const linked = dock && ride.boardCmd ? this.map.room(dock.links[ride.boardCmd]?.to) : undefined;
+    if (!target && linked && linked.id !== dock?.id && this.fullyMatches(linked, obs)) target = linked;
+    if (!target) {
+      // A known port, but only on the exact same prose: every company berth ends alike.
+      const exact = this.candidatePool(obs).filter((r) => r.id !== dock?.id && this.exactlyMatches(r, obs));
+      if (exact.length === 1) target = exact[0];
+    }
+    let created = false;
+    if (!target) {
+      const label = ride.place ?? `${ride.rule.label} landing`;
+      const plane = this.map.newPlane("surface", undefined, label);
+      // Only the ship reaches it: keep its rooms from ever matching look-alikes back home.
+      if (ride.departed) plane.continent = label;
+      target = this.map.createRoom({ plane: plane.id, x: 0, y: 0, z: 0 });
+      created = true;
+    }
+    this.map.applyObservation(target, obs);
+    this.setHere(target.id);
+    this.record(null, obs, target.id, { created });
+    const crossed = ride.departed && !!dock && dock.id !== target.id;
+    if (crossed && ride.boardCmd && ride.rule.link !== false) {
+      const seconds = Math.round((at - ride.boardedAt) / 1000);
+      this.map.linkTransit(dock!.id, ride.boardCmd, target.id, {
+        rule: ride.rule.id,
+        label: ride.rule.label,
+        ...(ride.place ? { place: ride.place } : {}),
+        ...(seconds > 0 ? { seconds } : {}),
+        ...(ride.rule.howTo ? { howTo: ride.rule.howTo } : {}),
+      });
+    }
+    if (crossed) this.fenceRoot = target.id;
+    this.debug?.(`transit landed ${target.id}${created ? " (new plane)" : ""}`);
+    this.emit({ type: "moved", from, to: target.id, via: ride.boardCmd, how: "relocate", created });
+  }
+
+  /** Full match on the very same prose (not just a shared ending), title and exits. */
+  private exactlyMatches(room: MapRoom, obs: RoomObservation): boolean {
+    if (!this.fullyMatches(room, obs)) return false;
+    if (!obs.description) return !!obs.title && room.title === obs.title;
+    return !!room.description && normalizeDescription(room.description) === normalizeDescription(obs.description);
+  }
+
+  /** Inside the post-ride fence (or no fence): walkable from the landing without riding back. */
+  private reachable(room: MapRoom): boolean {
+    if (!this.fenceRoot) return true;
+    const root = this.map.canonicalId(this.fenceRoot);
+    if (!root) {
+      this.fenceRoot = null;
+      return true;
+    }
+    if (!this.fenceCache) {
+      const seen = new Set<string>([root]);
+      const todo = [root];
+      while (todo.length) {
+        const r = this.map.room(todo.pop()!);
+        if (!r) continue;
+        const next: (string | null | undefined)[] = Object.values(r.links)
+          .filter((l) => l.kind !== "teleport")
+          .map((l) => l.to);
+        for (const p of this.map.incomingRooms(r.id)) {
+          if (Object.values(p.links).some((l) => l.kind !== "teleport" && this.map.canonicalId(l.to) === r.id)) next.push(p.id);
+        }
+        for (const n of next) {
+          const id = this.map.canonicalId(n);
+          if (id && !seen.has(id)) {
+            seen.add(id);
+            todo.push(id);
+          }
+        }
+      }
+      this.fenceCache = seen;
+    }
+    return this.fenceCache.has(room.id);
+  }
+
   private onRoom(obs: RoomObservation): void {
+    this.fenceCache = null;
+    if (this.ride && this.eventAt - this.ride.boardedAt > RIDE_MAX_MS) this.ride = null;
+    if (this.ride?.arriving) {
+      this.land(obs);
+      return;
+    }
+    if (this.ride) {
+      // Aboard: anything shown (`view`) is outside the ship, not where we stand.
+      this.debug?.(`room ${obs.title ?? obs.mode}(${obs.exits}) ignored aboard ${this.ride.rule.id}`);
+      return;
+    }
     if (this.fleeDir) {
       const dir = this.fleeDir;
       this.fleeDir = null;
@@ -481,34 +727,37 @@ export class Mapper {
    * Work out where a room display puts us when the command queue cannot. `key` is how we
    * got here relative to the previous display: `?` some exit, `=` no move, null a jump.
    */
-  private relocate(obs: RoomObservation, key: string | null, hint?: string): void {
+  private relocate(obs: RoomObservation, key: string | null, hint?: string, opts: { knownOnly?: boolean } = {}): boolean {
     const from = this.position;
     if (obs.mode === "dark") {
+      if (opts.knownOnly) return false;
       if (this.position) this.lastKnown = this.position;
       this.position = null;
       this.history = [];
       this.emit({ type: "lost", reason: "relocated into a dark room" });
-      return;
+      return true;
     }
     const cur = this.current();
     if (cur && key !== "=" && this.map.compatibility(cur, obs) > 0) {
       this.map.applyObservation(cur, obs);
       this.record("=", obs, cur.id, { sure: this.history.at(-1)?.sure });
       this.emit({ type: "moved", from, to: cur.id, how: "look", created: false });
-      return;
+      return true;
     }
     if (key === "?" && cur) {
       const via = this.neighborVia(cur, obs, hint);
       if (via) {
+        this.creditQueued(via);
         this.arrive(obs, via);
-        return;
+        return true;
       }
     }
     if (key !== null) {
-      if (hint && this.relocalize(obs, hint, "contradiction")) return;
-      if (this.relocalize(obs, key, "contradiction")) return;
+      if (hint && this.relocalize(obs, hint, "contradiction")) return true;
+      if (this.relocalize(obs, key, "contradiction")) return true;
     }
     let unique = this.map.findByObservation(obs, { allowTitle: true }).room;
+    if (unique && (!this.reachable(unique) || unique.tags.includes(VESSEL_TAG))) unique = null;
     if (
       unique &&
       obs.description &&
@@ -524,6 +773,9 @@ export class Mapper {
       (descPin ? this.nearestCandidate(obs) : undefined) ??
       this.contentsCandidate(obs, false);
     let created = false;
+    // `knownOnly`: only a room the display identifies by itself counts; a guess among
+    // look-alikes or a brand-new room is the caller's business.
+    if (opts.knownOnly && !unique) return false;
     if (!target) {
       const plane = this.map.newPlane("surface");
       target = this.map.createRoom({ plane: plane.id, x: 0, y: 0, z: 0 });
@@ -535,13 +787,20 @@ export class Mapper {
     // Anything short of a unique match is a guess: keep checking it against what we see next.
     if (!unique) this.suspectFor("doubt");
     this.emit({ type: "moved", from, to: target.id, how: "relocate", created });
+    return true;
+  }
+
+  /** The display was produced by the queued `key` after all: its prompt owes us nothing more. */
+  private creditQueued(key: string): void {
+    const q = this.queue.slice(0, 8).find((e) => !e.responded && e.kind === "move" && e.key === key);
+    if (q) q.responded = true;
   }
 
   /**
    * An unannounced move from `cur`: the exit whose known destination (link, else the room on
    * that side) matches `obs`, or the only unexplored exit whose far side lists the way back.
    */
-  private neighborVia(cur: MapRoom, obs: RoomObservation, hint?: string): string | undefined {
+  private neighborVia(cur: MapRoom, obs: RoomObservation, hint?: string, knownOnly = false): string | undefined {
     const dest = (cmd: string): MapRoom | undefined => {
       const l = cur.links[cmd];
       if (l?.to) return l.kind === "teleport" ? undefined : this.map.room(l.to);
@@ -556,12 +815,24 @@ export class Mapper {
     const exits = [...new Set([...cur.exits, ...Object.keys(cur.links)])];
     const hits = exits.filter(fits);
     if (hits.length === 1) return hits[0];
-    if (hits.length) return undefined;
+    if (hits.length) return this.bestKnownExit(cur, hits);
+    if (knownOnly) return undefined;
     const open = cur.exits.filter((d) => {
       const rev = reverseDirection(d);
       return isGeometricDirection(d) && !dest(d) && !!rev && obs.exits.includes(rev);
     });
     return open.length === 1 ? open[0] : undefined;
+  }
+
+  /**
+   * Several of `cur`'s exits lead to the room we see (duplicates): the one the room lists, else
+   * the one walked most.
+   */
+  private bestKnownExit(cur: MapRoom, cmds: string[]): string | undefined {
+    const dests = new Set(cmds.map((c) => this.map.canonicalId(cur.links[c]?.to)));
+    if (dests.size !== 1 || dests.has(undefined)) return undefined;
+    const rank = (c: string) => (cur.exits.includes(c) ? 1e9 : 0) + (cur.links[c]?.uses ?? 0);
+    return [...cmds].sort((a, b) => rank(b) - rank(a))[0];
   }
 
   /**
@@ -589,7 +860,10 @@ export class Mapper {
     room: string,
     opts: { created?: boolean; linkedFrom?: string | null; sure?: boolean } = {},
   ): void {
-    if (key === null) this.history = [];
+    if (key === null) {
+      this.history = [];
+      this.fenceRoot = null;
+    }
     const { created = false, linkedFrom = null, sure = false } = opts;
     this.history.push({ key, obs, room, created, linkedFrom, sure: sure && !created && this.doubt === 0 });
     if (this.history.length > HISTORY_STEPS) this.history.shift();
@@ -641,7 +915,13 @@ export class Mapper {
     const vertical = key === "u" || key === "d";
     if (isGeometricDirection(key) && !vertical && rev && target.exits.length && !target.exits.includes(rev)) return undefined;
     if (rev && target.links[rev]?.to && this.map.canonicalId(target.links[rev]!.to) !== prev.id) return undefined;
-    return this.layoutAgrees(prev, key, target) ? prev : undefined;
+    if (this.layoutAgrees(prev, key, target)) return prev;
+    // The grid disagrees, but the game does not: the room we surely left lists this exit with
+    // nothing behind it, and the room we reached lists the way back with nothing behind it.
+    // Trails that bend (Merevia's forest: spring r4891 e → junction r4821) are not a grid;
+    // without this the mapper relocated on every pass and never learned the link.
+    if (isGeometricDirection(key) && !vertical && rev && target.exits.includes(rev) && !target.links[rev]?.to) return prev;
+    return undefined;
   }
 
   /**
@@ -880,7 +1160,13 @@ export class Mapper {
   private candidatePool(obs: RoomObservation): MapRoom[] {
     if (obs.mode === "dark") return [];
     const pool = obs.title ? this.map.roomsWithTitle(obs.title) : this.map.rooms();
-    return pool.filter((r) => this.map.compatibility(r, obs) > 0 && (!obs.description || r.descKeys.length > 0));
+    return pool.filter(
+      (r) =>
+        this.map.compatibility(r, obs) > 0 &&
+        (!obs.description || r.descKeys.length > 0) &&
+        !r.tags.includes(VESSEL_TAG) &&
+        this.reachable(r),
+    );
   }
 
   /**
@@ -898,7 +1184,7 @@ export class Mapper {
     const dup: { target: MapRoom; x: MapRoom }[] = [];
     const weak: MapRoom[] = [];
     for (const c of this.candidatePool(obs)) {
-      if (c.id === from.id) continue;
+      if (c.id === from.id || !this.map.sameContinent(from, c)) continue;
       if (!rev) {
         weak.push(c);
         continue;
@@ -983,6 +1269,26 @@ export class Mapper {
     }
     const geometric = isGeometricDirection(key);
     const kind = exitKindFor(key, from.exits);
+    // An unlisted command with no exit behind it yet is the weakest explanation there is for a
+    // room display: commands answered late (combat rounds) or without a prompt leave it at the
+    // head of the queue while a later move's display arrives. Before it becomes a secret exit:
+    if (kind === "special" && !from.links[key]?.to && obs.mode !== "dark") {
+      // ...a neighbor we already know explains the display (`enter crack` → the room `se` leads to).
+      const via = this.neighborVia(from, obs, undefined, true);
+      if (via && via !== key) {
+        this.debug?.(`special ${key} from ${from.id} explained by known exit ${via}`);
+        this.creditQueued(via);
+        this.arrive(obs, via);
+        return;
+      }
+      // ...and a command that is no travel verb (`double-thrust`, `globe of darkness on lich`)
+      // never leads into a room the map already knows: that is an unexplained move, placed by
+      // the trajectory. It may still discover a brand-new room (benefit of the doubt).
+      if (!looksLikeTravelCommand(key, from) && this.relocate(obs, "?", undefined, { knownOnly: true })) {
+        this.debug?.(`non-travel ${key} from ${from.id} not recorded as an exit`);
+        return;
+      }
+    }
     let target: MapRoom | undefined;
     // Followed the map (link or coordinate) rather than a guess.
     let mapped = false;
@@ -991,6 +1297,18 @@ export class Mapper {
     let suspect = geometric && from.exits.length > 0 && !from.exits.includes(key) && !from.tags.includes("dynamic-exits");
 
     const link = from.links[key];
+    // Nothing to see (dark, or Deepwater's blinding glare) and the map only guesses where this
+    // exit goes, a guess the far room's own exits deny (no way back): following it would confirm
+    // it unseen, and the next refusals would be charged to a room we are not in (r2183 `n` →
+    // fish shop r4774, which only opens east; really Waterside Road). We moved, but to an
+    // unknown room: drop our footing until the next display places us.
+    if (obs.mode === "dark" && link?.to && !link.confirmed && this.guessDenied(key, link.to)) {
+      this.lastKnown = from.id;
+      this.position = null;
+      this.history = [];
+      this.emit({ type: "lost", reason: `unseen step ${key} along an unwalked link` });
+      return;
+    }
     if (link?.to) {
       const t = this.map.room(link.to);
       if (t && this.map.compatibility(t, obs) >= 0) {
@@ -1054,7 +1372,8 @@ export class Mapper {
     }
 
     if (!target && described) {
-      if (this.layoutAgrees(from, key, described)) target = described;
+      // The grid agrees, or the exits do (a bent trail: both ends list the step, neither is wired).
+      if (this.layoutAgrees(from, key, described) || this.unlinkedPredecessor(from.id, key, described)) target = described;
       else {
         // We are in that room, but the way we got here says we were not where we thought.
         this.map.applyObservation(described, obs);
@@ -1090,6 +1409,36 @@ export class Mapper {
       this.emit({ type: "moved", from: from.id, to: from.id, how: "look", created: false });
       return;
     }
+    if (isTeleportOnlyCommand(key)) {
+      this.map.applyObservation(target, obs);
+      this.setHere(target.id);
+      this.record(null, obs, target.id, { created });
+      this.emit({ type: "moved", from: from.id, to: target.id, how: "relocate", created });
+      return;
+    }
+    // A well-walked exit that suddenly leads somewhere else: one observation (a slipped queue, a
+    // missed display, a shove) does not rewrite it. We go where the display says, in doubt, and
+    // only the same other room showing up again re-points the link.
+    const old = from.links[key];
+    const oldTo = this.map.canonicalId(old?.to);
+    if (old && oldTo && oldTo !== target.id && old.confirmed && (old.uses >= ESTABLISHED_USES || old.verified) && obs.mode !== "dark") {
+      const again = old.contested && this.map.canonicalId(old.contested.to) === target.id ? old.contested.count + 1 : 1;
+      if (again < (old.verified ? 4 : 2)) {
+        old.contested = { to: target.id, count: again };
+        this.map.touch();
+        this.map.applyObservation(target, obs);
+        this.setHere(target.id);
+        this.record(key, obs, target.id, { created });
+        this.suspectFor("doubt");
+        this.debug?.(`contested ${from.id} ${key}: ${oldTo} (u${old.uses}) vs ${target.id} #${again}`);
+        this.emit({ type: "moved", from: from.id, to: target.id, via: key, how: "relocate", created });
+        return;
+      }
+    }
+    if (old?.contested && oldTo === target.id) {
+      delete old.contested;
+      this.map.touch();
+    }
     const newLink = this.map.canonicalId(from.links[key]?.to) !== target.id;
     const merged = this.map.connect(from, key, target, { confirmed: true, hidden: kind === "special" });
     this.map.applyObservation(target, obs);
@@ -1106,6 +1455,14 @@ export class Mapper {
       sure: mapped && !suspect && obs.mode !== "dark",
     });
     this.emit({ type: "moved", from: from.id, to: this.position ?? target.id, via: key, how: "exit", created });
+  }
+
+  /** The room a compass guess leads to has a known exit list without the way back. */
+  private guessDenied(key: string, toId: string): boolean {
+    const rev = reverseDirection(key);
+    const to = this.map.room(toId);
+    if (!rev || !isGeometricDirection(key) || !to || to.dark || to.tags.includes("dynamic-exits")) return false;
+    return to.exits.length > 0 && !to.exits.includes(rev);
   }
 
   /** Normalized verbose text long enough to treat as a cross-area fingerprint. */
@@ -1152,7 +1509,11 @@ export class Mapper {
     if (obs.description && obs.description.trim().length >= MIN_MERGE_DESC) {
       if (!this.descriptionPinAllowed(obs)) return undefined;
       const r = this.map.findByObservation(obs, { allowTitle: false }).room;
-      return r && r.id !== from.id && (r.description?.length ?? 0) >= MIN_MERGE_DESC ? r : undefined;
+      // Another landmass is never a walk away (Kelton's Profession trainer is word for word
+      // Dunagin's r1370, which the old mapper wired to Kelton's street).
+      return r && r.id !== from.id && (r.description?.length ?? 0) >= MIN_MERGE_DESC && this.reachable(r) && this.map.sameContinent(from, r)
+        ? r
+        : undefined;
     }
     if (!obs.title || obs.description) return undefined;
     const titled = this.map.roomsWithTitle(obs.title);
@@ -1179,6 +1540,7 @@ export class Mapper {
 
   /** Linking `from --key--> to` keeps the layout sane (other plane, named exit, or right spot). */
   private layoutAgrees(from: MapRoom, key: string, to: MapRoom): boolean {
+    if (!this.map.sameContinent(from, to)) return false;
     if (!isGeometricDirection(key) || from.pos.plane !== to.pos.plane) return true;
     const p = this.map.expectedPos(from, key)!;
     return p.x === to.pos.x && p.y === to.pos.y && p.z === to.pos.z;

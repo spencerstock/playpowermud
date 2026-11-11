@@ -2,6 +2,8 @@
   "name": "playpowermud",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "repository": "github:spencerstock/playpowermud",
   "type": "module",
   "description": "Browser-based Powermud client: terminal, aliases, comms, world map.",
   "scripts": {
