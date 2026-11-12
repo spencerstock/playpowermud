@@ -1,5 +1,7 @@
 # playpowermud
 
+Open source ([MIT](./LICENSE)) — [github.com/spencerstock/playpowermud](https://github.com/spencerstock/playpowermud)
+
 Play [Powermud](http://powermud.com) in the browser. A basic client built from the internals of
 `mudwithme`: terminal, aliases, comms, world map — nothing else.
 
@@ -60,3 +62,7 @@ uninterrupted play, run `yarn relay` on an always-on host and build with
 
 `public/data/powermud.graph.json` is copied from `mudwithme/data/world/powermud.graph.json`.
 Browsers keep their own learned copy until a shipped map with a newer `updatedAt` arrives.
+
+## License
+
+MIT — see [LICENSE](./LICENSE). Contributions welcome via pull request on GitHub.

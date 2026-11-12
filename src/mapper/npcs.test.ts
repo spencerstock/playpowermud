@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { classifyNpcKind, contentCountsAsRoomNpc, npcMatchFor, roomNpcNames, syncRoomNpcs } from "./npcs.js";
+import { classifyNpcKind, contentCountsAsRoomNpc, npcMatchFor, roomNpcNames, singularNpcName, syncRoomNpcs } from "./npcs.js";
 import type { MapRoom } from "./types.js";
 
 test("roomNpcNames keeps shop NPCs and drops corpses and prose", () => {
@@ -71,4 +71,26 @@ test("roomNpcNames drops guild boards and room objects", () => {
 
 test("classifyNpcKind recognizes Loreman as npc", () => {
   assert.equal(classifyNpcKind("Loreman", undefined, "unknown"), "npc");
+});
+
+test("singularNpcName turns a listed group into one of them", () => {
+  assert.equal(singularNpcName("Highwaymen"), "Highwayman");
+  assert.equal(singularNpcName("Lizard men"), "Lizard man");
+  assert.equal(singularNpcName("Women"), "Woman");
+  assert.equal(singularNpcName("Rothes"), "Rothe");
+  assert.equal(singularNpcName("Faerny sentrys"), "Faerny sentry");
+  assert.equal(singularNpcName("Kobold villagers [Children]"), "Kobold villager [Child]");
+  assert.equal(singularNpcName("Wolves"), "Wolf");
+  assert.equal(singularNpcName("Puppies"), "Puppy");
+  assert.equal(singularNpcName("Sons of the Sea"), "Son of the Sea");
+});
+
+test("roomNpcNames indexes groups by the singular name and folds duplicates", () => {
+  const names = roomNpcNames({
+    a: { name: "Highwaymen", kind: "npc", lastCount: 2, seenCount: 1, lastSeenAt: "" },
+    b: { name: "Highwayman", kind: "npc", lastCount: 1, seenCount: 4, lastSeenAt: "" },
+    c: { name: "Male Drow", kind: "npc", lastCount: 3, seenCount: 1, lastSeenAt: "" },
+    d: { name: "Egg", kind: "item", lastCount: 1, seenCount: 1, lastSeenAt: "" },
+  });
+  assert.deepEqual(names, ["Highwayman", "Male Drow"]);
 });

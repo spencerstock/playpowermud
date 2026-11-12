@@ -1,13 +1,14 @@
 import { isGeometricDirection } from "../game/directions.js";
+import { variableTime } from "../scripting/variableTime.js";
 import { flakyBatchRepeatFromCatalog } from "./flakyTravelCatalog.js";
-import { NAV_FAILURES_BEFORE_HEAL, type NavFailureResult, type WorldMap } from "./WorldMap.js";
+import { BLOCK_AFTER_CONSECUTIVE_FAILS, type NavFailureResult, type WorldMap } from "./WorldMap.js";
 import type { MapLink, MapRoom } from "./types.js";
 
 export type FlakyTravelContext = {
   fromId: string;
   map: {
     room(id: string): MapRoom | undefined;
-    canonicalId(id: string): string;
+    canonicalId(id: string): string | undefined;
   };
 };
 
@@ -17,9 +18,11 @@ export type MoveSendResult = { error?: string; output: string };
 export const FLAKY_MOVE_MAX_ATTEMPTS = 16;
 /** Tries per walk step for an ordinary exit before the walk reroutes. */
 export const COMPASS_MOVE_MAX_ATTEMPTS = 3;
+/** Tries for an exit where moves get eaten (`MapLink.hindered`, the Kulajo small boy's trips). */
+export const HINDERED_MOVE_MAX_ATTEMPTS = 8;
 
 const MOVE_FAILED_RE =
-  /cannot go that direction|can't go that way|alas, you cannot|too busy fighting|trips you|tripping you|can't move|you fail to climb|you are unable to climb|you fail to enter|you are unable to enter|you slip|lose your grip|you can't reach|you cannot reach|find nothing|search reveals nothing/i;
+  /cannot go that direction|can't go that way|alas, you cannot|too busy fighting|in your way|trips you|tripping you|can't move|you fail to climb|you are unable to climb|you fail to enter|you are unable to enter|you slip|lose your grip|you can't reach|you cannot reach|find nothing|search reveals nothing/i;
 
 export function outputSaysMoveFailed(output: string): boolean {
   return MOVE_FAILED_RE.test(output);
@@ -39,10 +42,10 @@ export function isOneWayAsideExit(ctx: FlakyTravelContext, link: Pick<MapLink, "
   if (!toId) return false;
   const dest = ctx.map.room(toId);
   if (!dest) return true;
-  const fromCanon = ctx.map.canonicalId(ctx.fromId);
+  const fromCanon = ctx.map.canonicalId(ctx.fromId) ?? ctx.fromId;
   for (const back of Object.values(dest.links)) {
     if (!back.to) continue;
-    if (ctx.map.canonicalId(back.to) === fromCanon) return false;
+    if ((ctx.map.canonicalId(back.to) ?? back.to) === fromCanon) return false;
   }
   return true;
 }
@@ -54,7 +57,7 @@ export function isOneWayAsideExit(ctx: FlakyTravelContext, link: Pick<MapLink, "
  */
 export function isFlakyTravelCommand(
   cmd: string,
-  link?: Pick<MapLink, "kind" | "failCount" | "blocked" | "to">,
+  link?: Pick<MapLink, "kind" | "failCount" | "blocked" | "to"> & Partial<MapLink>,
   ctx?: FlakyTravelContext,
 ): boolean {
   const t = cmd.trim();
@@ -77,9 +80,11 @@ const FLAKY_TRAVEL_RE = [
 
 export function moveMaxAttempts(cmd: string, link?: MapLink, priorFailures = 0, ctx?: FlakyTravelContext): number {
   if (isFlakyTravelCommand(cmd, link, ctx)) return FLAKY_MOVE_MAX_ATTEMPTS;
-  // A plain exit that refused us a few times in a row will not open on the 20th try: give up
-  // and let the walk reroute around it (failCount still accumulates toward a heal).
-  return Math.max(1, Math.min(COMPASS_MOVE_MAX_ATTEMPTS, NAV_FAILURES_BEFORE_HEAL - priorFailures));
+  // Trips are not refusals: the exit works, it just takes a few tries.
+  if ((link?.hindered ?? 0) > 0) return HINDERED_MOVE_MAX_ATTEMPTS;
+  // A few tries, then let this walk reroute. The streak stays on the link, so a later walk
+  // retries it until BLOCK_AFTER_CONSECUTIVE_FAILS blocks it.
+  return Math.max(1, Math.min(COMPASS_MOVE_MAX_ATTEMPTS, BLOCK_AFTER_CONSECUTIVE_FAILS - priorFailures));
 }
 
 /** Extra sends in speedwalk (`batch`) mode — mirrors nav alias streak lengths when known. */
@@ -104,17 +109,51 @@ export type RetryCompassMoveResult = {
   failures?: number;
 };
 
-function shouldRecordNavFailure(
-  cmd: string,
-  link: MapLink | undefined,
-  output: string,
-  ctx?: FlakyTravelContext,
-): boolean {
-  if (isFlakyTravelCommand(cmd, link, ctx)) return false;
-  return !outputSaysMoveFailed(output);
+const SILENT_MOVE_FAIL_MAX = 2;
+
+/** Wait between retries of a link that just failed, so a stuck exit is not spammed. */
+export const LINK_RETRY_PAUSE_MS = 1000;
+
+export async function pauseBetweenLinkRetries(pause?: (ms: number) => Promise<void>): Promise<void> {
+  if (pause) {
+    await pause(LINK_RETRY_PAUSE_MS);
+    return;
+  }
+  await new Promise<void>((resolve) => setTimeout(resolve, variableTime(LINK_RETRY_PAUSE_MS)));
 }
 
-const SILENT_MOVE_FAIL_MAX = 2;
+function firstFailureLine(output: string): string {
+  const line = output
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .find(Boolean);
+  return line ? line.slice(0, 160) : "did not move";
+}
+
+/**
+ * Count a failed move the mapper did not already record during `send` (it increments
+ * `failCount` itself for profile `moveFailed` lines). `did not move` and other
+ * {@link outputSaysMoveFailed} lines (`in your way`, trips, …) share that counter.
+ * Does not remove the link — a real exit stays until it is blocked at the streak threshold.
+ */
+export function recordUncountedMoveFailure(
+  map: WorldMap,
+  fromId: string,
+  cmd: string,
+  last: MoveSendResult,
+  failCountBefore: number,
+): NavFailureResult | undefined {
+  const live = map.room(fromId)?.links[cmd];
+  const after = live?.failCount ?? 0;
+  if (!live && failCountBefore > 0) return { failures: failCountBefore, healed: true, detail: `link ${cmd} removed` };
+  if (after > failCountBefore) return undefined;
+  if (last.error?.trim()) return undefined;
+  const recognized = outputSaysMoveFailed(last.output);
+  if (!recognized && !last.output.trim()) return undefined;
+  const reason = recognized ? firstFailureLine(last.output) : "did not move";
+  const noted = map.noteConsecutiveFailure(fromId, cmd, reason);
+  return { failures: noted.failures, healed: false };
+}
 
 function shouldAbortMoveRetry(last: MoveSendResult, attempt: number): boolean {
   if (last.error?.trim()) return true;
@@ -133,6 +172,10 @@ export async function retryCompassMove(opts: {
   send: () => Promise<MoveSendResult>;
   moved: () => boolean;
   shouldAbort?: () => boolean;
+  /** Test hook. Production waits {@link LINK_RETRY_PAUSE_MS} between failed tries. */
+  pause?: (ms: number) => Promise<void>;
+  /** The caller already sent this command once and it failed. */
+  pauseBeforeFirst?: boolean;
 }): Promise<RetryCompassMoveResult> {
   const link = opts.map.room(opts.fromId)?.links[opts.cmd];
   const flakyCtx: FlakyTravelContext = { map: opts.map, fromId: opts.fromId };
@@ -142,35 +185,31 @@ export async function retryCompassMove(opts: {
     if (opts.shouldAbort?.()) {
       return { ok: false, result: last, detail: "aborted" };
     }
+    if (attempt > 0 || opts.pauseBeforeFirst) await pauseBetweenLinkRetries(opts.pause);
+    if (opts.shouldAbort?.()) {
+      return { ok: false, result: last, detail: "aborted" };
+    }
+    const failCountBefore = opts.map.room(opts.fromId)?.links[opts.cmd]?.failCount ?? 0;
     last = await opts.send();
     if (opts.shouldAbort?.()) {
       return { ok: false, result: last, detail: "aborted" };
     }
-    if (opts.moved()) return { ok: true, result: last };
+    if (opts.moved()) {
+      opts.map.clearConsecutiveFailures(opts.fromId, opts.cmd);
+      return { ok: true, result: last };
+    }
 
     if (shouldAbortMoveRetry(last, attempt)) {
       return { ok: false, result: last, detail: last.error ?? "silent move failure" };
     }
 
-    let rec: NavFailureResult | undefined;
-    if (shouldRecordNavFailure(opts.cmd, link, last.output, flakyCtx)) {
-      rec = opts.map.recordNavigationFailure(opts.fromId, opts.cmd, last.error ?? "did not move");
-    } else if (outputSaysMoveFailed(last.output)) {
-      const live = opts.map.room(opts.fromId)?.links[opts.cmd];
-      const failures = live?.failCount ?? 0;
-      if (!live?.to) {
-        return { ok: false, result: last, healed: true, detail: `link ${opts.cmd} removed`, failures };
-      }
-      if (failures >= NAV_FAILURES_BEFORE_HEAL) {
-        return { ok: false, result: last, healed: true, failures };
-      }
-    }
+    const rec = recordUncountedMoveFailure(opts.map, opts.fromId, opts.cmd, last, failCountBefore);
     if (rec?.healed) {
       return { ok: false, result: last, healed: true, detail: rec.detail, failures: rec.failures };
     }
     const live = opts.map.room(opts.fromId)?.links[opts.cmd];
     if (!live?.to) {
-      return { ok: false, result: last, healed: true, detail: `link ${opts.cmd} removed`, failures: rec?.failures };
+      return { ok: false, result: last, healed: true, detail: rec?.detail ?? `link ${opts.cmd} removed`, failures: rec?.failures };
     }
   }
   return { ok: false, result: last, failures: opts.map.room(opts.fromId)?.links[opts.cmd]?.failCount };

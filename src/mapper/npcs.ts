@@ -38,13 +38,53 @@ export function npcNamesForRoom(room: Pick<MapRoom, "npcs" | "contents">): strin
   return roomNpcNames(room.contents);
 }
 
+const IRREGULAR_PLURALS: [RegExp, string][] = [
+  [/men$/i, "man"], // Highwaymen, Lizard men, Women, Fishermen
+  [/children$/i, "child"],
+  [/people$/i, "person"],
+  [/mice$/i, "mouse"],
+  [/geese$/i, "goose"],
+  [/teeth$/i, "tooth"],
+  [/feet$/i, "foot"],
+  [/oxen$/i, "ox"],
+  [/ieves$/i, "ief"], // thieves
+  [/([lr])ves$/i, "$1f"], // wolves, elves, dwarves
+  [/ives$/i, "ife"], // knives, wives
+];
+
+function singularWord(word: string): string {
+  const keepCase = (out: string) =>
+    /^[A-Z]+$/.test(word) ? out.toUpperCase() : /^[A-Z]/.test(word) ? out[0]!.toUpperCase() + out.slice(1) : out;
+  for (const [re, to] of IRREGULAR_PLURALS) if (re.test(word)) return keepCase(word.replace(re, to));
+  if (word.length > 4 && /ies$/i.test(word)) return keepCase(word.slice(0, -3) + "y");
+  if (/(?:ss|sh|ch|x|z)es$/i.test(word)) return word.slice(0, -2);
+  if (word.length > 2 && /s$/i.test(word) && !/(?:ss|us|is)$/i.test(word)) return word.slice(0, -1);
+  return word;
+}
+
+/**
+ * One of a group the MUD listed as `There are a couple Highwaymen.` → `Highwayman`, so `/to
+ * highwayman` finds rooms first seen with two of them. Only the head noun changes: the last word,
+ * or the word before ` of `; a `[Children]`-style tag is singular too.
+ */
+export function singularNpcName(name: string): string {
+  const tag = name.match(/^(.*?)\s*\[([^\]]+)\]\s*$/);
+  if (tag) return `${singularNpcName(tag[1]!)} [${singularWord(tag[2]!)}]`;
+  const of = name.match(/^(.*?)(\S+)( of .*)$/i);
+  if (of) return `${of[1]}${singularWord(of[2]!)}${of[3]}`;
+  const last = name.match(/^(.*?)(\S+)$/);
+  return last ? `${last[1]}${singularWord(last[2]!)}` : name;
+}
+
 export function roomNpcNames(contents: Record<string, StoredContent> | undefined): string[] {
-  const names = new Set<string>();
+  const names = new Map<string, string>();
   for (const c of Object.values(contents ?? {})) {
     if (!contentCountsAsRoomNpc(c)) continue;
-    names.add(c.name);
+    const name = (c.lastCount ?? 1) > 1 ? singularNpcName(c.name) : c.name;
+    const key = name.toLowerCase();
+    if (!names.has(key)) names.set(key, name);
   }
-  return [...names].sort((a, b) => a.localeCompare(b));
+  return [...names.values()].sort((a, b) => a.localeCompare(b));
 }
 
 export function syncRoomNpcs(room: MapRoom): void {

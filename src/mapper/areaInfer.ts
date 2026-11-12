@@ -106,6 +106,26 @@ export function parseAreaHints(text: string): AreaHint[] {
       confidence: 9,
       pick: (m) => m[1]!,
     },
+    {
+      re: /\bYou are in the treacherous UnderDark\b/g,
+      confidence: 10,
+      pick: () => "Underdark",
+    },
+    {
+      re: /\bYou are in the UnderDark\b/g,
+      confidence: 10,
+      pick: () => "Underdark",
+    },
+    {
+      re: /\b(?:maze of tunnels called the|warrens of the|denizens of the)\s+UnderDark\b/gi,
+      confidence: 9,
+      pick: () => "Underdark",
+    },
+    {
+      re: /\bUnderDark(?! Jewel)\b/g,
+      confidence: 7,
+      pick: () => "Underdark",
+    },
   ];
 
   for (const { re, confidence, pick } of rules) {
@@ -165,6 +185,21 @@ function looksLikeWilderness(room: MapRoom): boolean {
   return /\b(?:tunnel|tunnels|wilderness|shore|shoreline|underdark|cavern|cave|passage|trail|path|road)\b/i.test(text);
 }
 
+/** Underdark tunnels connect through generic "tunnel" prose; still stop at other settlements. */
+function blocksAreaFlood(room: MapRoom, hint: AreaHint): boolean {
+  if (hint.id !== "underdark") return looksLikeWilderness(room);
+  const text = `${room.title ?? ""} ${room.description ?? ""}`;
+  const local = parseAreaHints(text);
+  if (local.some((h) => h.id !== "underdark" && h.confidence >= 9)) return true;
+  if (
+    /\b(?:faerny|rothe island)\b/i.test(text) ||
+    (/\b(?:dunkrist|nal shaddar|granei)\b/i.test(text) && !/\bunderdark\b/i.test(text))
+  ) {
+    return true;
+  }
+  return false;
+}
+
 function neighbors(map: WorldMap, roomId: string): string[] {
   const room = map.room(roomId);
   if (!room) return [];
@@ -209,7 +244,7 @@ export function propagateAreas(map: WorldMap): number {
       const foreign = seeds.get(nid);
       if (foreign && foreign.id !== hint.id) continue;
       if (assigned.has(nid)) continue;
-      if (looksLikeWilderness(room)) continue;
+      if (blocksAreaFlood(room, hint)) continue;
       assigned.set(nid, hint);
       queue.push([nid, hint]);
     }

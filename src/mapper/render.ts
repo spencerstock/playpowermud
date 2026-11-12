@@ -3,6 +3,7 @@ import { areaDisplayLabel, effectiveAreaId } from "./areaInfer.js";
 import { npcNamesForRoom } from "./npcs.js";
 import { roomDisplayTitle } from "./roomTitle.js";
 import type { MapRoom } from "./types.js";
+import { layoutAround } from "./viewLayout.js";
 import type { WorldMap } from "./WorldMap.js";
 
 /**
@@ -32,10 +33,13 @@ export function renderAscii(
     row: (center.pos.y - y + r) * 2 + 1,
   });
   const youId = opts.youId === undefined ? centerId : opts.youId;
-  for (const room of map.rooms()) {
-    if (room.pos.plane !== plane || room.pos.z !== z) continue;
-    if (Math.abs(room.pos.x - center.pos.x) > r || Math.abs(room.pos.y - center.pos.y) > r) continue;
-    const { col, row } = cellOf(room.pos.x, room.pos.y);
+  // Cells come from the links around the center (`viewLayout.ts`), so look-alike rooms the
+  // stored grid stacked on one cell, or rooms behind a secret exit, still show up side by side.
+  const layout = layoutAround(map, center.id, { radius: r, zMin: Math.min(z, center.pos.z) - 1, zMax: Math.max(z, center.pos.z) + 1 });
+  for (const [id, p] of layout.cells) {
+    const room = map.room(id);
+    if (!room || p.z !== z) continue;
+    const { col, row } = cellOf(p.x, p.y);
     const hasAside = Object.values(room.links).some((l) => l.kind === "named" || l.kind === "special");
     const mid = room.id === youId ? "@" : room.dark ? "#" : hasAside ? "*" : "o";
     put(row, col - 1, room.links.u?.to || room.exits.includes("u") ? "^" : "[");
@@ -44,6 +48,9 @@ export function renderAscii(
     for (const [cmd, link] of Object.entries(room.links)) {
       const v = DIRECTION_VECTORS[cmd];
       if (!v || v.z !== 0 || !link.to) continue;
+      // Only draw the connector when the neighbor really sits there in this view.
+      const q = layout.cells.get(map.canonicalId(link.to) ?? "");
+      if (!q || q.x !== p.x + v.x || q.y !== p.y + v.y || q.z !== p.z) continue;
       const ch = cmd === "e" || cmd === "w" ? "-" : cmd === "n" || cmd === "s" ? "|" : cmd === "ne" || cmd === "sw" ? "/" : "\\";
       put(row - v.y, col + v.x * 2, ch);
     }

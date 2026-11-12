@@ -41,6 +41,38 @@ test("parseAreaHints ignores generic 'the area' phrasing", () => {
   assert.equal(hints.length, 0);
 });
 
+test("parseAreaHints finds Underdark but not UnderDark Jewel", () => {
+  const tunnel = parseAreaHints(
+    "You are in the treacherous UnderDark.  There is no telling what is around in these tunnels.",
+  );
+  assert.equal(tunnel[0]?.id, "underdark");
+  const jewel = parseAreaHints(
+    "You are in the eating establishment called the 'UnderDark Jewel'.  It is located directly undernearth the 'Dragons Poison' tavern.",
+  );
+  assert.ok(!jewel.some((h) => h.id === "underdark"));
+});
+
+test("propagateAreas floods Underdark through generic tunnel rooms", () => {
+  const map = WorldMap.empty("test");
+  map.doc.rooms.a = room("a", {
+    pos: { plane: "p1", x: 0, y: 0, z: 0 },
+    description: "You are in the treacherous UnderDark.  The tunnel leads east.",
+    links: { e: { to: "b", kind: "dir", confirmed: true, uses: 1 } },
+    exits: ["e"],
+  });
+  map.doc.rooms.b = room("b", {
+    pos: { plane: "p1", x: 1, y: 0, z: 0 },
+    description: "The tunnel is sloping down towards the southwest.  Chittering noises assault you.",
+    links: { w: { to: "a", kind: "dir", confirmed: true, uses: 1 } },
+    exits: ["w"],
+  });
+  map.reindex();
+  propagateAreas(map);
+  assert.equal(map.doc.rooms.a!.area, "underdark");
+  assert.equal(map.doc.rooms.b!.area, "underdark");
+  assert.equal(map.doc.areas.underdark?.label, "Underdark");
+});
+
 test("propagateAreas labels connected rooms and shops", () => {
   const map = WorldMap.empty("test");
   map.doc.rooms.a = room("a", {

@@ -85,13 +85,14 @@ test("an unlisted compass move that arrives stays on this plane and is linked bo
   assert.ok(h.map.findPath(market.id, (r) => r.id === shop.id));
 });
 
-test("failed moves do not move us and listed-but-blocked exits are recorded", () => {
+test("failed moves do not move us and listed failures are counted without blocking", () => {
   const h = harness();
   h.step(null, `Gate (n, s)\n${P}`);
   const gate = h.here();
   h.step("n", `You cannot go that direction.\n${P}`);
   assert.equal(h.here().id, gate.id);
-  assert.ok(gate.links.n?.blocked);
+  assert.equal(gate.links.n?.failCount, 1);
+  assert.equal(gate.links.n?.blocked, undefined);
   h.step("e", `You cannot go that direction.\n${P}`);
   assert.equal(gate.links.e, undefined, "unlisted failures are not recorded");
 });
@@ -111,6 +112,59 @@ test("dizzy after a move follows the exit and does not block the room we left", 
   h.step("s", `You cannot go that direction.\n${P}`);
   assert.equal(h.here().id, island.id);
   assert.equal(dock.links.s?.blocked, undefined, "the failure belongs to the island, which has no south");
+});
+
+const GLARE = "Your eyes sting from the blinding light, leaving you not able to see for a\nbrief moment.";
+const BRIGHT_GLARE = "Your eyes sting from the bright light, and you are blinded for a moment!";
+
+test("the blinding glare after a walked exit follows it; the next refusal is not charged to the room we left", () => {
+  const h = harness();
+  h.step(null, `Dulaj Road (e, w)\n${P}`);
+  const road = h.here();
+  h.step("w", `Intersection (n, s, e, w)\n${P}`);
+  const inter = h.here();
+  h.step("e", `${GLARE}\n${P}`);
+  assert.equal(h.here().id, road.id, "the move landed; only the display was lost to the glare");
+  assert.equal(road.dark, undefined, "a known room is not marked dark");
+  h.step("e", `You cannot go that direction.\n${P}`);
+  assert.equal(h.here().id, road.id);
+  assert.equal(road.links.e?.failCount, 1, "the refusal belongs to the road");
+  assert.equal(road.links.e?.blocked, undefined, "one refusal does not block the exit");
+  assert.equal(inter.links.e?.failCount ?? 0, 0, "not charged to the intersection we already left");
+  assert.equal(inter.links.e?.blocked, undefined);
+});
+
+test("goat-pen bright-light glare on a confirmed west follows the link and does not block it (r2768→r2767)", () => {
+  const h = harness();
+  h.step(null, `Pen mouth (e, w)\n${P}`);
+  const mouth = h.here();
+  h.step("e", `Pen end (w)\n${P}`);
+  const end = h.here();
+  assert.equal(end.links.w?.to, mouth.id);
+  h.step("w", `${BRIGHT_GLARE}\n${P}`);
+  assert.equal(h.here().id, mouth.id, "confirmed west still lands despite bright-light glare");
+  assert.equal(end.links.w?.blocked, undefined, "glare must not mark the exit blocked");
+  assert.equal(end.links.w?.failCount, undefined);
+});
+
+test("the blinding glare along an unwalked guess does not confirm it or blame the room we left (Deepwater r2183)", () => {
+  const h = harness();
+  h.step(null, `Dulaj Road (e, w)\n${P}`);
+  h.step("w", `Intersection (n, s, e, w)\n${P}`);
+  const inter = h.here();
+  // A guess from the layout: the fish shop beside the intersection only opens east.
+  const shop = h.map.createRoom(h.map.expectedPos(inter, "n")!);
+  h.map.applyObservation(shop, { mode: "brief", title: "Fish shop", exits: ["e"], contents: [] });
+  h.map.link(inter.id, "n", shop.id, { kind: "dir", confirmed: false });
+  h.map.link(shop.id, "s", inter.id, { kind: "dir", confirmed: false });
+  h.step("n", `${GLARE}\n${P}`);
+  assert.equal(h.mapper.current(), undefined, "somewhere north, but not provably the shop");
+  assert.equal(inter.links.n?.confirmed, false, "an unseen step never confirms a guessed link");
+  h.step("e", `You cannot go that direction.\n${P}`);
+  assert.equal(inter.links.e?.blocked, undefined, "the refusal is not charged to the intersection");
+  assert.equal(shop.links.e?.blocked, undefined, "nor to the shop we never saw");
+  h.step("n", `Waterside Road (n, s)\n${P}`);
+  assert.ok(h.mapper.current(), "the next display places us again");
 });
 
 test("dark rooms become placeholders that later get filled in", () => {
@@ -398,4 +452,28 @@ test("a fight-in-progress redisplay after an unlisted compass move re-identifies
   assert.equal(h.here().id, r88.id, "known shore room, not a new one west of the beach");
   assert.equal(h.map.roomCount(), rooms);
   assert.doesNotMatch(h.map.room(r88.id)!.description ?? "", /You slash/);
+});
+
+test("the small boy's trips eat queued moves without moving or blaming the exit (Kulajo r1540)", () => {
+  const h = harness();
+  h.step(null, `Caravan Route (ne, sw, nw)\n${P}`);
+  const start = h.here();
+  h.step("ne", `Sturdy path (ne, sw)\n${P}`);
+  const sturdy = h.here();
+  h.step("ne", `Hasty path (ne, sw)\n${P}`);
+  const hasty = h.here();
+  h.step("sw;sw", `Sturdy path (ne, sw)\n${P}\nCaravan Route (ne, sw, nw)\n${P}`);
+  assert.equal(h.here().id, start.id);
+  // A speedwalk sends all three at once; the boy trips the first two.
+  h.step(
+    "ne;ne;ne",
+    `The small boy trips you!  What a punk!\n${P}\nThe small boy trips you!  What a punk!\n${P}\nSturdy path (ne, sw)\n${P}`,
+  );
+  assert.equal(h.here().id, sturdy.id, "two moves eaten, one went through");
+  assert.notEqual(h.here().id, hasty.id);
+  const ne = start.links.ne!;
+  assert.equal(ne.hindered, 2, "both trips counted against the exit we tried to leave by");
+  assert.equal(ne.blocked, undefined, "a trip is not a refusal");
+  assert.equal(ne.failCount ?? 0, 0);
+  assert.equal(ne.to, sturdy.id, "the link is kept");
 });

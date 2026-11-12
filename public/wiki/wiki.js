@@ -1,4 +1,5 @@
 const SKIN_LS = "playpowermud-skin";
+const PLAYPOWERMUD_SOURCE_URL = "https://github.com/spencerstock/playpowermud";
 
 /** Single source for wiki sidebar navigation. */
 const WIKI_CLIENT_SECTION = {
@@ -43,6 +44,7 @@ const WIKI_NAV_SECTIONS = [
       ["Normal equipment", "/wiki/items/normal-equipment.html"],
       ["Magic items", "/wiki/items/magic-items.html"],
       ["Crafting components", "/wiki/items/components.html"],
+      ["Shop stock", "/wiki/items/shops.html"],
     ],
   },
   {
@@ -183,6 +185,20 @@ function renderWikiNav() {
 }
 
 renderWikiNav();
+
+function appendSourceLinkToWikiFooters() {
+  for (const foot of document.querySelectorAll("footer.wiki-foot p")) {
+    if (foot.querySelector(`a[href="${PLAYPOWERMUD_SOURCE_URL}"]`)) continue;
+    foot.append(" · ");
+    const a = document.createElement("a");
+    a.href = PLAYPOWERMUD_SOURCE_URL;
+    a.textContent = "Source (MIT)";
+    a.rel = "noopener noreferrer";
+    foot.append(a);
+  }
+}
+
+appendSourceLinkToWikiFooters();
 
 function wikiSearchTerms(query) {
   return query

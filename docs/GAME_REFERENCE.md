@@ -2,7 +2,7 @@
 
 This file tracks how **Powermud** knowledge is organized on the Play Powermud wiki (`public/wiki/`). Update wiki HTML when you add or rename topics.
 
-The public wiki is the reference. Personal character sheets, client config, proxies, and cheats are not published.
+The public wiki is the reference. Personal character sheets, client config, proxies, and cheats are not published — see [`docs/personal/`](./personal/).
 
 ---
 
@@ -33,7 +33,7 @@ The public wiki is the reference. Personal character sheets, client config, prox
 
 | Wiki page | Topic |
 |-----------|--------|
-| [Items](../public/wiki/items/index.html) | Plus formula, sacrifice note, shops |
+| [Items](../public/wiki/items/index.html) | Plus formula, sacrifice note, shop stock |
 | [Normal equipment](../public/wiki/items/normal-equipment.html) | Mundane gear and locations |
 | [Magic items](../public/wiki/items/magic-items.html) | Slot, plus, effects |
 | [Crafting components](../public/wiki/items/components.html) | Component pairs |

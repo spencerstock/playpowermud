@@ -1,15 +1,16 @@
 import { roomSearchTitle } from "../mapper/areaInfer.js";
 import { computeAreaOverlaysForMapView } from "../mapper/areaLayout.js";
 import { npcNamesForRoom } from "../mapper/npcs.js";
+import { resolvePathOptions } from "../mapper/pathPolicy.js";
 import { describeRoom, label } from "../mapper/render.js";
-import type { MapRoom } from "../mapper/types.js";
+import type { MapRoom, PathOptions } from "../mapper/types.js";
 import { stripAnsi } from "../session/scrollback.js";
 import type { ClientRuntime } from "./runtime.js";
 
 /**
  * In-process version of the old hub's `/api/state` and `/api/map/*` routes, so the copied
  * world panel keeps calling `api(path, body)` unchanged. Handlers are ported from
- * mudwithme `src/hub/api.ts`; walk/path/bot/login routes are intentionally absent.
+ * mudwithme `src/hub/api.ts` (walk/bot/login routes still absent in the browser client).
  */
 
 class ApiError extends Error {}
@@ -17,6 +18,16 @@ class ApiError extends Error {}
 function need<T>(v: T | undefined | null, msg: string): T {
   if (v === undefined || v === null || v === "") throw new ApiError(msg);
   return v;
+}
+
+function pathOpts(body: Record<string, unknown>): PathOptions {
+  return resolvePathOptions({
+    maxDanger: typeof body.maxDanger === "number" ? body.maxDanger : undefined,
+    avoid: Array.isArray(body.avoid) ? body.avoid.map(String) : undefined,
+    preferAvoid: Array.isArray(body.preferAvoid) ? body.preferAvoid.map(String) : undefined,
+    allowSpecial: body.allowSpecial === false ? false : undefined,
+    allowInferred: body.allowInferred === false ? false : undefined,
+  });
 }
 
 function roomDescriptionSnippet(room: MapRoom, max = 360): string | null {
@@ -84,6 +95,53 @@ export function createMapApi(game: ClientRuntime) {
         radius,
         rooms,
         areaOverlays,
+      };
+    }
+    if (p === "/api/map/waypoints" && m === "GET") {
+      return {
+        waypoints: map.listWaypoints().map((wp) => ({
+          ...wp,
+          room: brief(map.room(wp.roomId)),
+        })),
+      };
+    }
+    if (p === "/api/map/waypoint" && m === "POST") {
+      const name = String(need(b.name, "name required"));
+      let roomId: string;
+      if (b.room === null || b.room === undefined || b.room === "") {
+        const here = game.mapper.current();
+        if (!here) throw new ApiError("Current position unknown — look first, or pass room");
+        roomId = here.id;
+      } else {
+        roomId = room(String(b.room)).id;
+      }
+      map.setWaypoint(name, roomId);
+      store.schedule();
+      const key = name.trim().toLowerCase();
+      const stored = map.doc.waypoints?.[key];
+      return {
+        name: key,
+        roomId,
+        label: stored?.label,
+        setAt: stored?.setAt,
+        room: brief(map.room(roomId)),
+      };
+    }
+    if (p === "/api/map/resolve" && m === "GET") {
+      const ref = need(url.searchParams.get("ref"), "ref required");
+      const resolved = map.resolve(ref);
+      return { ref, found: !!resolved, room: resolved ? brief(resolved) : null };
+    }
+    if (p === "/api/map/path" && m === "POST") {
+      const from = room(b.from);
+      const to = room(need(b.to, "to required"));
+      const path = map.findPath(from.id, (r) => r.id === to.id, pathOpts(b));
+      return {
+        from: brief(from),
+        to: brief(to),
+        found: path !== null,
+        commands: path?.flatMap((s) => [...(s.pre ?? []), s.cmd]) ?? [],
+        steps: path?.map((s) => ({ ...s, toLabel: label(map.room(s.to)!) })) ?? [],
       };
     }
     if (p === "/api/map/search" && m === "GET") {
