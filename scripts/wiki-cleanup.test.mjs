@@ -78,7 +78,7 @@ test("old wiki URLs redirect at the new pages", async () => {
 test("underdark directions keep the routes that share a line with the banner", async () => {
   const page = await readFile(path.join(wiki, "world/underdark.html"), "utf8");
   const blocks = [...page.matchAll(/<pre><code>([\s\S]*?)<\/code><\/pre>/g)].map((m) => m[1]);
-  assert.equal(blocks.length, 15);
+  assert.equal(blocks.length, 16);
   assert.ok(blocks.some((b) => b.includes("*climb hatch*(supply room)")));
   assert.ok(blocks.some((b) => b.includes("2swim s")));
   assert.ok(blocks.some((b) => b.includes("2w,nw,s,se,sw")));
