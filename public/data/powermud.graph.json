@@ -18879,7 +18879,7 @@
    "firstSeenAt": "2026-10-27T19:57:59.068Z",
    "lastSeenAt": "2026-11-11T18:40:21.833Z",
    "description": "You are standing in a tunnel a little ways to the west of the Duergar city of\nDunkrist.  You can just barely spy the gigantic gates of the city.  To the\nwest lies the dangerous and treacherous warrens of the UnderDark.  Travellers\nhave been known to never reach their destinations, their screams lost in the\nunderground maze of tunnels called the UnderDark.",
-   "area": "dunkrist",
+   "area": "underdark",
    "npcs": [
     "Bat"
    ]
@@ -18933,7 +18933,7 @@
    "firstSeenAt": "2026-10-27T19:57:59.268Z",
    "lastSeenAt": "2026-11-11T18:40:21.833Z",
    "description": "You are standing just west of the Duergar city of Dunkrist.  The tall gates\nof the city reach almost to the ceiling of the cavern, effectively setting a\nbarrier between the invaders and the city' defenders.  To the west lies the\ndark and foreboding Underdark.",
-   "area": "dunkrist",
+   "area": "underdark",
    "npcs": [
     "Bat"
    ]
@@ -195907,12 +195907,7 @@
      "kind": "dir",
      "confirmed": true,
      "uses": 13,
-     "lastUsedAt": "2026-11-11T17:18:00.777Z",
-     "blocked": {
-      "reason": "did not move",
-      "at": "2026-11-11T17:22:12.667Z"
-     },
-     "failCount": 3
+     "lastUsedAt": "2026-11-11T17:18:00.777Z"
     }
    },
    "pos": {
@@ -208989,6 +208984,7 @@
    "firstSeenAt": "2026-11-09T17:39:42.350Z",
    "lastSeenAt": "2026-11-11T17:18:51.828Z",
    "description": "You are around the center of the cavern.  If you stop and listen, you will\nprobably hear faint echos from around the Underdark.  The cavern's ceiling\nis about twenty feet in height, and the width of the entire cavern is not\nover eighty feet.",
+   "title": "Balgar's cavern",
    "npcs": [
     "Balgar Greyhammer",
     "Dwarf"
@@ -255664,6 +255660,21 @@
    "roomId": "r1247",
    "label": "ms",
    "setAt": "2026-11-10T16:58:13.504Z"
+  },
+  "balgarton": {
+   "roomId": "r7280",
+   "label": "balgarton",
+   "setAt": "2026-11-12T08:10:00.000Z"
+  },
+  "balgartonal": {
+   "roomId": "r36",
+   "label": "balgartonal",
+   "setAt": "2026-11-12T08:10:00.000Z"
+  },
+  "naltobalgar": {
+   "roomId": "r7280",
+   "label": "naltobalgar",
+   "setAt": "2026-11-12T08:10:00.000Z"
   },
   "bandit": {
    "roomId": "r730",
