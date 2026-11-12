@@ -58,6 +58,7 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | [Combat](../public/wiki/mechanics/combat.html) | Hit words, stun, dragon notes |
 | [Stats and ranks](../public/wiki/mechanics/stats.html) | Abilities and dragon killer rank names |
 | [Professions](../public/wiki/mechanics/professions.html) | Lower and upper professions |
+| [Skill trainers](../public/wiki/mechanics/skill-trainers.html) | Non-guild skills (forging, mining, UD) |
 | [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Trainer locations, costs, stat reqs |
 | [Doctor and herbs](../public/wiki/mechanics/doctor.html) | Doctor, harvest, intensify |
 | [PK areas](../public/wiki/mechanics/pk-areas.html) | `help pkareas` |

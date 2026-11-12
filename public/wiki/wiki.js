@@ -64,6 +64,7 @@ const WIKI_NAV_SECTIONS = [
       ["Combat", "/wiki/mechanics/combat.html"],
       ["Stats & ranks", "/wiki/mechanics/stats.html"],
       ["Professions", "/wiki/mechanics/professions.html"],
+      ["Skill trainers", "/wiki/mechanics/skill-trainers.html"],
       ["Profession trainers", "/wiki/mechanics/profession-trainers.html"],
       ["Doctor & herbs", "/wiki/mechanics/doctor.html"],
       ["PK areas", "/wiki/mechanics/pk-areas.html"],
