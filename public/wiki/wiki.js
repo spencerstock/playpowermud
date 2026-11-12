@@ -44,6 +44,7 @@ const WIKI_NAV_SECTIONS = [
       ["Normal equipment", "/wiki/items/normal-equipment.html"],
       ["Magic items", "/wiki/items/magic-items.html"],
       ["Crafting components", "/wiki/items/components.html"],
+      ["Shop stock", "/wiki/items/shops.html"],
     ],
   },
   {
