@@ -20,6 +20,19 @@ export function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+const JUDGE_NOT_APPLICABLE =
+  /^You can only judge a weapon or a piece of armor or an arrow\.?$/i;
+
+/** @param {{ verdict?: string | null, text?: string } | undefined} judge */
+export function formatJudge(judge) {
+  if (!judge) return "";
+  const verdict = judge.verdict?.trim();
+  if (verdict && !JUDGE_NOT_APPLICABLE.test(verdict)) return verdict;
+  const text = judge.text?.trim() ?? "";
+  if (!text || JUDGE_NOT_APPLICABLE.test(text)) return "";
+  return text;
+}
+
 /** @param {string} name */
 export function itemKey(name) {
   return String(name)
@@ -69,20 +82,32 @@ ${mainHtml}
 `;
 }
 
-/** @param {import("./items-hand-data.mjs").NORMAL_SECTIONS[0]["rows"][0] & { judge?: string, sell?: string, droppedBy?: string, dropRate?: string }} row @param {boolean} withStats */
+/** Hand-curated quality lines and hub judge verdicts are the same field on the wiki. */
+export function displayNormalJudge(row) {
+  return (row.quality?.trim() || row.judge?.trim() || "");
+}
+
+/** @param {{ quality?: string, judge?: string }} row */
+export function displayMagicJudge(row) {
+  return (row.quality?.trim() || row.judge?.trim() || "");
+}
+
+/** @param {import("./items-hand-data.mjs").NORMAL_SECTIONS[0]["rows"][0] & { judge?: string, sell?: string, droppedBy?: string }} row @param {boolean} withStats */
 function renderNormalRow(row, withStats) {
-  let cells = `<tr><td>${escapeHtml(row.item)}</td><td>${escapeHtml(row.quality)}</td><td>${escapeHtml(row.where)}</td>`;
+  const judge = displayNormalJudge(row);
+  let cells = `<tr><td>${escapeHtml(row.item)}</td><td>${escapeHtml(judge)}</td><td>${escapeHtml(row.where)}</td>`;
   if (withStats) {
-    cells += `<td>${escapeHtml(row.judge ?? "")}</td><td>${escapeHtml(row.sell ?? "")}</td><td>${escapeHtml(row.droppedBy ?? "")}</td><td>${escapeHtml(row.dropRate ?? "")}</td>`;
+    cells += `<td>${escapeHtml(row.sell ?? "")}</td><td>${escapeHtml(row.droppedBy ?? "")}</td>`;
   }
   return `${cells}</tr>\n`;
 }
 
-/** @param {import("./items-hand-data.mjs").MAGIC_SECTIONS[0]["rows"][0] & { judge?: string, sell?: string, droppedBy?: string, dropRate?: string }} row @param {boolean} withStats */
-function renderMagicRow(row, withStats) {
-  let cells = `<tr><td>${escapeHtml(row.item)}</td><td>${escapeHtml(row.plus)}</td><td>${escapeHtml(row.effects)}</td>`;
+/** @param {import("./items-hand-data.mjs").MAGIC_SECTIONS[0]["rows"][0] & { judge?: string, sell?: string, droppedBy?: string }} row @param {string} slot @param {boolean} withStats */
+function renderMagicRow(row, slot, withStats) {
+  const judge = displayMagicJudge(row);
+  let cells = `<tr><td>${escapeHtml(slot)}</td><td>${escapeHtml(row.item)}</td><td>${escapeHtml(row.plus)}</td><td>${escapeHtml(row.effects)}</td><td>${escapeHtml(judge)}</td>`;
   if (withStats) {
-    cells += `<td>${escapeHtml(row.judge ?? "")}</td><td>${escapeHtml(row.sell ?? "")}</td><td>${escapeHtml(row.droppedBy ?? "")}</td><td>${escapeHtml(row.dropRate ?? "")}</td>`;
+    cells += `<td>${escapeHtml(row.sell ?? "")}</td><td>${escapeHtml(row.droppedBy ?? "")}</td>`;
   }
   return `${cells}</tr>\n`;
 }
@@ -90,20 +115,18 @@ function renderMagicRow(row, withStats) {
 /**
  * @param {object | null} knowledge
  * @param {object | null} values
- * @param {Map<string, { npc: string, pct: number }[]>} chanceByKey
  * @param {Record<string, { name?: string }>} npcs
  * @param {string} name
  */
-export function enrichRow(name, knowledge, values, chanceByKey, npcs) {
+export function enrichRow(name, knowledge, values, npcs) {
   const key = itemKey(name);
-  /** @type {{ judge?: string, sell?: string, droppedBy?: string, dropRate?: string }} */
+  /** @type {{ judge?: string, sell?: string, droppedBy?: string }} */
   const extra = {};
   const kItem = knowledge?.items?.[key];
   const iv = values?.items?.[key];
 
-  if (kItem?.judge) {
-    extra.judge = kItem.judge.verdict || kItem.judge.text || "";
-  }
+  const judge = formatJudge(kItem?.judge);
+  if (judge) extra.judge = judge;
   if (iv) {
     if (iv.worthless) extra.sell = "worthless";
     else if (iv.price != null) {
@@ -115,10 +138,6 @@ export function enrichRow(name, knowledge, values, chanceByKey, npcs) {
   }
   const dropped = droppedByNames(kItem, npcs);
   if (dropped) extra.droppedBy = dropped;
-  const rates = chanceByKey.get(key);
-  if (rates?.length) {
-    extra.dropRate = rates.map((r) => `${r.npc} ${r.pct}%`).join("; ");
-  }
   return extra;
 }
 
@@ -209,7 +228,7 @@ function appendStatRows(sections, page, knowledge, values, chanceByKey, npcs, al
     }
 
     const name = kItem?.name || iv?.name || key;
-    const extra = enrichRow(name, knowledge, values, chanceByKey, npcs);
+    const extra = enrichRow(name, knowledge, values, npcs);
     const row =
       page === "magic"
         ? { item: name, plus: "", effects: "", ...extra }
@@ -248,12 +267,12 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
   if (withStats) {
     for (const sec of normalSections) {
       for (const row of sec.rows) {
-        Object.assign(row, enrichRow(row.item, knowledge, values, chanceByKey, npcs));
+        Object.assign(row, enrichRow(row.item, knowledge, values, npcs));
       }
     }
     for (const sec of magicSections) {
       for (const row of sec.rows) {
-        Object.assign(row, enrichRow(row.item, knowledge, values, chanceByKey, npcs));
+        Object.assign(row, enrichRow(row.item, knowledge, values, npcs));
       }
     }
 
@@ -269,17 +288,17 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
   }
 
   const normalHead = withStats
-    ? "<thead><tr><th>Item</th><th>Quality</th><th>Where</th><th>Judge</th><th>Sell</th><th>Dropped by</th><th>Drop rate</th></tr></thead>"
-    : "<thead><tr><th>Item</th><th>Quality</th><th>Where</th></tr></thead>";
+    ? "<thead><tr><th>Item</th><th>Judge</th><th>Where</th><th>Sell</th><th>Dropped by</th></tr></thead>"
+    : "<thead><tr><th>Item</th><th>Judge</th><th>Where</th></tr></thead>";
 
   const magicHead = withStats
-    ? "<thead><tr><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th><th>Sell</th><th>Dropped by</th><th>Drop rate</th></tr></thead>"
-    : "<thead><tr><th>Name</th><th>Plus</th><th>Effects</th></tr></thead>";
+    ? "<thead><tr><th>Slot</th><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th><th>Sell</th><th>Dropped by</th></tr></thead>"
+    : "<thead><tr><th>Slot</th><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th></tr></thead>";
 
   let normalBody = `<h2>Normal equipment</h2>
-      <p class="wiki-lede">Mundane weapons and armor, with the quality words and the place each one was seen. The original list was unfinished. Areas it names: Threshold, Cerene, Kobold Village, Kal-Thax, Sheep Ledge, Dwarven Mines, Lowhill, Cutland's Pass, Mining Tunnel, Orc Camp, Deep Forest, Threshold Swamps, Cannibal Village, Reptiloid Village, Nymph Forest, Bandit Camp, Goblin Tunnels, Dulaj Road, Fire Grotto, Elinost (outside the gate), Zeraf Pit.${
+      <p class="wiki-lede">Mundane weapons and armor, with judge verdicts and where each one was seen. The original list was unfinished. Areas it names: Threshold, Cerene, Kobold Village, Kal-Thax, Sheep Ledge, Dwarven Mines, Lowhill, Cutland's Pass, Mining Tunnel, Orc Camp, Deep Forest, Threshold Swamps, Cannibal Village, Reptiloid Village, Nymph Forest, Bandit Camp, Goblin Tunnels, Dulaj Road, Fire Grotto, Elinost (outside the gate), Zeraf Pit.${
         withStats
-          ? " Judge, sell, and drop columns refresh when hub stats are copied into <code>data/stats/</code> and the site is rebuilt."
+          ? " Sell and drop-source columns refresh when hub stats are copied into <code>data/stats/</code> and the site is rebuilt."
           : ""
       }</p>\n`;
 
@@ -292,22 +311,22 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
     normalBody += `        </tbody>\n      </table>\n\n`;
   }
 
+  const magicCount = magicSections.reduce((n, s) => n + s.rows.length, 0);
   let magicBody = `<h2>Magic items</h2>
-      <p class="wiki-lede">A player catalog of magic items that were in the game when the list was kept. ${magicSections.reduce((n, s) => n + s.rows.length, 0)} entries. Slot codes are the list's own abbreviations. If an item is missing, that only means it was not on this list.${
+      <p class="wiki-lede">A player catalog of magic items that were in the game when the list was kept. ${magicCount} entries in one table; slot codes are the list's own abbreviations. If an item is missing, that only means it was not on this list.${
         withStats
           ? " Judge, sell, and drop columns refresh when hub stats are copied into <code>data/stats/</code> and the site is rebuilt."
           : ""
       }</p>
       <p>Plus is magical power. See <a href="/wiki/items/index.html">how plus adds up</a>.</p>\n\n`;
 
+  magicBody += `      <table>\n        ${magicHead}\n        <tbody>\n`;
   for (const sec of magicSections) {
-    if (!sec.rows.length) continue;
-    magicBody += `      <h3 id="${escapeHtml(sec.id)}">${escapeHtml(sec.title)}</h3>\n      <table>\n        ${magicHead}\n        <tbody>\n`;
     for (const row of sec.rows) {
-      magicBody += renderMagicRow(row, withStats);
+      magicBody += renderMagicRow(row, sec.title, withStats);
     }
-    magicBody += `        </tbody>\n      </table>\n\n`;
   }
+  magicBody += `        </tbody>\n      </table>\n\n`;
 
   const normalHtml = wikiShell(
     "Normal equipment",

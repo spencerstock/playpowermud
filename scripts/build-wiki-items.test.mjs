@@ -4,6 +4,9 @@ import {
   buildPages,
   enrichRow,
   escapeHtml,
+  displayNormalJudge,
+  displayMagicJudge,
+  formatJudge,
   itemKey,
 } from "./build-wiki-items.mjs";
 
@@ -64,19 +67,43 @@ test("escapeHtml escapes angle brackets", () => {
   assert.equal(escapeHtml("a<b"), "a&lt;b");
 });
 
-test("enrichRow fills judge sell dropped by and drop rate", () => {
-  const chance = new Map([["test blade", [{ npc: "Test Npc", pct: 20 }]]]);
+test("displayNormalJudge prefers hand quality then hub judge", () => {
+  assert.equal(
+    displayNormalJudge({ quality: "Good weapon.", judge: "good" }),
+    "Good weapon.",
+  );
+  assert.equal(displayNormalJudge({ quality: "", judge: "extremely good" }), "extremely good");
+});
+
+test("displayMagicJudge prefers hand quality then hub judge", () => {
+  assert.equal(
+    displayMagicJudge({ quality: "Terrific weapon.", judge: "terrific" }),
+    "Terrific weapon.",
+  );
+  assert.equal(displayMagicJudge({ quality: "", judge: "poor" }), "poor");
+});
+
+test("formatJudge omits non-judgeable item reply", () => {
+  assert.equal(
+    formatJudge({
+      text: "You can only judge a weapon or a piece of armor or an arrow.",
+      verdict: null,
+    }),
+    "",
+  );
+  assert.equal(formatJudge({ verdict: "good", text: "ok" }), "good");
+});
+
+test("enrichRow fills judge sell and dropped by", () => {
   const extra = enrichRow(
     "Test Blade",
     FIXTURE_KNOWLEDGE,
     FIXTURE_VALUES,
-    chance,
     FIXTURE_KNOWLEDGE.npcs,
   );
   assert.equal(extra.judge, "good");
   assert.equal(extra.sell, "12–15");
   assert.equal(extra.droppedBy, "Test NPC");
-  assert.match(extra.dropRate ?? "", /20%/);
 });
 
 test("buildPages with stats adds columns and appended rows", () => {
@@ -93,13 +120,18 @@ test("buildPages with stats adds columns and appended rows", () => {
   assert.doesNotMatch(normalHtml, /<th>[^<]*[Ee]xp/);
   assert.match(magicHtml, /Magic Armbands/);
   assert.match(magicHtml, /Fine Piwafwi/);
+  assert.match(magicHtml, /<th>Slot<\/th>/);
+  assert.equal((magicHtml.match(/<table>/g) ?? []).length, 1);
+  assert.doesNotMatch(normalHtml, /<th>Drop rate<\/th>/);
+  assert.doesNotMatch(normalHtml, /<th>Quality<\/th>/);
 });
 
 test("buildPages without stats keeps three-column tables", () => {
   const { normalHtml, withStats } = buildPages(HAND_NORMAL, HAND_MAGIC, null, null);
   assert.equal(withStats, false);
   assert.match(normalHtml, /<th>Where<\/th>/);
-  assert.doesNotMatch(normalHtml, /<th>Judge<\/th>/);
+  assert.match(normalHtml, /<th>Judge<\/th>/);
+  assert.doesNotMatch(normalHtml, /<th>Quality<\/th>/);
   assert.match(normalHtml, /Longsword/);
 });
 

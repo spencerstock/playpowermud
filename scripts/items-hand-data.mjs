@@ -747,7 +747,7 @@ export const NORMAL_SECTIONS = [
   }
 ];
 
-/** @type {{ id: string, title: string, rows: { item: string, plus: string, effects: string }[] }[]} */
+/** @type {{ id: string, title: string, rows: { item: string, plus: string, effects: string, quality?: string }[] }[]} */
 export const MAGIC_SECTIONS = [
   {
     "id": "ar",
@@ -837,6 +837,12 @@ export const MAGIC_SECTIONS = [
         "item": "Leather Armor of Stealth",
         "plus": "6",
         "effects": "+dex, +20 hp, +10 'hide', +30 'sneak'"
+      },
+      {
+        "item": "Graft of Stone",
+        "plus": "",
+        "effects": "hp penalty, sp bonus, regen",
+        "quality": "Very bad piece of armor."
       }
     ]
   },
@@ -1764,6 +1770,22 @@ export const MAGIC_SECTIONS = [
         "item": "Ring of Regeneration",
         "plus": "10",
         "effects": "+50 hp,+50sp,+40 regen"
+      },
+      {
+        "item": "Yellow Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, unarmed aversion ext poor",
+        "quality": "Poor piece of armor."
+      },
+      {
+        "item": "Saddle-stone Ring",
+        "plus": "",
+        "effects": "+10 hp"
+      },
+      {
+        "item": "Bell-chime Ring",
+        "plus": "",
+        "effects": "+15 hp"
       }
     ]
   },
@@ -1986,6 +2008,12 @@ export const MAGIC_SECTIONS = [
         "item": "Sword of Tears",
         "plus": "10",
         "effects": "+str,+50hp,+50sp,Light, +60 poison, +40 slash, +40 elec, Dam vs Elves, CALLOUTS"
+      },
+      {
+        "item": "Stormdrake Fang",
+        "plus": "",
+        "effects": "damage bonus, res to fire",
+        "quality": "Terrific weapon."
       }
     ]
   },
