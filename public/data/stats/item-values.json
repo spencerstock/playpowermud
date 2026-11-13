@@ -1,0 +1,1103 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-13T21:06:07.248Z",
+  "items": {
+    "adamantite longsword": {
+      "name": "Adamantite longsword",
+      "price": 49,
+      "maxPrice": 49,
+      "worthless": false,
+      "magic": false,
+      "sales": 5,
+      "updatedAt": "2026-11-13T16:50:32.732Z"
+    },
+    "adamantite tower shield": {
+      "name": "Adamantite Tower Shield",
+      "price": 110,
+      "maxPrice": 110,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:31.492Z"
+    },
+    "adamantium staff": {
+      "name": "Adamantium Staff",
+      "price": 187,
+      "maxPrice": 187,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:31.492Z"
+    },
+    "amethyst": {
+      "name": "Amethyst",
+      "price": 125,
+      "maxPrice": 166,
+      "worthless": false,
+      "magic": false,
+      "sales": 660,
+      "updatedAt": "2026-11-13T21:06:06.426Z"
+    },
+    "armbands": {
+      "name": "Armbands",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T18:52:16.757Z"
+    },
+    "badger fur": {
+      "name": "Badger fur",
+      "price": 11,
+      "maxPrice": 12,
+      "worthless": false,
+      "magic": false,
+      "sales": 14,
+      "updatedAt": "2026-11-13T16:50:31.934Z"
+    },
+    "banded gauntlets": {
+      "name": "Banded Gauntlets",
+      "price": 4,
+      "maxPrice": 4,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:28.392Z"
+    },
+    "barbakas blade": {
+      "name": "Barbakas blade",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.935Z"
+    },
+    "basilisk scale": {
+      "name": "Basilisk Scale",
+      "price": 79,
+      "maxPrice": 79,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:31.002Z"
+    },
+    "bastard sword": {
+      "name": "Bastard Sword",
+      "price": 9,
+      "maxPrice": 9,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.860Z"
+    },
+    "battle axe": {
+      "name": "Battle axe",
+      "price": 3,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 33,
+      "updatedAt": "2026-11-13T20:08:49.476Z"
+    },
+    "black aba": {
+      "name": "Black Aba",
+      "price": 3,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 33,
+      "updatedAt": "2026-11-13T16:50:29.550Z"
+    },
+    "black badger fur": {
+      "name": "Black badger fur",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.935Z"
+    },
+    "blade of lorasin": {
+      "name": "Blade of Lorasin",
+      "price": 9,
+      "maxPrice": 22,
+      "worthless": false,
+      "magic": false,
+      "sales": 8,
+      "updatedAt": "2026-11-13T16:50:31.496Z"
+    },
+    "blue dragonoid scale": {
+      "name": "Blue Dragonoid scale",
+      "price": 55,
+      "maxPrice": 55,
+      "worthless": false,
+      "magic": false,
+      "sales": 17,
+      "updatedAt": "2026-11-13T16:50:31.931Z"
+    },
+    "bone dagger": {
+      "name": "Bone Dagger",
+      "price": 8,
+      "maxPrice": 8,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:29.377Z"
+    },
+    "bone knife": {
+      "name": "Bone knife",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 28,
+      "updatedAt": "2026-11-13T16:50:26.081Z"
+    },
+    "bracelet": {
+      "name": "Bracelet",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.376Z"
+    },
+    "broadsword": {
+      "name": "Broadsword",
+      "price": 11,
+      "maxPrice": 11,
+      "worthless": false,
+      "magic": false,
+      "sales": 11,
+      "updatedAt": "2026-11-13T19:51:16.776Z"
+    },
+    "broom": {
+      "name": "Broom",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 819,
+      "updatedAt": "2026-11-13T19:49:41.163Z"
+    },
+    "brown sandals": {
+      "name": "Brown Sandals",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 24,
+      "updatedAt": "2026-11-13T16:50:28.001Z"
+    },
+    "burlap satchel": {
+      "name": "Burlap Satchel",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 72,
+      "updatedAt": "2026-11-13T16:50:32.968Z"
+    },
+    "cellulose armor": {
+      "name": "Cellulose Armor",
+      "price": 1,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 384,
+      "updatedAt": "2026-11-13T16:50:28.310Z"
+    },
+    "chainmail shirt": {
+      "name": "Chainmail shirt",
+      "price": 6,
+      "maxPrice": 6,
+      "worthless": false,
+      "magic": false,
+      "sales": 28,
+      "updatedAt": "2026-11-13T19:42:01.973Z"
+    },
+    "clear garnet": {
+      "name": "Clear garnet",
+      "price": 41,
+      "maxPrice": 41,
+      "worthless": false,
+      "magic": false,
+      "sales": 5,
+      "updatedAt": "2026-11-13T19:51:15.791Z"
+    },
+    "clerical robes": {
+      "name": "Clerical Robes",
+      "price": 8,
+      "maxPrice": 8,
+      "worthless": false,
+      "magic": false,
+      "sales": 418,
+      "updatedAt": "2026-11-13T18:49:15.686Z"
+    },
+    "crystal dragonoid scale": {
+      "name": "Crystal Dragonoid scale",
+      "price": 66,
+      "maxPrice": 66,
+      "worthless": false,
+      "magic": false,
+      "sales": 3,
+      "updatedAt": "2026-11-13T16:50:31.853Z"
+    },
+    "crystal halberd": {
+      "name": "Crystal Halberd",
+      "price": 24,
+      "maxPrice": 24,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:31.271Z"
+    },
+    "dark boots": {
+      "name": "Dark Boots",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 102,
+      "updatedAt": "2026-11-13T16:50:32.966Z"
+    },
+    "dark katana": {
+      "name": "Dark katana",
+      "price": 6,
+      "maxPrice": 6,
+      "worthless": false,
+      "magic": false,
+      "sales": 26,
+      "updatedAt": "2026-11-13T16:50:31.916Z"
+    },
+    "diamond": {
+      "name": "Diamond",
+      "price": 250,
+      "maxPrice": 250,
+      "worthless": false,
+      "magic": false,
+      "sales": 105,
+      "updatedAt": "2026-11-13T20:53:12.215Z"
+    },
+    "dirty shirt": {
+      "name": "Dirty shirt",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 323,
+      "updatedAt": "2026-11-13T16:50:30.264Z"
+    },
+    "drider bow": {
+      "name": "Drider bow [ 9 ]",
+      "price": 22,
+      "maxPrice": 22,
+      "worthless": false,
+      "magic": false,
+      "sales": 3,
+      "updatedAt": "2026-11-13T16:50:31.940Z"
+    },
+    "duergar platemail (breastplate)": {
+      "name": "Duergar platemail (breastplate)",
+      "price": 56,
+      "maxPrice": 56,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:32.290Z"
+    },
+    "dwarven platemail (breastplate)": {
+      "name": "Dwarven platemail (breastplate)",
+      "price": 46,
+      "maxPrice": 46,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T17:56:05.350Z"
+    },
+    "elf-ear necklace": {
+      "name": "Elf-Ear Necklace",
+      "price": 8,
+      "maxPrice": 8,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:31.469Z"
+    },
+    "elven chainmail": {
+      "name": "Elven chainmail",
+      "price": 33,
+      "maxPrice": 33,
+      "worthless": false,
+      "magic": false,
+      "sales": 6,
+      "updatedAt": "2026-11-13T16:50:29.399Z"
+    },
+    "filthy cloak": {
+      "name": "Filthy cloak",
+      "price": 1,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 204,
+      "updatedAt": "2026-11-13T16:50:30.264Z"
+    },
+    "fine piwafwi": {
+      "name": "Fine piwafwi",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.564Z"
+    },
+    "fine stiletto": {
+      "name": "Fine Stiletto",
+      "price": 17,
+      "maxPrice": 17,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.379Z"
+    },
+    "fishing pole": {
+      "name": "Fishing pole",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.649Z"
+    },
+    "forging hammer": {
+      "name": "Forging Hammer",
+      "price": 8,
+      "maxPrice": 8,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.520Z"
+    },
+    "furry coat": {
+      "name": "Furry coat",
+      "price": 35,
+      "maxPrice": 35,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:31.299Z"
+    },
+    "glasses": {
+      "name": "Glasses",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:25.681Z"
+    },
+    "gleaming longsword": {
+      "name": "Gleaming longsword",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.278Z"
+    },
+    "gleaming ring": {
+      "name": "Gleaming ring",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.626Z"
+    },
+    "goat horns": {
+      "name": "Goat Horns",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 1292,
+      "updatedAt": "2026-11-13T16:50:30.452Z"
+    },
+    "gold chain": {
+      "name": "Gold Chain",
+      "price": 16,
+      "maxPrice": 53,
+      "worthless": false,
+      "magic": false,
+      "sales": 241,
+      "updatedAt": "2026-11-13T21:06:07.248Z"
+    },
+    "graft of stone": {
+      "name": "Graft of stone",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:33.004Z"
+    },
+    "heavy chainmail (black)": {
+      "name": "Heavy Chainmail (black)",
+      "price": 38,
+      "maxPrice": 38,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.860Z"
+    },
+    "heavy cloak": {
+      "name": "Heavy cloak",
+      "price": 1,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 350,
+      "updatedAt": "2026-11-13T16:50:29.940Z"
+    },
+    "iron bracers (black)": {
+      "name": "Iron Bracers (black)",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.860Z"
+    },
+    "iron broadsword": {
+      "name": "Iron Broadsword",
+      "price": 3,
+      "maxPrice": 4,
+      "worthless": false,
+      "magic": false,
+      "sales": 124,
+      "updatedAt": "2026-11-13T16:50:32.966Z"
+    },
+    "iron shod boots": {
+      "name": "Iron shod boots",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 5,
+      "updatedAt": "2026-11-13T19:47:50.397Z"
+    },
+    "katana": {
+      "name": "Katana",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.938Z"
+    },
+    "knife": {
+      "name": "Knife",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 189,
+      "updatedAt": "2026-11-13T16:50:30.264Z"
+    },
+    "large quartz": {
+      "name": "Large Quartz",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 20,
+      "updatedAt": "2026-11-13T17:07:00.984Z"
+    },
+    "lead club": {
+      "name": "Lead Club",
+      "price": 3,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 112,
+      "updatedAt": "2026-11-13T16:50:32.881Z"
+    },
+    "leather armbands": {
+      "name": "Leather armbands",
+      "price": 5,
+      "maxPrice": 5,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:27.906Z"
+    },
+    "light piwafwi": {
+      "name": "Light Piwafwi",
+      "price": 5,
+      "maxPrice": 6,
+      "worthless": false,
+      "magic": false,
+      "sales": 431,
+      "updatedAt": "2026-11-13T20:53:13.550Z"
+    },
+    "lorasin leather armor": {
+      "name": "Lorasin Leather Armor",
+      "price": 12,
+      "maxPrice": 46,
+      "worthless": false,
+      "magic": false,
+      "sales": 20,
+      "updatedAt": "2026-11-13T16:50:31.932Z"
+    },
+    "mace": {
+      "name": "Mace",
+      "price": 5,
+      "maxPrice": 5,
+      "worthless": false,
+      "magic": false,
+      "sales": 407,
+      "updatedAt": "2026-11-13T18:49:15.686Z"
+    },
+    "metal bracelet": {
+      "name": "Metal bracelet",
+      "price": 1,
+      "maxPrice": 9,
+      "worthless": false,
+      "magic": false,
+      "sales": 588,
+      "updatedAt": "2026-11-13T16:50:32.999Z"
+    },
+    "metal bracers": {
+      "name": "Metal bracers",
+      "price": 4,
+      "maxPrice": 4,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:28.392Z"
+    },
+    "metal helmet": {
+      "name": "Metal helmet",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 10,
+      "updatedAt": "2026-11-13T18:52:18.437Z"
+    },
+    "miner's gloves": {
+      "name": "Miner's gloves",
+      "price": 1,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 425,
+      "updatedAt": "2026-11-13T16:50:32.968Z"
+    },
+    "mining vest": {
+      "name": "Mining Vest",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 46,
+      "updatedAt": "2026-11-13T16:50:32.883Z"
+    },
+    "old shirt": {
+      "name": "Old shirt",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 12,
+      "updatedAt": "2026-11-13T16:50:28.417Z"
+    },
+    "pick-axe": {
+      "name": "Pick-axe",
+      "price": 3,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 43,
+      "updatedAt": "2026-11-13T20:21:11.278Z"
+    },
+    "piwafwi": {
+      "name": "Piwafwi",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T20:55:18.916Z"
+    },
+    "platemail breastplate": {
+      "name": "Platemail Breastplate",
+      "price": 44,
+      "maxPrice": 44,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:28.607Z"
+    },
+    "poison arrow": {
+      "name": "Poison Arrow",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 84,
+      "updatedAt": "2026-11-13T16:50:32.241Z"
+    },
+    "quartz": {
+      "name": "Quartz",
+      "price": 20,
+      "maxPrice": 20,
+      "worthless": false,
+      "magic": false,
+      "sales": 548,
+      "updatedAt": "2026-11-13T21:06:06.225Z"
+    },
+    "rapier": {
+      "name": "Rapier",
+      "price": 124,
+      "maxPrice": 124,
+      "worthless": false,
+      "magic": true,
+      "sales": 11,
+      "updatedAt": "2026-11-13T16:50:32.733Z"
+    },
+    "rat-skin cloak": {
+      "name": "Rat-skin cloak",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 52,
+      "updatedAt": "2026-11-13T16:50:26.315Z"
+    },
+    "red cloak": {
+      "name": "Red cloak",
+      "price": 11,
+      "maxPrice": 11,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.860Z"
+    },
+    "red dragonoid scale": {
+      "name": "Red Dragonoid scale",
+      "price": 55,
+      "maxPrice": 55,
+      "worthless": false,
+      "magic": false,
+      "sales": 17,
+      "updatedAt": "2026-11-13T16:50:31.926Z"
+    },
+    "rimer": {
+      "name": "Rimer",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:30.841Z"
+    },
+    "robes": {
+      "name": "Robes",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.282Z"
+    },
+    "rothe-hide coat": {
+      "name": "Rothe-hide coat",
+      "price": 3,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 7,
+      "updatedAt": "2026-11-13T19:51:16.776Z"
+    },
+    "rothe-hide pants": {
+      "name": "Rothe-hide pants",
+      "price": 4,
+      "maxPrice": 34,
+      "worthless": false,
+      "magic": false,
+      "sales": 479,
+      "updatedAt": "2026-11-13T16:50:33.005Z"
+    },
+    "rothe-leather boots": {
+      "name": "Rothe-leather boots",
+      "price": 2,
+      "maxPrice": 4,
+      "worthless": false,
+      "magic": false,
+      "sales": 1149,
+      "updatedAt": "2026-11-13T16:50:33.005Z"
+    },
+    "rothe-leather jerkin": {
+      "name": "Rothe-leather jerkin",
+      "price": 3,
+      "maxPrice": 7,
+      "worthless": false,
+      "magic": false,
+      "sales": 1618,
+      "updatedAt": "2026-11-13T16:50:33.005Z"
+    },
+    "rothe-prod": {
+      "name": "Rothe-prod",
+      "price": 4,
+      "maxPrice": 6,
+      "worthless": false,
+      "magic": false,
+      "sales": 1816,
+      "updatedAt": "2026-11-13T16:50:33.005Z"
+    },
+    "ruby": {
+      "name": "Ruby",
+      "price": 83,
+      "maxPrice": 83,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:28.589Z"
+    },
+    "rusty rapier": {
+      "name": "Rusty Rapier",
+      "price": 3,
+      "maxPrice": 22,
+      "worthless": false,
+      "magic": false,
+      "sales": 133,
+      "updatedAt": "2026-11-13T20:53:13.550Z"
+    },
+    "sapphire": {
+      "name": "Sapphire",
+      "price": 125,
+      "maxPrice": 125,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:32.493Z"
+    },
+    "scimitar": {
+      "name": "Scimitar",
+      "price": 4,
+      "maxPrice": 6,
+      "worthless": false,
+      "magic": false,
+      "sales": 31,
+      "updatedAt": "2026-11-13T16:50:29.550Z"
+    },
+    "sharp dagger": {
+      "name": "Sharp dagger",
+      "price": 1,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 449,
+      "updatedAt": "2026-11-13T16:50:33.039Z"
+    },
+    "sharp hand pick": {
+      "name": "Sharp Hand Pick",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 39,
+      "updatedAt": "2026-11-13T16:50:32.934Z"
+    },
+    "short stick": {
+      "name": "Short stick",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 12,
+      "updatedAt": "2026-11-13T16:50:25.992Z"
+    },
+    "shortsword": {
+      "name": "Shortsword",
+      "price": 15,
+      "maxPrice": 15,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:26.928Z"
+    },
+    "sickle": {
+      "name": "Sickle",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 239,
+      "updatedAt": "2026-11-13T16:50:28.310Z"
+    },
+    "silver chalice": {
+      "name": "Silver Chalice",
+      "price": 99,
+      "maxPrice": 99,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:30.520Z"
+    },
+    "small amethyst": {
+      "name": "Small Amethyst",
+      "price": 16,
+      "maxPrice": 16,
+      "worthless": false,
+      "magic": false,
+      "sales": 19,
+      "updatedAt": "2026-11-13T17:07:00.984Z"
+    },
+    "spear": {
+      "name": "Spear",
+      "price": 1,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 381,
+      "updatedAt": "2026-11-13T16:50:30.262Z"
+    },
+    "spider ring": {
+      "name": "Spider ring",
+      "price": 8,
+      "maxPrice": 39,
+      "worthless": false,
+      "magic": false,
+      "sales": 108,
+      "updatedAt": "2026-11-13T16:50:33.045Z"
+    },
+    "steel longsword": {
+      "name": "Steel longsword",
+      "price": 11,
+      "maxPrice": 12,
+      "worthless": false,
+      "magic": false,
+      "sales": 1137,
+      "updatedAt": "2026-11-13T19:47:50.397Z"
+    },
+    "stick": {
+      "name": "Stick",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 226,
+      "updatedAt": "2026-11-13T16:50:30.264Z"
+    },
+    "stiletto": {
+      "name": "Stiletto",
+      "price": 2,
+      "maxPrice": 4,
+      "worthless": false,
+      "magic": false,
+      "sales": 370,
+      "updatedAt": "2026-11-13T16:50:29.590Z"
+    },
+    "stone boots": {
+      "name": "Stone boots",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 29,
+      "updatedAt": "2026-11-13T20:21:11.278Z"
+    },
+    "stone bracelet": {
+      "name": "Stone bracelet",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T19:51:16.776Z"
+    },
+    "stubby pick-axe": {
+      "name": "Stubby Pick-Axe",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 370,
+      "updatedAt": "2026-11-13T16:50:32.968Z"
+    },
+    "tan aba": {
+      "name": "Tan Aba",
+      "price": 3,
+      "maxPrice": 3,
+      "worthless": false,
+      "magic": false,
+      "sales": 4,
+      "updatedAt": "2026-11-13T16:50:28.002Z"
+    },
+    "tattered pants": {
+      "name": "Tattered Pants",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 39,
+      "updatedAt": "2026-11-13T16:50:32.966Z"
+    },
+    "thin katana": {
+      "name": "Thin katana",
+      "price": 8,
+      "maxPrice": 8,
+      "worthless": false,
+      "magic": false,
+      "sales": 49,
+      "updatedAt": "2026-11-13T16:50:31.938Z"
+    },
+    "tiny pick-axe": {
+      "name": "Tiny pick-axe",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 422,
+      "updatedAt": "2026-11-13T19:45:23.174Z"
+    },
+    "toolbag": {
+      "name": "Toolbag",
+      "price": 2,
+      "maxPrice": 2,
+      "worthless": false,
+      "magic": false,
+      "sales": 52,
+      "updatedAt": "2026-11-13T16:50:32.947Z"
+    },
+    "topaz": {
+      "name": "Topaz",
+      "price": 20,
+      "maxPrice": 20,
+      "worthless": false,
+      "magic": false,
+      "sales": 5,
+      "updatedAt": "2026-11-13T16:50:32.885Z"
+    },
+    "torch": {
+      "name": "Torch",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:27.269Z"
+    },
+    "two-handed battle axe": {
+      "name": "Two-handed battle axe",
+      "price": 12,
+      "maxPrice": 12,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:32.290Z"
+    },
+    "vampiric sword": {
+      "name": "Vampiric sword",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.873Z"
+    },
+    "vorpal blade": {
+      "name": "Vorpal blade",
+      "price": null,
+      "maxPrice": null,
+      "worthless": false,
+      "magic": true,
+      "sales": 0,
+      "updatedAt": "2026-11-13T16:50:31.514Z"
+    },
+    "warhammer": {
+      "name": "Warhammer",
+      "price": 6,
+      "maxPrice": 6,
+      "worthless": false,
+      "magic": false,
+      "sales": 2,
+      "updatedAt": "2026-11-13T16:50:28.392Z"
+    },
+    "white dragonoid scale": {
+      "name": "White Dragonoid scale",
+      "price": 55,
+      "maxPrice": 55,
+      "worthless": false,
+      "magic": false,
+      "sales": 11,
+      "updatedAt": "2026-11-13T16:50:31.891Z"
+    },
+    "wood cross": {
+      "name": "Wood Cross",
+      "price": 58,
+      "maxPrice": 58,
+      "worthless": false,
+      "magic": false,
+      "sales": 4,
+      "updatedAt": "2026-11-13T16:50:31.299Z"
+    },
+    "worn boots": {
+      "name": "Worn Boots",
+      "price": 1,
+      "maxPrice": 1,
+      "worthless": false,
+      "magic": false,
+      "sales": 45,
+      "updatedAt": "2026-11-13T16:50:32.966Z"
+    },
+    "yeti coat": {
+      "name": "Yeti coat",
+      "price": 5,
+      "maxPrice": 5,
+      "worthless": false,
+      "magic": false,
+      "sales": 1,
+      "updatedAt": "2026-11-13T16:50:30.353Z"
+    }
+  },
+  "keywords": {
+    "ambrosia": {
+      "updatedAt": "2026-11-13T16:50:30.418Z",
+      "worthless": true
+    },
+    "cloak": {
+      "updatedAt": "2026-11-13T16:50:27.700Z",
+      "notMagic": true
+    },
+    "graft": {
+      "updatedAt": "2026-11-13T16:50:32.385Z",
+      "magic": true
+    },
+    "katana": {
+      "updatedAt": "2026-11-13T16:50:31.935Z",
+      "magic": true
+    },
+    "medallion": {
+      "updatedAt": "2026-11-13T16:50:31.508Z",
+      "magic": true
+    },
+    "ore": {
+      "updatedAt": "2026-11-13T16:50:32.385Z",
+      "worthless": true
+    },
+    "piwafwi": {
+      "updatedAt": "2026-11-13T20:53:13.146Z",
+      "magic": true,
+      "notMagic": true
+    },
+    "rock": {
+      "updatedAt": "2026-11-13T16:50:32.561Z",
+      "worthless": true
+    }
+  }
+}

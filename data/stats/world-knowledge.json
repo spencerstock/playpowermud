@@ -1,0 +1,6885 @@
+{
+ "version": 1,
+ "updatedAt": "2026-11-13T21:00:18.453Z",
+ "npcs": {
+  "bartender": {
+   "key": "bartender",
+   "name": "Bartender",
+   "names": [
+    "Bartender"
+   ],
+   "firstSeenAt": "2026-10-27T22:30:00.000Z",
+   "lastSeenAt": "2026-11-11T14:53:24.259Z",
+   "rooms": {
+    "r7": {
+     "area": "nal-shaddar",
+     "title": "small tavern in Nal Shaddar",
+     "seen": 2,
+     "lastAt": "2026-11-11T14:53:24.259Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Bartender is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-27T22:30:00.000Z"
+   }
+  },
+  "duergar merchant": {
+   "key": "duergar merchant",
+   "name": "Duergar merchant",
+   "names": [
+    "Duergar merchant"
+   ],
+   "firstSeenAt": "2026-10-27T23:10:17.338Z",
+   "lastSeenAt": "2026-11-11T14:53:49.706Z",
+   "rooms": {
+    "r10": {
+     "area": "nal-shaddar",
+     "seen": 5,
+     "lastAt": "2026-11-11T14:53:49.706Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 118,
+   "drops": {
+    "gold chain": 1
+   },
+   "dropNames": {
+    "gold chain": "Gold Chain"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T14:53:57.325Z",
+     "expBefore": 103993,
+     "gain": 2
+    }
+   ],
+   "gauge": {
+    "text": "Duergar is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-27T23:10:17.338Z"
+   }
+  },
+  "jade spider": {
+   "key": "jade spider",
+   "name": "Jade Spider",
+   "names": [
+    "Jade Spider"
+   ],
+   "firstSeenAt": "2026-10-28T23:28:02.438Z",
+   "lastSeenAt": "2026-11-11T14:55:28.647Z",
+   "rooms": {
+    "r95": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:22.636Z"
+    },
+    "r31": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:28.647Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Jade spider's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T23:28:02.438Z"
+   }
+  },
+  "male drow": {
+   "key": "male drow",
+   "name": "Male Drow",
+   "names": [
+    "Male Drow"
+   ],
+   "firstSeenAt": "2026-10-29T00:49:18.880Z",
+   "lastSeenAt": "2026-11-11T14:55:25.241Z",
+   "rooms": {
+    "r46": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:25.241Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow is beyond your scope to determine in slash.\nYou are unfamiliar with Drow's method of attack.",
+    "rank": null,
+    "at": "2026-10-29T00:49:18.880Z"
+   }
+  },
+  "yochol": {
+   "key": "yochol",
+   "name": "Yochol",
+   "names": [
+    "Yochol"
+   ],
+   "firstSeenAt": "2026-10-27T22:28:32.978Z",
+   "lastSeenAt": "2026-11-11T14:55:15.286Z",
+   "rooms": {
+    "r100": {
+     "area": "melee-magthere",
+     "seen": 2,
+     "lastAt": "2026-11-11T14:55:15.286Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Yochol is good in unarmed.",
+    "rank": 6,
+    "at": "2026-10-27T22:28:32.978Z"
+   }
+  },
+  "bat": {
+   "key": "bat",
+   "name": "Bat",
+   "names": [
+    "Bat"
+   ],
+   "firstSeenAt": "2026-10-29T02:52:15.894Z",
+   "lastSeenAt": "2026-11-11T14:55:55.226Z",
+   "rooms": {
+    "r329": {
+     "area": "underdark",
+     "title": "Mine Tunnel",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:58:22.842Z"
+    },
+    "r117": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:42.727Z"
+    },
+    "r128": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:44.451Z"
+    },
+    "r131": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:46.842Z"
+    },
+    "r132": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:47.667Z"
+    },
+    "r133": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:48.632Z"
+    },
+    "r141": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:55.226Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Bat's method of attack.",
+    "rank": null,
+    "at": "2026-10-29T02:52:15.894Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'bat' here.",
+    "at": "2026-11-11T06:58:28.186Z"
+   }
+  },
+  "quartermaster": {
+   "key": "quartermaster",
+   "name": "Quartermaster",
+   "names": [
+    "Quartermaster"
+   ],
+   "firstSeenAt": "2026-10-27T22:28:51.952Z",
+   "lastSeenAt": "2026-11-11T14:55:27.459Z",
+   "rooms": {
+    "r108": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:27.459Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Quartermaster is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-27T22:28:51.952Z"
+   }
+  },
+  "orc slave": {
+   "key": "orc slave",
+   "name": "Orcish slave",
+   "names": [
+    "Orcish slave",
+    "Orc Slave"
+   ],
+   "firstSeenAt": "2026-10-27T22:29:02.731Z",
+   "lastSeenAt": "2026-11-13T20:21:11.277Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Orcish slave is non-existent in blunt.\nOrcish slave is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-27T22:29:02.731Z"
+   },
+   "refusals": 1,
+   "seenLoot": {
+    "broom": "Broom"
+   },
+   "drakaanMin": 2,
+   "drakaanMax": 20
+  },
+  "acolyte": {
+   "key": "acolyte",
+   "name": "Acolyte",
+   "names": [
+    "Acolyte"
+   ],
+   "firstSeenAt": "2026-10-27T22:29:09.582Z",
+   "lastSeenAt": "2026-11-11T14:55:16.651Z",
+   "rooms": {
+    "r114": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:16.651Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Acolyte is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-27T22:29:09.582Z"
+   }
+  },
+  "learned acolyte": {
+   "key": "learned acolyte",
+   "name": "Learned Acolyte",
+   "names": [
+    "Learned Acolyte"
+   ],
+   "firstSeenAt": "2026-10-27T22:29:14.724Z",
+   "lastSeenAt": "2026-11-11T14:55:18.022Z",
+   "rooms": {
+    "r115": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:18.022Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Learned acolyte is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-27T22:29:14.724Z"
+   }
+  },
+  "high priestess of loth": {
+   "key": "high priestess of loth",
+   "name": "High Priestess of Loth",
+   "names": [
+    "High Priestess of Loth"
+   ],
+   "firstSeenAt": "2026-10-27T22:29:15.680Z",
+   "lastSeenAt": "2026-11-11T14:55:19.078Z",
+   "rooms": {
+    "r116": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:14.491Z"
+    },
+    "r98": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:19.078Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "High priestess is perfect in blunt.\nHigh priestess is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-27T22:29:15.680Z"
+   }
+  },
+  "bank teller": {
+   "key": "bank teller",
+   "name": "Bank teller",
+   "names": [
+    "Bank teller"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:49.938Z",
+   "lastSeenAt": "2026-11-11T14:53:29.031Z",
+   "rooms": {
+    "r12": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:53:29.031Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 8,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-11T14:53:49.398Z",
+     "expBefore": 103991,
+     "gain": 2
+    }
+   ],
+   "gauge": {
+    "text": "Bank teller is good in unarmed.",
+    "rank": 6,
+    "at": "2026-10-28T01:46:49.938Z"
+   }
+  },
+  "drow merchant": {
+   "key": "drow merchant",
+   "name": "Drow merchant",
+   "names": [
+    "Drow merchant"
+   ],
+   "firstSeenAt": "2026-10-27T23:09:26.769Z",
+   "lastSeenAt": "2026-10-27T23:09:26.769Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-27T23:09:26.769Z"
+   }
+  },
+  "dante the shopkeeper": {
+   "key": "dante the shopkeeper",
+   "name": "Dante the shopkeeper",
+   "names": [
+    "Dante the shopkeeper"
+   ],
+   "firstSeenAt": "2026-10-27T23:10:40.313Z",
+   "lastSeenAt": "2026-10-27T23:10:40.313Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Dante is excellent in unarmed.",
+    "rank": 9,
+    "at": "2026-10-27T23:10:40.313Z"
+   }
+  },
+  "elven slave": {
+   "key": "elven slave",
+   "name": "Elven Slave",
+   "names": [
+    "Elven Slave"
+   ],
+   "firstSeenAt": "2026-10-27T23:16:31.075Z",
+   "lastSeenAt": "2026-10-27T23:16:31.075Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Elven slave is beyond your scope to determine in blunt.\nElven slave is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-27T23:16:31.075Z"
+   }
+  },
+  "large lizard": {
+   "key": "large lizard",
+   "name": "Large lizard",
+   "names": [
+    "Large lizard"
+   ],
+   "firstSeenAt": "2026-10-27T23:16:33.528Z",
+   "lastSeenAt": "2026-11-11T14:55:23.446Z",
+   "rooms": {
+    "r29": {
+     "area": "melee-magthere",
+     "seen": 4,
+     "lastAt": "2026-11-11T14:55:23.446Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Lizard's method of attack.",
+    "rank": null,
+    "at": "2026-10-27T23:16:33.528Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'large lizard' here.",
+    "at": "2026-11-11T06:59:59.481Z"
+   }
+  },
+  "loreman": {
+   "key": "loreman",
+   "name": "Loreman",
+   "names": [
+    "Loreman"
+   ],
+   "firstSeenAt": "2026-10-27T23:16:34.260Z",
+   "lastSeenAt": "2026-11-11T14:52:10.538Z",
+   "rooms": {
+    "r32": {
+     "area": "melee-magthere",
+     "seen": 2,
+     "lastAt": "2026-11-11T14:52:10.538Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 267,
+   "drops": {
+    "gleaming longsword": 1,
+    "fine piwafwi": 1
+   },
+   "dropNames": {
+    "gleaming longsword": "Gleaming Longsword",
+    "fine piwafwi": "Fine Piwafwi"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T14:52:51.733Z",
+     "expBefore": 103980,
+     "gain": 7
+    }
+   ],
+   "gauge": {
+    "text": "Loreman is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-27T23:16:34.260Z"
+   },
+   "losses": [
+    {
+     "at": "2026-11-11T07:00:45.978Z",
+     "expBefore": 103309,
+     "outcome": "fled"
+    }
+   ],
+   "refusals": 0
+  },
+  "rothe": {
+   "key": "rothe",
+   "name": "Rothe",
+   "names": [
+    "Rothe"
+   ],
+   "firstSeenAt": "2026-10-27T23:20:05.731Z",
+   "lastSeenAt": "2026-10-27T23:20:05.731Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Rothe's method of attack.",
+    "rank": null,
+    "at": "2026-10-27T23:20:05.731Z"
+   }
+  },
+  "goblin slave": {
+   "key": "goblin slave",
+   "name": "Goblin Slave",
+   "names": [
+    "Goblin Slave"
+   ],
+   "firstSeenAt": "2026-10-27T23:20:10.688Z",
+   "lastSeenAt": "2026-10-27T23:20:10.688Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Goblin slave is perfect in blunt.\nGoblin slave is non-existent in unarmed.",
+    "rank": 10,
+    "at": "2026-10-27T23:20:10.688Z"
+   }
+  },
+  "human slave": {
+   "key": "human slave",
+   "name": "Human Slave",
+   "names": [
+    "Human Slave"
+   ],
+   "firstSeenAt": "2026-10-28T00:58:51.403Z",
+   "lastSeenAt": "2026-10-28T00:58:51.403Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Human slave is beyond your scope to determine in blunt.\nHuman slave is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T00:58:51.403Z"
+   }
+  },
+  "shopkeeper": {
+   "key": "shopkeeper",
+   "name": "Shopkeeper",
+   "names": [
+    "Shopkeeper"
+   ],
+   "firstSeenAt": "2026-10-27T23:23:35.265Z",
+   "lastSeenAt": "2026-11-11T14:53:24.648Z",
+   "rooms": {
+    "r9": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:53:24.648Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Shopkeeper is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-27T23:23:35.265Z"
+   }
+  },
+  "female drow": {
+   "key": "female drow",
+   "name": "Female Drow",
+   "names": [
+    "Female Drow"
+   ],
+   "firstSeenAt": "2026-10-27T23:45:43.479Z",
+   "lastSeenAt": "2026-10-27T23:45:43.479Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow is perfect in blunt.\nYou are unfamiliar with Drow's method of attack.",
+    "rank": 10,
+    "at": "2026-10-27T23:45:43.479Z"
+   }
+  },
+  "umber hulk": {
+   "key": "umber hulk",
+   "name": "Umber Hulk",
+   "names": [
+    "Umber Hulk"
+   ],
+   "firstSeenAt": "2026-10-27T23:58:05.549Z",
+   "lastSeenAt": "2026-11-11T14:55:45.246Z",
+   "rooms": {
+    "r102": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:59:39.225Z"
+    },
+    "r129": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:45.246Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Umber hulk's method of attack.",
+    "rank": null,
+    "at": "2026-10-27T23:58:05.549Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'umber hulk' here.",
+    "at": "2026-11-11T06:59:42.630Z"
+   }
+  },
+  "cave faerny miner": {
+   "key": "cave faerny miner",
+   "name": "Cave Faerny Miner",
+   "names": [
+    "Cave Faerny Miner"
+   ],
+   "firstSeenAt": "2026-10-27T23:58:08.370Z",
+   "lastSeenAt": "2026-11-11T14:55:57.511Z",
+   "rooms": {
+    "r143": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:57.511Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Faerny is beyond your scope to determine in pierce.\nFaerny is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-27T23:58:08.370Z"
+   }
+  },
+  "cave faerny": {
+   "key": "cave faerny",
+   "name": "Cave Faerny",
+   "names": [
+    "Cave Faerny"
+   ],
+   "firstSeenAt": "2026-10-27T23:59:28.499Z",
+   "lastSeenAt": "2026-11-11T14:56:20.532Z",
+   "rooms": {
+    "r148": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:56:01.820Z"
+    },
+    "r149": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:56:02.647Z"
+    },
+    "r150": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:56:03.539Z"
+    },
+    "r152": {
+     "seen": 3,
+     "lastAt": "2026-11-11T14:56:20.532Z"
+    },
+    "r154": {
+     "seen": 2,
+     "lastAt": "2026-11-11T14:56:15.463Z"
+    },
+    "r155": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:56:07.852Z"
+    },
+    "r156": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:56:14.460Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Faerny is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-27T23:59:28.499Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'cave faerny' here.",
+    "at": "2026-11-11T14:56:13.749Z"
+   }
+  },
+  "carrion crawler": {
+   "key": "carrion crawler",
+   "name": "Carrion Crawler",
+   "names": [
+    "Carrion Crawler"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:37.164Z",
+   "lastSeenAt": "2026-10-28T01:46:37.164Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Carrion crawler's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T01:46:37.164Z"
+   }
+  },
+  "kobold slave": {
+   "key": "kobold slave",
+   "name": "Kobold slave",
+   "names": [
+    "Kobold slave"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:38.864Z",
+   "lastSeenAt": "2026-10-28T01:46:38.864Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Kobold is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T01:46:38.864Z"
+   }
+  },
+  "duergar": {
+   "key": "duergar",
+   "name": "Duergar",
+   "names": [
+    "Duergar"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:39.149Z",
+   "lastSeenAt": "2026-11-13T20:34:02.060Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Duergar is beyond your scope to determine in blunt.\nYou are unfamiliar with Duergar's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T01:46:39.149Z"
+   },
+   "drakaanMin": 65,
+   "drakaanMax": 107,
+   "seenLoot": {
+    "gold chain": "Gold Chain"
+   }
+  },
+  "armored guard": {
+   "key": "armored guard",
+   "name": "Armored Guard",
+   "names": [
+    "Armored Guard"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:39.419Z",
+   "lastSeenAt": "2026-10-28T01:46:39.419Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Armored guard is perfect in slash.\nArmored guard is beyond your scope to determine in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T01:46:39.419Z"
+   }
+  },
+  "grout": {
+   "key": "grout",
+   "name": "Grout",
+   "names": [
+    "Grout"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:39.956Z",
+   "lastSeenAt": "2026-10-28T01:46:39.956Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Grout is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T01:46:39.956Z"
+   }
+  },
+  "duergar child": {
+   "key": "duergar child",
+   "name": "Duergar child",
+   "names": [
+    "Duergar child"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:40.233Z",
+   "lastSeenAt": "2026-10-28T01:46:40.233Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Duergar child is non-existent in blunt.\nDuergar child is okay in unarmed.",
+    "rank": 0,
+    "at": "2026-10-28T01:46:40.233Z"
+   }
+  },
+  "smith": {
+   "key": "smith",
+   "name": "Smith",
+   "names": [
+    "Smith"
+   ],
+   "firstSeenAt": "2026-10-28T01:46:40.505Z",
+   "lastSeenAt": "2026-10-28T01:46:40.505Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Smith is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T01:46:40.505Z"
+   }
+  },
+  "waiter": {
+   "key": "waiter",
+   "name": "Waiter",
+   "names": [
+    "Waiter"
+   ],
+   "firstSeenAt": "2026-10-28T02:00:11.640Z",
+   "lastSeenAt": "2026-11-11T14:53:13.028Z",
+   "rooms": {
+    "r40": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:53:13.028Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 28,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-11T14:53:23.764Z",
+     "expBefore": 103987,
+     "gain": 4
+    }
+   ],
+   "gauge": {
+    "text": "Waiter is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T02:00:11.640Z"
+   }
+  },
+  "faerny sentry": {
+   "key": "faerny sentry",
+   "name": "Faerny sentry",
+   "names": [
+    "Faerny sentry"
+   ],
+   "firstSeenAt": "2026-10-28T17:16:44.725Z",
+   "lastSeenAt": "2026-11-11T14:56:00.224Z",
+   "rooms": {
+    "r146": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:56:00.224Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Sentry is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T17:16:44.725Z"
+   }
+  },
+  "high priest of remoah": {
+   "key": "high priest of remoah",
+   "name": "High Priest of Remoah",
+   "names": [
+    "High Priest of Remoah"
+   ],
+   "firstSeenAt": "2026-10-28T19:33:58.605Z",
+   "lastSeenAt": "2026-10-28T19:33:58.605Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "High priest of remoah is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T19:33:58.605Z"
+   }
+  },
+  "magic dealer": {
+   "key": "magic dealer",
+   "name": "Magic Dealer",
+   "names": [
+    "Magic Dealer"
+   ],
+   "firstSeenAt": "2026-10-28T19:34:01.447Z",
+   "lastSeenAt": "2026-10-28T19:34:01.447Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Magic dealer is poor in unarmed.",
+    "rank": 3,
+    "at": "2026-10-28T19:34:01.447Z"
+   }
+  },
+  "drow slavemaster": {
+   "key": "drow slavemaster",
+   "name": "Drow Slavemaster",
+   "names": [
+    "Drow Slavemaster"
+   ],
+   "firstSeenAt": "2026-10-28T19:35:00.361Z",
+   "lastSeenAt": "2026-11-13T20:50:33.368Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow slavemaster is perfect in pierce.\nDrow slavemaster is perfect in unarmed.\nDrow slavemaster's capability of evading attacks is poor.",
+    "rank": 10,
+    "at": "2026-10-28T19:35:00.361Z"
+   },
+   "drakaanMin": 4,
+   "drakaanMax": 88,
+   "seenLoot": {
+    "rusty rapier": "Rusty Rapier",
+    "light piwafwi": "Light Piwafwi",
+    "lead club": "Lead Club"
+   }
+  },
+  "svirfneblin miner": {
+   "key": "svirfneblin miner",
+   "name": "Svirfneblin Miner",
+   "names": [
+    "Svirfneblin Miner"
+   ],
+   "firstSeenAt": "2026-10-28T19:35:01.355Z",
+   "lastSeenAt": "2026-11-13T20:51:01.890Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Svirfneblin miner is almost non-existent in pierce.\nSvirfneblin miner is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T19:35:01.355Z"
+   },
+   "drakaanMin": 2,
+   "drakaanMax": 6,
+   "seenLoot": {
+    "miner's gloves": "Miner's gloves",
+    "stubby pick-axe": "Stubby Pick-Axe"
+   }
+  },
+  "fire golem": {
+   "key": "fire golem",
+   "name": "Fire golem",
+   "names": [
+    "Fire golem"
+   ],
+   "firstSeenAt": "2026-10-28T19:41:54.275Z",
+   "lastSeenAt": "2026-10-28T19:41:54.275Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Golem is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-28T19:41:54.275Z"
+   },
+   "losses": [
+    {
+     "at": "2026-11-11T14:56:20.531Z",
+     "expBefore": 104005,
+     "outcome": "fled"
+    }
+   ]
+  },
+  "drow bodyguard": {
+   "key": "drow bodyguard",
+   "name": "Drow Bodyguard",
+   "names": [
+    "Drow Bodyguard"
+   ],
+   "firstSeenAt": "2026-10-28T19:42:20.443Z",
+   "lastSeenAt": "2026-10-28T19:42:20.443Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow bodyguard is almost non-existent in blunt.\nDrow bodyguard is perfect in unarmed.\nDrow bodyguard's capability of evading attacks is perfect.",
+    "rank": 10,
+    "at": "2026-10-28T19:42:20.443Z"
+   }
+  },
+  "hook horror": {
+   "key": "hook horror",
+   "name": "Hook Horror",
+   "names": [
+    "Hook Horror"
+   ],
+   "firstSeenAt": "2026-10-28T19:42:56.977Z",
+   "lastSeenAt": "2026-10-28T19:42:56.977Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Hook horror's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T19:42:56.977Z"
+   }
+  },
+  "mistress of arach-tillith": {
+   "key": "mistress of arach-tillith",
+   "name": "Mistress of Arach-Tillith",
+   "names": [
+    "Mistress of Arach-Tillith"
+   ],
+   "firstSeenAt": "2026-10-28T19:43:31.164Z",
+   "lastSeenAt": "2026-11-11T14:54:46.430Z",
+   "rooms": {
+    "r99": {
+     "area": "melee-magthere",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:54:46.430Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 79,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-11T14:55:13.278Z",
+     "expBefore": 103999,
+     "gain": 4
+    }
+   ],
+   "gauge": {
+    "text": "Mistress of arach-tillith is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T19:43:31.164Z"
+   }
+  },
+  "arcas, the smart drow": {
+   "key": "arcas, the smart drow",
+   "name": "Arcas, the smart Drow",
+   "names": [
+    "Arcas, the smart Drow"
+   ],
+   "firstSeenAt": "2026-10-28T19:43:27.068Z",
+   "lastSeenAt": "2026-10-28T19:43:27.068Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Arcas is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-10-28T19:43:27.068Z"
+   }
+  },
+  "belwar dissente": {
+   "key": "belwar dissente",
+   "name": "Belwar Dissente",
+   "names": [
+    "Belwar Dissente"
+   ],
+   "firstSeenAt": "2026-10-28T19:43:38.250Z",
+   "lastSeenAt": "2026-10-28T19:43:38.250Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Belwar is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T19:43:38.250Z"
+   }
+  },
+  "shawarra le'nor": {
+   "key": "shawarra le'nor",
+   "name": "Shawarra Le'Nor",
+   "names": [
+    "Shawarra Le'Nor"
+   ],
+   "firstSeenAt": "2026-10-28T19:44:11.050Z",
+   "lastSeenAt": "2026-10-28T19:44:11.050Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Shawarra is extremely poor in blunt.\nShawarra is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T19:44:11.050Z"
+   }
+  },
+  "graxxa": {
+   "key": "graxxa",
+   "name": "Graxxas",
+   "names": [
+    "Graxxas"
+   ],
+   "firstSeenAt": "2026-10-28T19:44:11.783Z",
+   "lastSeenAt": "2026-10-28T19:44:11.783Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Graxxas is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-28T19:44:11.783Z"
+   }
+  },
+  "cook": {
+   "key": "cook",
+   "name": "Cook",
+   "names": [
+    "Cook"
+   ],
+   "firstSeenAt": "2026-10-28T19:44:14.662Z",
+   "lastSeenAt": "2026-10-28T19:44:14.662Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Cook is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T19:44:14.662Z"
+   }
+  },
+  "drow priestess": {
+   "key": "drow priestess",
+   "name": "Drow Priestess",
+   "names": [
+    "Drow Priestess"
+   ],
+   "firstSeenAt": "2026-10-28T19:45:07.341Z",
+   "lastSeenAt": "2026-10-28T19:45:07.341Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow priestess is perfect in blunt.\nDrow priestess is almost non-existent in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T19:45:07.341Z"
+   }
+  },
+  "drakkay the climber": {
+   "key": "drakkay the climber",
+   "name": "Drakkay the Climber",
+   "names": [
+    "Drakkay the Climber"
+   ],
+   "firstSeenAt": "2026-10-28T19:45:08.495Z",
+   "lastSeenAt": "2026-10-28T19:45:08.495Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drakkay is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T19:45:08.495Z"
+   }
+  },
+  "weaponsmith": {
+   "key": "weaponsmith",
+   "name": "Weaponsmith",
+   "names": [
+    "Weaponsmith"
+   ],
+   "firstSeenAt": "2026-10-28T19:45:14.064Z",
+   "lastSeenAt": "2026-10-28T19:45:14.064Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Weaponsmith is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-28T19:45:14.064Z"
+   }
+  },
+  "priest of remoah": {
+   "key": "priest of remoah",
+   "name": "Priest of Remoah",
+   "names": [
+    "Priest of Remoah"
+   ],
+   "firstSeenAt": "2026-10-28T19:45:14.546Z",
+   "lastSeenAt": "2026-10-28T19:45:14.546Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Priest of remoah is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-28T19:45:14.546Z"
+   }
+  },
+  "town citizen": {
+   "key": "town citizen",
+   "name": "Town citizen",
+   "names": [
+    "Town citizen"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:25.905Z",
+   "lastSeenAt": "2026-11-11T06:57:34.661Z",
+   "rooms": {
+    "r1272": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:24.989Z"
+    },
+    "r1245": {
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:34.661Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Citizen is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-28T20:05:25.905Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'town citizen' here.",
+    "at": "2026-11-11T06:57:32.278Z"
+   }
+  },
+  "town guard": {
+   "key": "town guard",
+   "name": "Town guard",
+   "names": [
+    "Town guard"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:26.531Z",
+   "lastSeenAt": "2026-11-11T06:57:44.860Z",
+   "rooms": {
+    "r1250": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:44.860Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-11T06:57:55.633Z",
+     "expBefore": 103298,
+     "gain": 4
+    }
+   ],
+   "gauge": {
+    "text": "Town guard is extremely poor in slash.\nTown guard is non-existent in unarmed.",
+    "rank": 1,
+    "at": "2026-10-28T20:05:26.531Z"
+   }
+  },
+  "wandering woodworker": {
+   "key": "wandering woodworker",
+   "name": "Wandering Woodworker",
+   "names": [
+    "Wandering Woodworker"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:28.503Z",
+   "lastSeenAt": "2026-10-28T20:05:28.503Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Woodworker is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T20:05:28.503Z"
+   }
+  },
+  "church recruiter": {
+   "key": "church recruiter",
+   "name": "Church Recruiter",
+   "names": [
+    "Church Recruiter"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:30.873Z",
+   "lastSeenAt": "2026-10-28T20:05:30.873Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Church recruiter is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-28T20:05:30.873Z"
+   }
+  },
+  "pastor": {
+   "key": "pastor",
+   "name": "Pastor",
+   "names": [
+    "Pastor"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:32.892Z",
+   "lastSeenAt": "2026-10-28T20:05:32.892Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Pastor is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T20:05:32.892Z"
+   }
+  },
+  "bishop": {
+   "key": "bishop",
+   "name": "Bishop",
+   "names": [
+    "Bishop"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:34.691Z",
+   "lastSeenAt": "2026-10-28T20:05:34.691Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Bishop is very good in unarmed.",
+    "rank": 7,
+    "at": "2026-10-28T20:05:34.691Z"
+   }
+  },
+  "demetrii, the sage": {
+   "key": "demetrii, the sage",
+   "name": "Demetrii, the sage",
+   "names": [
+    "Demetrii, the sage"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:36.960Z",
+   "lastSeenAt": "2026-10-28T20:05:36.960Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Demetrii is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T20:05:36.960Z"
+   }
+  },
+  "burly town guard": {
+   "key": "burly town guard",
+   "name": "Burly town guard",
+   "names": [
+    "Burly town guard"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:37.555Z",
+   "lastSeenAt": "2026-11-11T06:57:44.064Z",
+   "rooms": {
+    "r1244": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:35.473Z"
+    },
+    "r1249": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:44.064Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Burly guard is perfect in slash.\nBurly guard is beyond your scope to determine in unarmed.",
+    "rank": 10,
+    "at": "2026-10-28T20:05:37.555Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'burly town guard' here.",
+    "at": "2026-11-11T06:57:43.356Z"
+   }
+  },
+  "rat": {
+   "key": "rat",
+   "name": "Rat",
+   "names": [
+    "Rat"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:38.735Z",
+   "lastSeenAt": "2026-10-28T20:05:38.735Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Rat's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T20:05:38.735Z"
+   }
+  },
+  "chicken": {
+   "key": "chicken",
+   "name": "Chicken",
+   "names": [
+    "Chicken"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:42.665Z",
+   "lastSeenAt": "2026-10-28T20:05:42.665Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Chicken's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T20:05:42.665Z"
+   }
+  },
+  "small squirrel": {
+   "key": "small squirrel",
+   "name": "Small squirrel",
+   "names": [
+    "Small squirrel"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:43.051Z",
+   "lastSeenAt": "2026-10-28T20:05:43.051Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Squirrel's method of attack.",
+    "rank": null,
+    "at": "2026-10-28T20:05:43.051Z"
+   }
+  },
+  "small boy": {
+   "key": "small boy",
+   "name": "Small boy",
+   "names": [
+    "Small boy"
+   ],
+   "firstSeenAt": "2026-10-28T20:05:47.073Z",
+   "lastSeenAt": "2026-11-11T06:58:04.668Z",
+   "rooms": {
+    "r1540": {
+     "area": "kalin",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:58:04.668Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 4,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-11T06:58:08.229Z",
+     "expBefore": 103302,
+     "gain": 1
+    }
+   ],
+   "gauge": {
+    "text": "Small boy is okay in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T20:05:47.073Z"
+   }
+  },
+  "natural healer": {
+   "key": "natural healer",
+   "name": "Natural Healer",
+   "names": [
+    "Natural Healer"
+   ],
+   "firstSeenAt": "2026-10-28T21:56:20.427Z",
+   "lastSeenAt": "2026-10-28T21:56:20.427Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Healer is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-28T21:56:20.427Z"
+   }
+  },
+  "myconid": {
+   "key": "myconid",
+   "name": "Myconid [Guard]",
+   "names": [
+    "Myconid [Guard]",
+    "Myconid"
+   ],
+   "firstSeenAt": "2026-10-29T02:24:34.166Z",
+   "lastSeenAt": "2026-11-13T20:32:22.400Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Myconid is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-29T02:24:34.166Z"
+   },
+   "seenLoot": {
+    "mushroom": "Mushroom",
+    "small amethyst": "Small Amethyst",
+    "large quartz": "Large Quartz"
+   }
+  },
+  "drider": {
+   "key": "drider",
+   "name": "Drider",
+   "names": [
+    "Drider"
+   ],
+   "firstSeenAt": "2026-10-29T03:46:53.614Z",
+   "lastSeenAt": "2026-10-29T03:46:53.614Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drider is non-existent in ranged.\nDrider is very poor in unarmed.",
+    "rank": 2,
+    "at": "2026-10-29T03:46:53.614Z"
+   }
+  },
+  "nameht gaerne": {
+   "key": "nameht gaerne",
+   "name": "Nameht Gaerne",
+   "names": [
+    "Nameht Gaerne"
+   ],
+   "firstSeenAt": "2026-10-29T03:46:54.462Z",
+   "lastSeenAt": "2026-10-29T03:46:54.462Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Nameht is very poor in slash.\nYou are unfamiliar with Nameht's method of attack.",
+    "rank": 2,
+    "at": "2026-10-29T03:46:54.462Z"
+   }
+  },
+  "hardiys hojlen": {
+   "key": "hardiys hojlen",
+   "name": "Hardiys Hojlen",
+   "names": [
+    "Hardiys Hojlen"
+   ],
+   "firstSeenAt": "2026-10-29T03:58:54.086Z",
+   "lastSeenAt": "2026-10-29T03:58:54.086Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Hardiys is beyond your scope to determine in pierce.\nHardiys is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-29T03:58:54.086Z"
+   }
+  },
+  "laborer": {
+   "key": "laborer",
+   "name": "Laborer",
+   "names": [
+    "Laborer"
+   ],
+   "firstSeenAt": "2026-10-30T04:14:25.069Z",
+   "lastSeenAt": "2026-10-30T04:14:25.069Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Laborer is okay in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T04:14:25.069Z"
+   }
+  },
+  "woman": {
+   "key": "woman",
+   "name": "Woman",
+   "names": [
+    "Woman"
+   ],
+   "firstSeenAt": "2026-10-30T04:14:56.762Z",
+   "lastSeenAt": "2026-10-30T04:14:56.762Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Woman is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T04:14:56.762Z"
+   }
+  },
+  "beggar": {
+   "key": "beggar",
+   "name": "Beggar",
+   "names": [
+    "Beggar"
+   ],
+   "firstSeenAt": "2026-10-30T04:15:10.530Z",
+   "lastSeenAt": "2026-10-30T04:15:10.530Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Beggar is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-30T04:15:10.530Z"
+   }
+  },
+  "kalinport guard": {
+   "key": "kalinport guard",
+   "name": "Kalinport guard",
+   "names": [
+    "Kalinport guard"
+   ],
+   "firstSeenAt": "2026-10-30T04:21:17.252Z",
+   "lastSeenAt": "2026-10-30T04:21:17.252Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Kalinport guard is extremely poor in slash.\nKalinport guard is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T04:21:17.252Z"
+   }
+  },
+  "male derelict": {
+   "key": "male derelict",
+   "name": "Male Derelict",
+   "names": [
+    "Male Derelict"
+   ],
+   "firstSeenAt": "2026-10-30T04:24:04.077Z",
+   "lastSeenAt": "2026-10-30T04:24:04.077Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Derelict is extremely poor in pierce.\nDerelict is almost non-existent in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T04:24:04.077Z"
+   }
+  },
+  "child derelict": {
+   "key": "child derelict",
+   "name": "Child Derelict",
+   "names": [
+    "Child Derelict"
+   ],
+   "firstSeenAt": "2026-10-30T04:24:04.663Z",
+   "lastSeenAt": "2026-10-30T04:24:04.663Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Derelict is almost non-existent in pierce.\nDerelict is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-10-30T04:24:04.663Z"
+   }
+  },
+  "female derelict": {
+   "key": "female derelict",
+   "name": "Female Derelict",
+   "names": [
+    "Female Derelict"
+   ],
+   "firstSeenAt": "2026-10-30T04:24:05.072Z",
+   "lastSeenAt": "2026-10-30T04:24:05.072Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Derelict is almost non-existent in blunt.\nDerelict is extremely good in unarmed.",
+    "rank": 8,
+    "at": "2026-10-30T04:24:05.072Z"
+   }
+  },
+  "thug": {
+   "key": "thug",
+   "name": "Thug [Man]",
+   "names": [
+    "Thug [Man]"
+   ],
+   "firstSeenAt": "2026-10-30T04:24:13.775Z",
+   "lastSeenAt": "2026-10-30T04:24:13.775Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Thug is almost non-existent in pierce.\nThug is excellent in unarmed.",
+    "rank": 9,
+    "at": "2026-10-30T04:24:13.775Z"
+   }
+  },
+  "crab": {
+   "key": "crab",
+   "name": "Crab",
+   "names": [
+    "Crab"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:43.309Z",
+   "lastSeenAt": "2026-10-30T04:26:43.309Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Crab's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T04:26:43.309Z"
+   }
+  },
+  "plague victim (man)": {
+   "key": "plague victim (man)",
+   "name": "Plague Victim (Man)",
+   "names": [
+    "Plague Victim (Man)"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:44.840Z",
+   "lastSeenAt": "2026-10-30T04:26:44.840Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Plague victim is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-10-30T04:26:44.840Z"
+   }
+  },
+  "plague victim (young kid)": {
+   "key": "plague victim (young kid)",
+   "name": "Plague Victim (Young Kid)",
+   "names": [
+    "Plague Victim (Young Kid)"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:45.231Z",
+   "lastSeenAt": "2026-10-30T04:26:45.231Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Plague victim is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-30T04:26:45.231Z"
+   }
+  },
+  "diseased rat": {
+   "key": "diseased rat",
+   "name": "Diseased rat",
+   "names": [
+    "Diseased rat"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:45.626Z",
+   "lastSeenAt": "2026-10-30T04:26:45.626Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Diseased rat's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T04:26:45.626Z"
+   }
+  },
+  "plague victim (woman)": {
+   "key": "plague victim (woman)",
+   "name": "Plague Victim (Woman)",
+   "names": [
+    "Plague Victim (Woman)"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:47.393Z",
+   "lastSeenAt": "2026-10-30T04:26:47.393Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Plague victim is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T04:26:47.393Z"
+   }
+  },
+  "profession removal person": {
+   "key": "profession removal person",
+   "name": "Profession Removal Person",
+   "names": [
+    "Profession Removal Person"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:57.361Z",
+   "lastSeenAt": "2026-10-30T04:26:57.361Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Person is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T04:26:57.361Z"
+   }
+  },
+  "teacher": {
+   "key": "teacher",
+   "name": "Teacher",
+   "names": [
+    "Teacher"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:58.778Z",
+   "lastSeenAt": "2026-10-30T04:26:58.778Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Teacher is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T04:26:58.778Z"
+   }
+  },
+  "kalinport citizen": {
+   "key": "kalinport citizen",
+   "name": "Kalinport citizen",
+   "names": [
+    "Kalinport citizen"
+   ],
+   "firstSeenAt": "2026-10-30T04:26:59.547Z",
+   "lastSeenAt": "2026-10-30T04:26:59.547Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Kalinport citizen is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T04:26:59.547Z"
+   }
+  },
+  "riding instructor": {
+   "key": "riding instructor",
+   "name": "Riding Instructor",
+   "names": [
+    "Riding Instructor"
+   ],
+   "firstSeenAt": "2026-10-30T04:27:01.716Z",
+   "lastSeenAt": "2026-10-30T04:27:01.716Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Instructor is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T04:27:01.716Z"
+   }
+  },
+  "stablehand": {
+   "key": "stablehand",
+   "name": "Stablehand",
+   "names": [
+    "Stablehand"
+   ],
+   "firstSeenAt": "2026-10-30T04:27:02.152Z",
+   "lastSeenAt": "2026-10-30T04:27:02.152Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Stablehand is okay in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T04:27:02.152Z"
+   }
+  },
+  "lizard": {
+   "key": "lizard",
+   "name": "Lizard",
+   "names": [
+    "Lizard"
+   ],
+   "firstSeenAt": "2026-10-30T04:43:47.527Z",
+   "lastSeenAt": "2026-10-30T04:43:47.527Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Lizard's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T04:43:47.527Z"
+   }
+  },
+  "finnyer": {
+   "key": "finnyer",
+   "name": "Finnyer",
+   "names": [
+    "Finnyer"
+   ],
+   "firstSeenAt": "2026-10-30T05:18:47.768Z",
+   "lastSeenAt": "2026-10-30T05:18:47.768Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Finnyer is almost non-existent in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T05:18:47.768Z"
+   }
+  },
+  "dinien": {
+   "key": "dinien",
+   "name": "Dinien",
+   "names": [
+    "Dinien"
+   ],
+   "firstSeenAt": "2026-10-30T06:10:10.213Z",
+   "lastSeenAt": "2026-10-30T06:10:10.213Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Dinien is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T06:10:10.213Z"
+   }
+  },
+  "merchant": {
+   "key": "merchant",
+   "name": "Merchant",
+   "names": [
+    "Merchant"
+   ],
+   "firstSeenAt": "2026-10-30T06:13:10.040Z",
+   "lastSeenAt": "2026-10-30T06:13:10.040Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Merchant is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T06:13:10.040Z"
+   }
+  },
+  "recruiter": {
+   "key": "recruiter",
+   "name": "Recruiter",
+   "names": [
+    "Recruiter"
+   ],
+   "firstSeenAt": "2026-10-30T07:58:28.443Z",
+   "lastSeenAt": "2026-10-30T07:58:28.443Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Recruiter is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-30T07:58:28.443Z"
+   }
+  },
+  "collin grokker": {
+   "key": "collin grokker",
+   "name": "Collin Grokker",
+   "names": [
+    "Collin Grokker"
+   ],
+   "firstSeenAt": "2026-10-30T08:07:53.385Z",
+   "lastSeenAt": "2026-10-30T08:07:53.385Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Collin is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T08:07:53.385Z"
+   }
+  },
+  "bank teller (behind the glass)": {
+   "key": "bank teller (behind the glass)",
+   "name": "Bank teller (behind the glass)",
+   "names": [
+    "Bank teller (behind the glass)"
+   ],
+   "firstSeenAt": "2026-10-30T08:08:06.648Z",
+   "lastSeenAt": "2026-10-30T08:08:06.648Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Teller is excellent in unarmed.",
+    "rank": 9,
+    "at": "2026-10-30T08:08:06.648Z"
+   }
+  },
+  "kalinport sam's labrador": {
+   "key": "kalinport sam's labrador",
+   "name": "Kalinport Sam's Labrador",
+   "names": [
+    "Kalinport Sam's Labrador"
+   ],
+   "firstSeenAt": "2026-10-30T08:47:44.149Z",
+   "lastSeenAt": "2026-10-30T08:47:44.149Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Brown labrador's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T08:47:44.149Z"
+   }
+  },
+  "reptiloid child": {
+   "key": "reptiloid child",
+   "name": "Reptiloid child",
+   "names": [
+    "Reptiloid child"
+   ],
+   "firstSeenAt": "2026-10-30T18:28:01.186Z",
+   "lastSeenAt": "2026-10-30T18:28:01.186Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Reptiloid child is extremely good in unarmed.",
+    "rank": 8,
+    "at": "2026-10-30T18:28:01.186Z"
+   }
+  },
+  "female reptiloid": {
+   "key": "female reptiloid",
+   "name": "Female reptiloid",
+   "names": [
+    "Female reptiloid"
+   ],
+   "firstSeenAt": "2026-10-30T18:28:49.978Z",
+   "lastSeenAt": "2026-10-30T18:28:49.978Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Female reptiloid is almost non-existent in pierce.\nFemale reptiloid is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-30T18:28:49.978Z"
+   }
+  },
+  "male reptiloid": {
+   "key": "male reptiloid",
+   "name": "Male reptiloid",
+   "names": [
+    "Male reptiloid"
+   ],
+   "firstSeenAt": "2026-10-30T18:30:53.644Z",
+   "lastSeenAt": "2026-10-30T18:30:53.644Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Male reptiloid is very good in pierce.\nMale reptiloid is very good in unarmed.",
+    "rank": 7,
+    "at": "2026-10-30T18:30:53.644Z"
+   }
+  },
+  "snurra the town clerk": {
+   "key": "snurra the town clerk",
+   "name": "Snurra the Town Clerk",
+   "names": [
+    "Snurra the Town Clerk"
+   ],
+   "firstSeenAt": "2026-10-30T18:36:30.554Z",
+   "lastSeenAt": "2026-10-30T18:36:30.554Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Snurra is extremely good in unarmed.",
+    "rank": 8,
+    "at": "2026-10-30T18:36:30.554Z"
+   }
+  },
+  "namssas the bartender": {
+   "key": "namssas the bartender",
+   "name": "Namssas the Bartender",
+   "names": [
+    "Namssas the Bartender"
+   ],
+   "firstSeenAt": "2026-10-30T18:37:31.048Z",
+   "lastSeenAt": "2026-10-30T18:37:31.048Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Namssas is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-30T18:37:31.048Z"
+   }
+  },
+  "alligator": {
+   "key": "alligator",
+   "name": "Alligator",
+   "names": [
+    "Alligator"
+   ],
+   "firstSeenAt": "2026-10-30T19:34:15.388Z",
+   "lastSeenAt": "2026-11-11T06:57:07.489Z",
+   "rooms": {
+    "r1525": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:07.489Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-11T06:57:15.614Z",
+     "expBefore": 103295,
+     "gain": 2
+    }
+   ],
+   "gauge": {
+    "text": "You are unfamiliar with Alligator's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T19:34:15.388Z"
+   }
+  },
+  "lizard man": {
+   "key": "lizard man",
+   "name": "Lizard man",
+   "names": [
+    "Lizard man"
+   ],
+   "firstSeenAt": "2026-10-30T19:34:22.084Z",
+   "lastSeenAt": "2026-11-11T06:57:19.192Z",
+   "rooms": {
+    "r1460": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:05.084Z"
+    },
+    "r1463": {
+     "seen": 1,
+     "lastAt": "2026-11-11T06:57:19.192Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Lizard man is almost non-existent in pierce.\nYou are unfamiliar with Lizard man's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T19:34:22.084Z"
+   }
+  },
+  "bank guard": {
+   "key": "bank guard",
+   "name": "Bank guard",
+   "names": [
+    "Bank guard"
+   ],
+   "firstSeenAt": "2026-10-30T20:29:05.499Z",
+   "lastSeenAt": "2026-10-30T20:29:05.499Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Bank guard is poor in unarmed.",
+    "rank": 3,
+    "at": "2026-10-30T20:29:05.499Z"
+   }
+  },
+  "mountain goat": {
+   "key": "mountain goat",
+   "name": "Mountain goat",
+   "names": [
+    "Mountain goat"
+   ],
+   "firstSeenAt": "2026-10-30T23:02:52.560Z",
+   "lastSeenAt": "2026-10-30T23:02:52.560Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Mountain goat's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T23:02:52.560Z"
+   }
+  },
+  "simien the goat herder": {
+   "key": "simien the goat herder",
+   "name": "Simien the Goat Herder",
+   "names": [
+    "Simien the Goat Herder"
+   ],
+   "firstSeenAt": "2026-10-30T23:12:29.408Z",
+   "lastSeenAt": "2026-10-30T23:12:29.408Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Simien is excellent in blunt.\nSimien is okay in unarmed.",
+    "rank": 9,
+    "at": "2026-10-30T23:12:29.408Z"
+   }
+  },
+  "johans the climber": {
+   "key": "johans the climber",
+   "name": "Johans the Climber",
+   "names": [
+    "Johans the Climber"
+   ],
+   "firstSeenAt": "2026-10-30T23:14:28.445Z",
+   "lastSeenAt": "2026-10-30T23:14:28.445Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Johans is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T23:14:28.445Z"
+   }
+  },
+  "baby mountain goat": {
+   "key": "baby mountain goat",
+   "name": "Baby mountain goat",
+   "names": [
+    "Baby mountain goat"
+   ],
+   "firstSeenAt": "2026-10-30T23:19:05.554Z",
+   "lastSeenAt": "2026-10-30T23:19:05.554Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Baby mountain goat's method of attack.",
+    "rank": null,
+    "at": "2026-10-30T23:19:05.554Z"
+   }
+  },
+  "large kobold": {
+   "key": "large kobold",
+   "name": "Large kobold",
+   "names": [
+    "Large kobold"
+   ],
+   "firstSeenAt": "2026-10-30T23:59:37.205Z",
+   "lastSeenAt": "2026-10-30T23:59:37.205Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Large kobold is extremely poor in pierce.\nLarge kobold is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T23:59:37.205Z"
+   }
+  },
+  "kobold villager": {
+   "key": "kobold villager",
+   "name": "Kobold villager [Child]",
+   "names": [
+    "Kobold villager [Child]"
+   ],
+   "firstSeenAt": "2026-10-30T23:59:37.804Z",
+   "lastSeenAt": "2026-10-30T23:59:37.804Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Child villager is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-30T23:59:37.804Z"
+   }
+  },
+  "kobold cook": {
+   "key": "kobold cook",
+   "name": "Kobold Cook",
+   "names": [
+    "Kobold Cook"
+   ],
+   "firstSeenAt": "2026-10-31T02:45:05.697Z",
+   "lastSeenAt": "2026-10-31T02:45:05.697Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Kobold cook is non-existent in blunt.\nKobold cook is beyond your scope to determine in unarmed.",
+    "rank": 0,
+    "at": "2026-10-31T02:45:05.697Z"
+   }
+  },
+  "dunagin citizen": {
+   "key": "dunagin citizen",
+   "name": "Dunagin Citizen",
+   "names": [
+    "Dunagin Citizen"
+   ],
+   "firstSeenAt": "2026-10-31T04:17:51.940Z",
+   "lastSeenAt": "2026-10-31T04:17:51.940Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Citizen is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-31T04:17:51.940Z"
+   }
+  },
+  "dunagin town guard": {
+   "key": "dunagin town guard",
+   "name": "Dunagin Town Guard",
+   "names": [
+    "Dunagin Town Guard"
+   ],
+   "firstSeenAt": "2026-10-31T04:24:30.072Z",
+   "lastSeenAt": "2026-10-31T04:24:30.072Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Guard is perfect in slash.\nGuard is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-31T04:24:30.072Z"
+   }
+  },
+  "guild guard (in the enclosure)": {
+   "key": "guild guard (in the enclosure)",
+   "name": "Guild Guard (in the enclosure)",
+   "names": [
+    "Guild Guard (in the enclosure)"
+   ],
+   "firstSeenAt": "2026-10-31T04:55:24.721Z",
+   "lastSeenAt": "2026-10-31T04:55:24.721Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Guild guard's method of attack.",
+    "rank": null,
+    "at": "2026-10-31T04:55:24.721Z"
+   }
+  },
+  "dock worker": {
+   "key": "dock worker",
+   "name": "Dock Worker",
+   "names": [
+    "Dock Worker"
+   ],
+   "firstSeenAt": "2026-10-31T09:56:28.472Z",
+   "lastSeenAt": "2026-10-31T09:56:28.472Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Dock worker is beyond your scope to determine in slash.\nDock worker is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-10-31T09:56:28.472Z"
+   }
+  },
+  "brawny shorehand": {
+   "key": "brawny shorehand",
+   "name": "Brawny Shorehand",
+   "names": [
+    "Brawny Shorehand"
+   ],
+   "firstSeenAt": "2026-10-31T11:29:53.312Z",
+   "lastSeenAt": "2026-10-31T11:29:53.312Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Shorehand is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-10-31T11:29:53.312Z"
+   }
+  },
+  "sailor": {
+   "key": "sailor",
+   "name": "Sailor",
+   "names": [
+    "Sailor"
+   ],
+   "firstSeenAt": "2026-10-31T11:32:56.214Z",
+   "lastSeenAt": "2026-10-31T11:32:56.214Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Sailor is okay in pierce.\nSailor is beyond your scope to determine in unarmed.",
+    "rank": null,
+    "at": "2026-10-31T11:32:56.214Z"
+   }
+  },
+  "dock laborer": {
+   "key": "dock laborer",
+   "name": "Dock Laborer",
+   "names": [
+    "Dock Laborer"
+   ],
+   "firstSeenAt": "2026-10-31T11:40:56.632Z",
+   "lastSeenAt": "2026-10-31T11:40:56.632Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Dock laborer is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-31T11:40:56.632Z"
+   }
+  },
+  "white-tailed buck": {
+   "key": "white-tailed buck",
+   "name": "White-tailed buck",
+   "names": [
+    "White-tailed buck"
+   ],
+   "firstSeenAt": "2026-10-31T21:37:38.116Z",
+   "lastSeenAt": "2026-10-31T21:37:38.116Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Buck's method of attack.",
+    "rank": null,
+    "at": "2026-10-31T21:37:38.116Z"
+   }
+  },
+  "pixie": {
+   "key": "pixie",
+   "name": "Pixie",
+   "names": [
+    "Pixie"
+   ],
+   "firstSeenAt": "2026-10-31T21:37:50.793Z",
+   "lastSeenAt": "2026-10-31T21:37:50.793Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Pixie is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-31T21:37:50.793Z"
+   }
+  },
+  "sprite": {
+   "key": "sprite",
+   "name": "Sprite",
+   "names": [
+    "Sprite"
+   ],
+   "firstSeenAt": "2026-10-31T21:38:10.323Z",
+   "lastSeenAt": "2026-10-31T21:38:10.323Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Sprite is extremely poor in pierce.\nSprite is very good in unarmed.",
+    "rank": 7,
+    "at": "2026-10-31T21:38:10.323Z"
+   }
+  },
+  "dryad": {
+   "key": "dryad",
+   "name": "Dryad",
+   "names": [
+    "Dryad"
+   ],
+   "firstSeenAt": "2026-10-31T21:39:22.083Z",
+   "lastSeenAt": "2026-10-31T21:39:22.083Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Dryad is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-10-31T21:39:22.083Z"
+   }
+  },
+  "leprechaun": {
+   "key": "leprechaun",
+   "name": "Leprechaun",
+   "names": [
+    "Leprechaun"
+   ],
+   "firstSeenAt": "2026-10-31T21:41:53.481Z",
+   "lastSeenAt": "2026-10-31T21:41:53.481Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Leprechaun is good in unarmed.",
+    "rank": 6,
+    "at": "2026-10-31T21:41:53.481Z"
+   }
+  },
+  "repiv the waiter": {
+   "key": "repiv the waiter",
+   "name": "Repiv the Waiter",
+   "names": [
+    "Repiv the Waiter"
+   ],
+   "firstSeenAt": "2026-10-31T21:42:21.823Z",
+   "lastSeenAt": "2026-10-31T21:42:21.823Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Repiv is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-10-31T21:42:21.823Z"
+   }
+  },
+  "white-tailed deer": {
+   "key": "white-tailed deer",
+   "name": "White-tailed deer",
+   "names": [
+    "White-tailed deer"
+   ],
+   "firstSeenAt": "2026-10-31T23:49:11.985Z",
+   "lastSeenAt": "2026-10-31T23:49:11.985Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Deer's method of attack.",
+    "rank": null,
+    "at": "2026-10-31T23:49:11.985Z"
+   }
+  },
+  "commandant": {
+   "key": "commandant",
+   "name": "Commandant",
+   "names": [
+    "Commandant"
+   ],
+   "firstSeenAt": "2026-11-01T02:34:38.262Z",
+   "lastSeenAt": "2026-11-01T02:34:38.262Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Commandant is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-01T02:34:38.262Z"
+   }
+  },
+  "bandit": {
+   "key": "bandit",
+   "name": "Bandit",
+   "names": [
+    "Bandit"
+   ],
+   "firstSeenAt": "2026-11-01T04:59:12.143Z",
+   "lastSeenAt": "2026-11-01T04:59:12.143Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Bandit is beyond your scope to determine in pierce.\nBandit is non-existent in unarmed.",
+    "rank": 0,
+    "at": "2026-11-01T04:59:12.143Z"
+   }
+  },
+  "lookout": {
+   "key": "lookout",
+   "name": "Lookout",
+   "names": [
+    "Lookout"
+   ],
+   "firstSeenAt": "2026-11-01T05:00:45.415Z",
+   "lastSeenAt": "2026-11-01T05:00:45.415Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Lookout is good in pierce.\nLookout is almost non-existent in unarmed.",
+    "rank": 6,
+    "at": "2026-11-01T05:00:45.415Z"
+   }
+  },
+  "rabbit": {
+   "key": "rabbit",
+   "name": "Rabbit",
+   "names": [
+    "Rabbit"
+   ],
+   "firstSeenAt": "2026-11-01T09:08:54.212Z",
+   "lastSeenAt": "2026-11-01T09:08:54.212Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Rabbit's method of attack.",
+    "rank": null,
+    "at": "2026-11-01T09:08:54.212Z"
+   }
+  },
+  "kalinport sam, the cigar man": {
+   "key": "kalinport sam, the cigar man",
+   "name": "Kalinport Sam, the cigar man",
+   "names": [
+    "Kalinport Sam, the cigar man"
+   ],
+   "firstSeenAt": "2026-11-02T10:20:24.021Z",
+   "lastSeenAt": "2026-11-02T10:20:24.021Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Kalinport sam is good in unarmed.",
+    "rank": 6,
+    "at": "2026-11-02T10:20:24.021Z"
+   }
+  },
+  "walker": {
+   "key": "walker",
+   "name": "Walker",
+   "names": [
+    "Walker"
+   ],
+   "firstSeenAt": "2026-11-02T15:27:48.689Z",
+   "lastSeenAt": "2026-11-02T15:27:48.689Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Walker is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-02T15:27:48.689Z"
+   }
+  },
+  "bey-sandrax commoner": {
+   "key": "bey-sandrax commoner",
+   "name": "Bey-Sandrax Commoner",
+   "names": [
+    "Bey-Sandrax Commoner"
+   ],
+   "firstSeenAt": "2026-11-03T01:30:24.454Z",
+   "lastSeenAt": "2026-11-11T14:54:31.264Z",
+   "rooms": {
+    "r4258": {
+     "area": "house",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:54:18.042Z"
+    },
+    "r4263": {
+     "area": "house",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:54:31.264Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 2,
+   "currency": 356,
+   "drops": {
+    "piwafwi": 2,
+    "steel longsword": 2
+   },
+   "dropNames": {
+    "piwafwi": "Piwafwi",
+    "steel longsword": "Steel longsword"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T14:54:27.497Z",
+     "expBefore": 103995,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-11T14:54:41.467Z",
+     "expBefore": 103997,
+     "gain": 2
+    }
+   ],
+   "gauge": {
+    "text": "Commoner is very poor in slash.\nYou are unfamiliar with Commoner's method of attack.",
+    "rank": 2,
+    "at": "2026-11-03T01:30:24.454Z"
+   }
+  },
+  "gem dealer": {
+   "key": "gem dealer",
+   "name": "Gem Dealer",
+   "names": [
+    "Gem Dealer"
+   ],
+   "firstSeenAt": "2026-11-05T06:44:21.631Z",
+   "lastSeenAt": "2026-11-05T06:44:21.631Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Gem dealer is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-11-05T06:44:21.631Z"
+   }
+  },
+  "hydra": {
+   "key": "hydra",
+   "name": "Hydra",
+   "names": [
+    "Hydra"
+   ],
+   "firstSeenAt": "2026-11-05T06:59:27.735Z",
+   "lastSeenAt": "2026-11-05T06:59:27.735Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Hydra's method of attack.",
+    "rank": null,
+    "at": "2026-11-05T06:59:27.735Z"
+   }
+  },
+  "small duck": {
+   "key": "small duck",
+   "name": "Small duck",
+   "names": [
+    "Small duck"
+   ],
+   "firstSeenAt": "2026-11-05T06:59:31.269Z",
+   "lastSeenAt": "2026-11-05T06:59:31.269Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Duck is poor in unarmed.",
+    "rank": 3,
+    "at": "2026-11-05T06:59:31.269Z"
+   }
+  },
+  "revaew the cook": {
+   "key": "revaew the cook",
+   "name": "Revaew the Cook",
+   "names": [
+    "Revaew the Cook"
+   ],
+   "firstSeenAt": "2026-11-05T06:59:52.941Z",
+   "lastSeenAt": "2026-11-05T06:59:52.941Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Revaew is okay in unarmed.",
+    "rank": null,
+    "at": "2026-11-05T06:59:52.941Z"
+   }
+  },
+  "dominic": {
+   "key": "dominic",
+   "name": "Dominic",
+   "names": [
+    "Dominic"
+   ],
+   "firstSeenAt": "2026-11-05T06:59:54.594Z",
+   "lastSeenAt": "2026-11-05T06:59:54.594Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Dominic is okay in unarmed.",
+    "rank": null,
+    "at": "2026-11-05T06:59:54.594Z"
+   }
+  },
+  "bruno": {
+   "key": "bruno",
+   "name": "Bruno",
+   "names": [
+    "Bruno"
+   ],
+   "firstSeenAt": "2026-11-05T06:59:55.388Z",
+   "lastSeenAt": "2026-11-05T06:59:55.388Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Bruno is poor in slash.\nBruno is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-11-05T06:59:55.388Z"
+   }
+  },
+  "trixie": {
+   "key": "trixie",
+   "name": "Trixie",
+   "names": [
+    "Trixie"
+   ],
+   "firstSeenAt": "2026-11-05T06:59:57.166Z",
+   "lastSeenAt": "2026-11-05T06:59:57.166Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Trixie is very poor in unarmed.",
+    "rank": 2,
+    "at": "2026-11-05T06:59:57.166Z"
+   }
+  },
+  "myconid king": {
+   "key": "myconid king",
+   "name": "Myconid King",
+   "names": [
+    "Myconid King"
+   ],
+   "firstSeenAt": "2026-11-05T17:33:47.527Z",
+   "lastSeenAt": "2026-11-13T20:44:22.189Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Myconid king is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-05T17:33:47.527Z"
+   },
+   "seenLoot": {
+    "diamond": "Diamond"
+   }
+  },
+  "svirfneblin illusionist": {
+   "key": "svirfneblin illusionist",
+   "name": "Svirfneblin Illusionist",
+   "names": [
+    "Svirfneblin Illusionist"
+   ],
+   "firstSeenAt": "2026-11-05T23:45:58.747Z",
+   "lastSeenAt": "2026-11-05T23:45:58.747Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "The illusionist is poor in pierce.\nThe illusionist is very poor in unarmed.\nThe illusionist's capability of evading attacks is very good.",
+    "rank": 7,
+    "at": "2026-11-05T23:45:58.747Z"
+   }
+  },
+  "waefus, duergar assassin": {
+   "key": "waefus, duergar assassin",
+   "name": "Waefus, Duergar Assassin",
+   "names": [
+    "Waefus, Duergar Assassin"
+   ],
+   "firstSeenAt": "2026-11-05T23:46:05.101Z",
+   "lastSeenAt": "2026-11-05T23:46:05.101Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Waefus is extremely poor in pierce.\nWaefus is perfect in pierce.\nWaefus is non-existent in unarmed.\nWaefus's capability of evading attacks is okay.",
+    "rank": 10,
+    "at": "2026-11-05T23:46:05.101Z"
+   }
+  },
+  "yedry nartulin": {
+   "key": "yedry nartulin",
+   "name": "Yedry Nartulin",
+   "names": [
+    "Yedry Nartulin"
+   ],
+   "firstSeenAt": "2026-11-06T02:39:44.176Z",
+   "lastSeenAt": "2026-11-06T02:39:44.176Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Yedry is fair in pierce.\nYedry is very poor in unarmed.",
+    "rank": 5,
+    "at": "2026-11-06T02:39:44.176Z"
+   }
+  },
+  "huge spider": {
+   "key": "huge spider",
+   "name": "Huge Spider",
+   "names": [
+    "Huge Spider"
+   ],
+   "firstSeenAt": "2026-11-06T02:39:47.020Z",
+   "lastSeenAt": "2026-11-06T02:39:47.020Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Spider is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-11-06T02:39:47.020Z"
+   }
+  },
+  "giant spider": {
+   "key": "giant spider",
+   "name": "Giant Spider",
+   "names": [
+    "Giant Spider"
+   ],
+   "firstSeenAt": "2026-11-06T02:40:24.787Z",
+   "lastSeenAt": "2026-11-06T02:40:24.787Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Spider is poor in unarmed.",
+    "rank": 3,
+    "at": "2026-11-06T02:40:24.787Z"
+   }
+  },
+  "highwayman": {
+   "key": "highwayman",
+   "name": "Highwayman",
+   "names": [
+    "Highwayman"
+   ],
+   "firstSeenAt": "2026-11-06T04:44:20.835Z",
+   "lastSeenAt": "2026-11-06T04:44:20.835Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Highwayman is poor in slash.\nYou are unfamiliar with Highwayman's method of attack.",
+    "rank": 3,
+    "at": "2026-11-06T04:44:20.835Z"
+   }
+  },
+  "vulture": {
+   "key": "vulture",
+   "name": "Vulture",
+   "names": [
+    "Vulture"
+   ],
+   "firstSeenAt": "2026-11-06T04:48:26.607Z",
+   "lastSeenAt": "2026-11-06T04:48:26.607Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Vulture's method of attack.",
+    "rank": null,
+    "at": "2026-11-06T04:48:26.607Z"
+   }
+  },
+  "lorax": {
+   "key": "lorax",
+   "name": "Lorax",
+   "names": [
+    "Lorax"
+   ],
+   "firstSeenAt": "2026-11-06T04:58:47.808Z",
+   "lastSeenAt": "2026-11-06T04:58:47.808Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Lorax is good in pierce.\nLorax is extremely good in pierce.\nLorax is almost non-existent in unarmed.\nLorax's capability of evading attacks is very poor.",
+    "rank": 8,
+    "at": "2026-11-06T04:58:47.808Z"
+   }
+  },
+  "spider": {
+   "key": "spider",
+   "name": "Spider",
+   "names": [
+    "Spider"
+   ],
+   "firstSeenAt": "2026-11-06T06:42:59.774Z",
+   "lastSeenAt": "2026-11-11T14:54:45.097Z",
+   "rooms": {
+    "r36": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:54:45.097Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Spider is poor in unarmed.",
+    "rank": 3,
+    "at": "2026-11-06T06:42:59.774Z"
+   }
+  },
+  "storekeeper": {
+   "key": "storekeeper",
+   "name": "Storekeeper",
+   "names": [
+    "Storekeeper"
+   ],
+   "firstSeenAt": "2026-11-10T05:39:37.269Z",
+   "lastSeenAt": "2026-11-10T05:39:37.269Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Storekeeper is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-10T05:39:37.269Z"
+   }
+  },
+  "arcath": {
+   "key": "arcath",
+   "name": "Arcath",
+   "names": [
+    "Arcath"
+   ],
+   "firstSeenAt": "2026-11-10T06:20:29.276Z",
+   "lastSeenAt": "2026-11-10T06:20:29.276Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Arcath is very good in unarmed.",
+    "rank": 7,
+    "at": "2026-11-10T06:20:29.276Z"
+   }
+  },
+  "phase spider": {
+   "key": "phase spider",
+   "name": "Phase Spider",
+   "names": [
+    "Phase Spider"
+   ],
+   "firstSeenAt": "2026-11-11T02:52:13.774Z",
+   "lastSeenAt": "2026-11-11T02:52:13.774Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Phase spider is poor in unarmed.",
+    "rank": 3,
+    "at": "2026-11-11T02:52:13.774Z"
+   }
+  },
+  "cave flyer": {
+   "key": "cave flyer",
+   "name": "Cave Flyer",
+   "names": [
+    "Cave Flyer"
+   ],
+   "firstSeenAt": "2026-11-11T03:20:44.027Z",
+   "lastSeenAt": "2026-11-11T03:20:44.027Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "You are unfamiliar with Cave flyer's method of attack.",
+    "rank": null,
+    "at": "2026-11-11T03:20:44.027Z"
+   }
+  },
+  "carrion crow": {
+   "key": "carrion crow",
+   "name": "Carrion crow",
+   "names": [
+    "Carrion crow"
+   ],
+   "firstSeenAt": "2026-11-11T06:56:54.864Z",
+   "lastSeenAt": "2026-11-11T06:56:54.864Z",
+   "rooms": {
+    "r8285": {
+     "area": "threshold",
+     "seen": 1,
+     "lastAt": "2026-11-11T06:56:54.864Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'carrion crow' here.",
+    "at": "2026-11-11T06:57:02.751Z"
+   }
+  },
+  "burly guard": {
+   "key": "burly guard",
+   "name": "Burly guard",
+   "names": [
+    "Burly guard"
+   ],
+   "firstSeenAt": "2026-11-11T06:57:40.407Z",
+   "lastSeenAt": "2026-11-11T06:57:40.407Z",
+   "rooms": {},
+   "moves": [
+    {
+     "at": "2026-11-11T06:57:40.407Z",
+     "roomId": "r1244",
+     "kind": "leave",
+     "dir": "w",
+     "otherRoomId": "r1259"
+    }
+   ],
+   "route": {
+    "r1244>r1259": 1
+   },
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": []
+  },
+  "arena": {
+   "key": "arena",
+   "name": "Arena",
+   "names": [
+    "Arena"
+   ],
+   "firstSeenAt": "2026-11-11T06:59:49.122Z",
+   "lastSeenAt": "2026-11-11T14:55:29.103Z",
+   "rooms": {
+    "r28": {
+     "seen": 4,
+     "lastAt": "2026-11-11T14:55:29.103Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "refusals": 2,
+   "unattackable": {
+    "reason": "That is not a living thing!",
+    "at": "2026-11-11T06:59:51.307Z"
+   }
+  },
+  "drow": {
+   "key": "drow",
+   "name": "Drow",
+   "names": [
+    "Drow"
+   ],
+   "firstSeenAt": "2026-11-11T14:52:53.537Z",
+   "lastSeenAt": "2026-11-13T20:44:53.663Z",
+   "rooms": {
+    "r36": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:52:53.537Z"
+    },
+    "r13": {
+     "area": "nal-shaddar",
+     "seen": 3,
+     "lastAt": "2026-11-11T14:54:44.706Z"
+    },
+    "r35": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:19.771Z"
+    },
+    "r28": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:20.042Z"
+    },
+    "r34": {
+     "area": "nal-shaddar",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:21.078Z"
+    },
+    "r79": {
+     "area": "nal-shaddar",
+     "seen": 2,
+     "lastAt": "2026-11-11T14:55:41.655Z"
+    },
+    "r127": {
+     "area": "underdark",
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:43.535Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drow is okay in blunt.\nYou are unfamiliar with Drow's method of attack.",
+    "rank": null,
+    "at": "2026-11-11T14:53:58.420Z"
+   },
+   "refusals": 2,
+   "unattackable": {
+    "reason": "There is no 'drow' here.",
+    "at": "2026-11-11T14:54:10.797Z"
+   },
+   "drakaanMin": 12,
+   "drakaanMax": 116,
+   "seenLoot": {
+    "iron broadsword": "Iron Broadsword",
+    "light piwafwi": "Light Piwafwi",
+    "clerical robes": "Clerical Robes",
+    "mace": "Mace",
+    "steel longsword": "Steel longsword"
+   }
+  },
+  "nalfene": {
+   "key": "nalfene",
+   "name": "Nalfene",
+   "names": [
+    "Nalfene"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:31.268Z",
+   "lastSeenAt": "2026-11-11T14:55:41.199Z",
+   "rooms": {
+    "r3761": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:41.199Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Nalfene is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-11T14:55:31.268Z"
+   }
+  },
+  "therragoe": {
+   "key": "therragoe",
+   "name": "Therragoe",
+   "names": [
+    "Therragoe"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:31.465Z",
+   "lastSeenAt": "2026-11-11T14:55:41.003Z",
+   "rooms": {
+    "r3762": {
+     "seen": 2,
+     "lastAt": "2026-11-11T14:55:41.003Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Therragoe is very poor in unarmed.",
+    "rank": 2,
+    "at": "2026-11-11T14:55:32.235Z"
+   }
+  },
+  "rizzen": {
+   "key": "rizzen",
+   "name": "Rizzen",
+   "names": [
+    "Rizzen"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:32.438Z",
+   "lastSeenAt": "2026-11-11T14:55:40.807Z",
+   "rooms": {
+    "r3763": {
+     "seen": 2,
+     "lastAt": "2026-11-11T14:55:40.807Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Rizzen is very poor in unarmed.",
+    "rank": 2,
+    "at": "2026-11-11T14:55:33.219Z"
+   }
+  },
+  "jursfene": {
+   "key": "jursfene",
+   "name": "Jursfene",
+   "names": [
+    "Jursfene"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:33.420Z",
+   "lastSeenAt": "2026-11-11T14:55:40.612Z",
+   "rooms": {
+    "r3764": {
+     "seen": 3,
+     "lastAt": "2026-11-11T14:55:40.612Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Jursfene is fair in unarmed.",
+    "rank": 5,
+    "at": "2026-11-11T14:55:34.285Z"
+   }
+  },
+  "sorcere student": {
+   "key": "sorcere student",
+   "name": "Sorcere Student",
+   "names": [
+    "Sorcere Student"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:34.489Z",
+   "lastSeenAt": "2026-11-11T14:55:37.615Z",
+   "rooms": {
+    "r3765": {
+     "seen": 2,
+     "lastAt": "2026-11-11T14:55:37.615Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Sorcere student is very poor in pierce.\nYou are unfamiliar with Sorcere student's method of attack.",
+    "rank": 2,
+    "at": "2026-11-11T14:55:35.263Z"
+   }
+  },
+  "gygaxe": {
+   "key": "gygaxe",
+   "name": "Gygaxe",
+   "names": [
+    "Gygaxe"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:35.463Z",
+   "lastSeenAt": "2026-11-11T14:55:37.420Z",
+   "rooms": {
+    "r3767": {
+     "seen": 2,
+     "lastAt": "2026-11-11T14:55:37.420Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Gygaxe is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-11T14:55:36.239Z"
+   }
+  },
+  "drevliy": {
+   "key": "drevliy",
+   "name": "Drevliy",
+   "names": [
+    "Drevliy"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:36.444Z",
+   "lastSeenAt": "2026-11-11T14:55:36.444Z",
+   "rooms": {
+    "r3768": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:36.444Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Drevliy is perfect in unarmed.",
+    "rank": 10,
+    "at": "2026-11-11T14:55:37.219Z"
+   }
+  },
+  "stone golem": {
+   "key": "stone golem",
+   "name": "Stone Golem",
+   "names": [
+    "Stone Golem"
+   ],
+   "firstSeenAt": "2026-11-11T14:55:38.023Z",
+   "lastSeenAt": "2026-11-11T14:55:38.023Z",
+   "rooms": {
+    "r3766": {
+     "seen": 1,
+     "lastAt": "2026-11-11T14:55:38.023Z"
+    }
+   },
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "gauge": {
+    "text": "Golem is extremely poor in unarmed.",
+    "rank": 1,
+    "at": "2026-11-11T14:55:38.794Z"
+   }
+  },
+  "huge badger": {
+   "key": "huge badger",
+   "name": "huge badger",
+   "names": [
+    "huge badger"
+   ],
+   "firstSeenAt": "2026-11-11T22:21:12.450Z",
+   "lastSeenAt": "2026-11-11T22:21:12.450Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 8,
+   "currency": 0,
+   "drops": {
+    "black badger fur": 1
+   },
+   "dropNames": {
+    "black badger fur": "Black Badger Fur"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T22:21:12.450Z",
+     "expBefore": 105522,
+     "gain": 84
+    },
+    {
+     "at": "2026-11-11T23:27:27.986Z",
+     "expBefore": 106318,
+     "gain": 86
+    },
+    {
+     "at": "2026-11-12T00:04:34.411Z",
+     "expBefore": 106842,
+     "gain": 74
+    },
+    {
+     "at": "2026-11-12T00:26:44.005Z",
+     "expBefore": 107082,
+     "gain": 87
+    },
+    {
+     "at": "2026-11-12T01:10:56.278Z",
+     "expBefore": 107679,
+     "gain": 83
+    },
+    {
+     "at": "2026-11-12T01:56:10.748Z",
+     "expBefore": 108301,
+     "gain": 78
+    },
+    {
+     "at": "2026-11-12T02:56:45.046Z",
+     "expBefore": 109386,
+     "gain": 85
+    },
+    {
+     "at": "2026-11-12T07:03:55.779Z",
+     "expBefore": 110166,
+     "gain": 84
+    }
+   ]
+  },
+  "white dragonoid": {
+   "key": "white dragonoid",
+   "name": "white dragonoid",
+   "names": [
+    "white dragonoid"
+   ],
+   "firstSeenAt": "2026-11-11T22:27:52.407Z",
+   "lastSeenAt": "2026-11-11T22:27:52.407Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 11,
+   "currency": 0,
+   "drops": {
+    "white dragonoid scale": 9
+   },
+   "dropNames": {
+    "white dragonoid scale": "White Dragonoid scale"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T22:27:52.407Z",
+     "expBefore": 105606,
+     "gain": 32
+    },
+    {
+     "at": "2026-11-11T22:29:11.635Z",
+     "expBefore": 105638,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-11T22:30:58.314Z",
+     "expBefore": 105687,
+     "gain": 29
+    },
+    {
+     "at": "2026-11-11T22:38:21.635Z",
+     "expBefore": 105809,
+     "gain": 27
+    },
+    {
+     "at": "2026-11-11T23:09:39.622Z",
+     "expBefore": 106219,
+     "gain": 33
+    },
+    {
+     "at": "2026-11-12T01:07:10.126Z",
+     "expBefore": 107631,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-12T02:19:22.710Z",
+     "expBefore": 108642,
+     "gain": 30
+    },
+    {
+     "at": "2026-11-12T02:22:38.426Z",
+     "expBefore": 108721,
+     "gain": 27
+    },
+    {
+     "at": "2026-11-12T02:30:04.099Z",
+     "expBefore": 108843,
+     "gain": 25
+    },
+    {
+     "at": "2026-11-12T02:32:20.658Z",
+     "expBefore": 108868,
+     "gain": 19
+    },
+    {
+     "at": "2026-11-12T06:34:45.561Z",
+     "expBefore": 109960,
+     "gain": 33
+    }
+   ]
+  },
+  "blue dragonoid": {
+   "key": "blue dragonoid",
+   "name": "blue dragonoid",
+   "names": [
+    "blue dragonoid"
+   ],
+   "firstSeenAt": "2026-11-11T22:31:51.992Z",
+   "lastSeenAt": "2026-11-11T22:31:51.992Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 17,
+   "currency": 0,
+   "drops": {
+    "blue dragonoid scale": 16
+   },
+   "dropNames": {
+    "blue dragonoid scale": "Blue Dragonoid scale"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T22:31:51.992Z",
+     "expBefore": 105716,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-11T22:37:32.459Z",
+     "expBefore": 105788,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-12T00:59:53.757Z",
+     "expBefore": 107508,
+     "gain": 31
+    },
+    {
+     "at": "2026-11-12T01:03:22.020Z",
+     "expBefore": 107570,
+     "gain": 34
+    },
+    {
+     "at": "2026-11-12T01:24:29.126Z",
+     "expBefore": 107912,
+     "gain": 27
+    },
+    {
+     "at": "2026-11-12T02:21:46.523Z",
+     "expBefore": 108693,
+     "gain": 28
+    },
+    {
+     "at": "2026-11-12T02:24:48.897Z",
+     "expBefore": 108748,
+     "gain": 30
+    },
+    {
+     "at": "2026-11-12T02:37:25.373Z",
+     "expBefore": 108932,
+     "gain": 30
+    },
+    {
+     "at": "2026-11-12T02:41:04.252Z",
+     "expBefore": 109023,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-12T02:42:43.154Z",
+     "expBefore": 109044,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-12T06:36:36.062Z",
+     "expBefore": 109993,
+     "gain": 33
+    },
+    {
+     "at": "2026-11-12T07:28:55.583Z",
+     "expBefore": 110440,
+     "gain": 19
+    },
+    {
+     "at": "2026-11-12T07:30:08.465Z",
+     "expBefore": 110459,
+     "gain": 28
+    },
+    {
+     "at": "2026-11-12T07:30:29.714Z",
+     "expBefore": 110487,
+     "gain": 31
+    },
+    {
+     "at": "2026-11-12T07:33:01.775Z",
+     "expBefore": 110552,
+     "gain": 24
+    },
+    {
+     "at": "2026-11-12T07:35:04.764Z",
+     "expBefore": 110576,
+     "gain": 25
+    },
+    {
+     "at": "2026-11-12T07:37:12.172Z",
+     "expBefore": 110601,
+     "gain": 27
+    }
+   ]
+  },
+  "red dragonoid": {
+   "key": "red dragonoid",
+   "name": "red dragonoid",
+   "names": [
+    "red dragonoid"
+   ],
+   "firstSeenAt": "2026-11-11T22:51:41.069Z",
+   "lastSeenAt": "2026-11-11T22:51:41.069Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 13,
+   "currency": 0,
+   "drops": {
+    "red dragonoid scale": 11
+   },
+   "dropNames": {
+    "red dragonoid scale": "Red Dragonoid scale"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T22:51:41.069Z",
+     "expBefore": 105883,
+     "gain": 29
+    },
+    {
+     "at": "2026-11-11T22:52:27.849Z",
+     "expBefore": 105912,
+     "gain": 19
+    },
+    {
+     "at": "2026-11-11T23:04:50.534Z",
+     "expBefore": 106017,
+     "gain": 26
+    },
+    {
+     "at": "2026-11-11T23:11:37.781Z",
+     "expBefore": 106252,
+     "gain": 33
+    },
+    {
+     "at": "2026-11-12T01:01:36.371Z",
+     "expBefore": 107539,
+     "gain": 31
+    },
+    {
+     "at": "2026-11-12T01:25:52.621Z",
+     "expBefore": 107939,
+     "gain": 32
+    },
+    {
+     "at": "2026-11-12T02:20:48.767Z",
+     "expBefore": 108672,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-12T02:26:07.026Z",
+     "expBefore": 108778,
+     "gain": 32
+    },
+    {
+     "at": "2026-11-12T02:28:46.319Z",
+     "expBefore": 108810,
+     "gain": 33
+    },
+    {
+     "at": "2026-11-12T02:34:24.589Z",
+     "expBefore": 108887,
+     "gain": 21
+    },
+    {
+     "at": "2026-11-12T02:40:00.680Z",
+     "expBefore": 108994,
+     "gain": 29
+    },
+    {
+     "at": "2026-11-12T06:33:45.825Z",
+     "expBefore": 109941,
+     "gain": 19
+    },
+    {
+     "at": "2026-11-12T07:31:44.693Z",
+     "expBefore": 110518,
+     "gain": 34
+    }
+   ]
+  },
+  "city guard": {
+   "key": "city guard",
+   "name": "city guard",
+   "names": [
+    "city guard"
+   ],
+   "firstSeenAt": "2026-11-11T23:14:57.591Z",
+   "lastSeenAt": "2026-11-11T23:14:57.591Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 29,
+   "currency": 272,
+   "drops": {
+    "dwarven platemail": 23,
+    "steel-axe": 18
+   },
+   "dropNames": {
+    "dwarven platemail": "Dwarven Platemail",
+    "steel-axe": "Steel-Axe"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T23:14:57.591Z",
+     "expBefore": 106285,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-11T23:15:28.758Z",
+     "expBefore": 106289,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:33:00.621Z",
+     "expBefore": 107280,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:33:21.029Z",
+     "expBefore": 107284,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:36:47.672Z",
+     "expBefore": 107299,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:37:06.321Z",
+     "expBefore": 107303,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:37:22.115Z",
+     "expBefore": 107307,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:43:37.325Z",
+     "expBefore": 107344,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:54:01.413Z",
+     "expBefore": 107433,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T01:17:51.452Z",
+     "expBefore": 107849,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T01:18:08.370Z",
+     "expBefore": 107853,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T01:18:35.949Z",
+     "expBefore": 107857,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:02:41.859Z",
+     "expBefore": 108473,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:03:00.571Z",
+     "expBefore": 108477,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:03:25.432Z",
+     "expBefore": 108481,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:08:25.482Z",
+     "expBefore": 108552,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:09:07.382Z",
+     "expBefore": 108556,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:09:16.256Z",
+     "expBefore": 108560,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:18:28.250Z",
+     "expBefore": 109769,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:21:00.083Z",
+     "expBefore": 109802,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:25:41.316Z",
+     "expBefore": 109832,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:43:34.443Z",
+     "expBefore": 110063,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:43:51.774Z",
+     "expBefore": 110067,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:46:59.556Z",
+     "expBefore": 110093,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:48:14.411Z",
+     "expBefore": 110097,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:10:11.129Z",
+     "expBefore": 110280,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:10:50.217Z",
+     "expBefore": 110284,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:10:56.323Z",
+     "expBefore": 110288,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:12:41.062Z",
+     "expBefore": 110292,
+     "gain": 4
+    }
+   ]
+  },
+  "vampire": {
+   "key": "vampire",
+   "name": "vampire",
+   "names": [
+    "vampire"
+   ],
+   "firstSeenAt": "2026-11-11T23:27:57.782Z",
+   "lastSeenAt": "2026-11-11T23:27:57.782Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 4,
+   "currency": 0,
+   "drops": {
+    "vampiric sword": 2
+   },
+   "dropNames": {
+    "vampiric sword": "Vampiric sword"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T23:27:57.782Z",
+     "expBefore": 106404,
+     "gain": 97
+    },
+    {
+     "at": "2026-11-11T23:59:46.126Z",
+     "expBefore": 106723,
+     "gain": 100
+    },
+    {
+     "at": "2026-11-12T01:17:30.201Z",
+     "expBefore": 107762,
+     "gain": 87
+    },
+    {
+     "at": "2026-11-12T03:02:10.682Z",
+     "expBefore": 109471,
+     "gain": 99
+    }
+   ]
+  },
+  "dojo guard": {
+   "key": "dojo guard",
+   "name": "dojo guard",
+   "names": [
+    "dojo guard"
+   ],
+   "firstSeenAt": "2026-11-11T23:28:59.801Z",
+   "lastSeenAt": "2026-11-11T23:28:59.801Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 25,
+   "currency": 755,
+   "drops": {
+    "dark katana": 18
+   },
+   "dropNames": {
+    "dark katana": "Dark katana"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T23:28:59.801Z",
+     "expBefore": 106501,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-11T23:33:48.489Z",
+     "expBefore": 106537,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:01:32.332Z",
+     "expBefore": 106823,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:01:51.345Z",
+     "expBefore": 106827,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:31:50.824Z",
+     "expBefore": 107265,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:32:06.404Z",
+     "expBefore": 107269,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:45:11.957Z",
+     "expBefore": 107348,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:45:20.000Z",
+     "expBefore": 107352,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:51:32.957Z",
+     "expBefore": 107414,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:51:40.292Z",
+     "expBefore": 107418,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T01:21:06.789Z",
+     "expBefore": 107890,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T01:21:17.006Z",
+     "expBefore": 107894,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:04:35.336Z",
+     "expBefore": 108485,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:04:48.448Z",
+     "expBefore": 108489,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:07:33.976Z",
+     "expBefore": 108544,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:22:17.815Z",
+     "expBefore": 109806,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:27:48.202Z",
+     "expBefore": 109847,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:28:00.019Z",
+     "expBefore": 109851,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:50:11.997Z",
+     "expBefore": 110101,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:50:23.684Z",
+     "expBefore": 110105,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:52:15.596Z",
+     "expBefore": 110123,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:16:26.207Z",
+     "expBefore": 110318,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:16:36.267Z",
+     "expBefore": 110322,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:20:58.688Z",
+     "expBefore": 110340,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:21:12.751Z",
+     "expBefore": 110344,
+     "gain": 4
+    }
+   ]
+  },
+  "samurai trainer": {
+   "key": "samurai trainer",
+   "name": "samurai trainer",
+   "names": [
+    "samurai trainer"
+   ],
+   "firstSeenAt": "2026-11-11T23:30:01.881Z",
+   "lastSeenAt": "2026-11-11T23:30:01.881Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 38,
+   "currency": 3743,
+   "drops": {
+    "thin katana": 25,
+    "glowing katana": 4,
+    "dark katana": 2
+   },
+   "dropNames": {
+    "thin katana": "Thin katana",
+    "glowing katana": "Glowing Katana",
+    "dark katana": "Dark katana"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T23:30:01.881Z",
+     "expBefore": 106509,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-11T23:36:11.476Z",
+     "expBefore": 106545,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-11T23:36:21.534Z",
+     "expBefore": 106552,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:02:45.844Z",
+     "expBefore": 106835,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:32:24.372Z",
+     "expBefore": 107273,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:35:58.748Z",
+     "expBefore": 107292,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:39:46.572Z",
+     "expBefore": 107311,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:43:04.765Z",
+     "expBefore": 107337,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:45:42.828Z",
+     "expBefore": 107356,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:45:59.132Z",
+     "expBefore": 107363,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T00:52:20.399Z",
+     "expBefore": 107426,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T01:19:40.150Z",
+     "expBefore": 107861,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T01:20:38.349Z",
+     "expBefore": 107883,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T01:21:50.696Z",
+     "expBefore": 107898,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T01:21:56.033Z",
+     "expBefore": 107905,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:05:08.578Z",
+     "expBefore": 108493,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:05:44.602Z",
+     "expBefore": 108504,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:06:10.953Z",
+     "expBefore": 108515,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:06:44.491Z",
+     "expBefore": 108526,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:10:38.632Z",
+     "expBefore": 108564,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:12:36.821Z",
+     "expBefore": 108571,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:12:44.308Z",
+     "expBefore": 108578,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:19:31.257Z",
+     "expBefore": 109773,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:19:56.138Z",
+     "expBefore": 109784,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:20:19.891Z",
+     "expBefore": 109795,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:24:28.022Z",
+     "expBefore": 109814,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:25:04.220Z",
+     "expBefore": 109825,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:28:28.255Z",
+     "expBefore": 109855,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:45:54.672Z",
+     "expBefore": 110075,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:46:17.198Z",
+     "expBefore": 110086,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T06:50:43.096Z",
+     "expBefore": 110109,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T07:05:18.207Z",
+     "expBefore": 110250,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T07:05:51.509Z",
+     "expBefore": 110261,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T07:18:40.389Z",
+     "expBefore": 110333,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T07:23:04.662Z",
+     "expBefore": 110348,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T07:23:39.833Z",
+     "expBefore": 110359,
+     "gain": 7
+    }
+   ]
+  },
+  "samurai youth": {
+   "key": "samurai youth",
+   "name": "samurai youth",
+   "names": [
+    "samurai youth"
+   ],
+   "firstSeenAt": "2026-11-11T23:30:17.811Z",
+   "lastSeenAt": "2026-11-11T23:30:17.811Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 30,
+   "currency": 367,
+   "drops": {
+    "thin katana": 3
+   },
+   "dropNames": {
+    "thin katana": "Thin katana"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T23:30:17.811Z",
+     "expBefore": 106516,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-11T23:30:53.463Z",
+     "expBefore": 106523,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-11T23:32:51.010Z",
+     "expBefore": 106530,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-11T23:37:20.322Z",
+     "expBefore": 106559,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-11T23:37:47.757Z",
+     "expBefore": 106567,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:40:20.394Z",
+     "expBefore": 107322,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T00:42:59.762Z",
+     "expBefore": 107333,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T01:20:04.828Z",
+     "expBefore": 107868,
+     "gain": 11
+    },
+    {
+     "at": "2026-11-12T02:06:24.357Z",
+     "expBefore": 108522,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T02:07:09.068Z",
+     "expBefore": 108533,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T02:07:17.550Z",
+     "expBefore": 108540,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:20:05.358Z",
+     "expBefore": 109791,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T06:27:23.851Z",
+     "expBefore": 109836,
+     "gain": 11
+    },
+    {
+     "at": "2026-11-12T07:14:01.141Z",
+     "expBefore": 110296,
+     "gain": 4
+    },
+    {
+     "at": "2026-11-12T07:16:00.947Z",
+     "expBefore": 110307,
+     "gain": 7
+    },
+    {
+     "at": "2026-11-12T07:16:09.817Z",
+     "expBefore": 110314,
+     "gain": 4
+    }
+   ]
+  },
+  "captain barbaka": {
+   "key": "captain barbaka",
+   "name": "captain barbakas",
+   "names": [
+    "captain barbakas"
+   ],
+   "firstSeenAt": "2026-11-11T23:40:41.782Z",
+   "lastSeenAt": "2026-11-11T23:40:41.782Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 7,
+   "currency": 0,
+   "drops": {
+    "lorasin leather armor": 7,
+    "treasure chamber key": 1,
+    "barbakas blade": 1
+   },
+   "dropNames": {
+    "lorasin leather armor": "Lorasin Leather Armor",
+    "treasure chamber key": "Treasure chamber key",
+    "barbakas blade": "Barbakas Blade"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-11T23:40:41.782Z",
+     "expBefore": 106571,
+     "gain": 19
+    },
+    {
+     "at": "2026-11-12T00:12:52.119Z",
+     "expBefore": 107053,
+     "gain": 29
+    },
+    {
+     "at": "2026-11-12T01:09:41.494Z",
+     "expBefore": 107652,
+     "gain": 27
+    },
+    {
+     "at": "2026-11-12T01:54:48.429Z",
+     "expBefore": 108264,
+     "gain": 37
+    },
+    {
+     "at": "2026-11-12T02:55:45.303Z",
+     "expBefore": 109355,
+     "gain": 31
+    },
+    {
+     "at": "2026-11-12T06:41:51.667Z",
+     "expBefore": 110026,
+     "gain": 37
+    },
+    {
+     "at": "2026-11-12T07:03:27.521Z",
+     "expBefore": 110131,
+     "gain": 35
+    }
+   ]
+  },
+  "brenoak grenith": {
+   "key": "brenoak grenith",
+   "name": "brenoak grenith",
+   "names": [
+    "brenoak grenith"
+   ],
+   "firstSeenAt": "2026-11-12T00:12:07.696Z",
+   "lastSeenAt": "2026-11-12T00:12:07.696Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 3,
+   "currency": 694,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [
+    {
+     "at": "2026-11-12T00:12:07.696Z",
+     "expBefore": 106916,
+     "gain": 137
+    },
+    {
+     "at": "2026-11-12T02:45:26.382Z",
+     "expBefore": 109065,
+     "gain": 131
+    },
+    {
+     "at": "2026-11-12T02:54:53.301Z",
+     "expBefore": 109210,
+     "gain": 145
+    }
+   ]
+  },
+  "master guard": {
+   "key": "master guard",
+   "name": "master guard",
+   "names": [
+    "master guard"
+   ],
+   "firstSeenAt": "2026-11-12T00:56:47.187Z",
+   "lastSeenAt": "2026-11-12T00:56:47.187Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 7,
+   "currency": 1296,
+   "drops": {
+    "thin katana": 4,
+    "dark katana": 1
+   },
+   "dropNames": {
+    "thin katana": "Thin katana",
+    "dark katana": "Dark katana"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-12T00:56:47.187Z",
+     "expBefore": 107437,
+     "gain": 37
+    },
+    {
+     "at": "2026-11-12T02:15:42.922Z",
+     "expBefore": 108585,
+     "gain": 23
+    },
+    {
+     "at": "2026-11-12T02:18:34.954Z",
+     "expBefore": 108608,
+     "gain": 34
+    },
+    {
+     "at": "2026-11-12T06:32:19.081Z",
+     "expBefore": 109869,
+     "gain": 31
+    },
+    {
+     "at": "2026-11-12T06:32:50.775Z",
+     "expBefore": 109900,
+     "gain": 41
+    },
+    {
+     "at": "2026-11-12T07:24:02.305Z",
+     "expBefore": 110366,
+     "gain": 41
+    }
+   ]
+  },
+  "crystal dragonoid": {
+   "key": "crystal dragonoid",
+   "name": "crystal dragonoid",
+   "names": [
+    "crystal dragonoid"
+   ],
+   "firstSeenAt": "2026-11-12T02:36:06.277Z",
+   "lastSeenAt": "2026-11-12T02:36:06.277Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 1,
+   "currency": 0,
+   "drops": {
+    "crystal dragonoid scale": 1
+   },
+   "dropNames": {
+    "crystal dragonoid scale": "Crystal Dragonoid scale"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-12T02:36:06.277Z",
+     "expBefore": 108908,
+     "gain": 24
+    }
+   ]
+  },
+  "badger": {
+   "key": "badger",
+   "name": "badger",
+   "names": [
+    "badger"
+   ],
+   "firstSeenAt": "2026-11-12T07:08:14.704Z",
+   "lastSeenAt": "2026-11-12T07:08:14.704Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 13,
+   "currency": 0,
+   "drops": {
+    "badger fur": 13
+   },
+   "dropNames": {
+    "badger fur": "Badger fur"
+   },
+   "expSamples": [
+    {
+     "at": "2026-11-12T07:08:14.704Z",
+     "expBefore": 110268,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:08:29.749Z",
+     "expBefore": 110270,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:08:44.234Z",
+     "expBefore": 110272,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:09:34.932Z",
+     "expBefore": 110278,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:39:17.796Z",
+     "expBefore": 110657,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:39:33.771Z",
+     "expBefore": 110659,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:39:44.587Z",
+     "expBefore": 110661,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:39:54.348Z",
+     "expBefore": 110663,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:40:06.786Z",
+     "expBefore": 110665,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:40:20.942Z",
+     "expBefore": 110667,
+     "gain": 2
+    },
+    {
+     "at": "2026-11-12T07:41:50.007Z",
+     "expBefore": 110669,
+     "gain": 2
+    }
+   ]
+  },
+  "dwarf": {
+   "key": "dwarf",
+   "name": "Dwarf",
+   "names": [
+    "Dwarf"
+   ],
+   "firstSeenAt": "2026-11-13T20:21:09.308Z",
+   "lastSeenAt": "2026-11-13T20:31:49.969Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "iron shod boots": "Iron shod boots",
+    "pick-axe": "Pick-axe",
+    "metal helmet": "Metal helmet"
+   },
+   "drakaanMin": 34,
+   "drakaanMax": 64
+  },
+  "svirfneblin": {
+   "key": "svirfneblin",
+   "name": "Svirfneblin",
+   "names": [
+    "Svirfneblin"
+   ],
+   "firstSeenAt": "2026-11-13T20:21:09.618Z",
+   "lastSeenAt": "2026-11-13T20:46:46.039Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "stubby pick-axe": "Stubby Pick-Axe",
+    "miner's gloves": "Miner's gloves",
+    "pick-axe": "Pick-axe",
+    "stone boots": "Stone boots",
+    "bag": "Bag"
+   },
+   "drakaanMin": 1,
+   "drakaanMax": 41
+  },
+  "telen": {
+   "key": "telen",
+   "name": "Telen",
+   "names": [
+    "Telen"
+   ],
+   "firstSeenAt": "2026-11-13T20:21:10.977Z",
+   "lastSeenAt": "2026-11-13T20:46:27.160Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "broadsword": "Broadsword"
+   },
+   "drakaanMin": 291,
+   "drakaanMax": 309
+  },
+  "commoner": {
+   "key": "commoner",
+   "name": "Commoner",
+   "names": [
+    "Commoner"
+   ],
+   "firstSeenAt": "2026-11-13T20:21:11.275Z",
+   "lastSeenAt": "2026-11-13T20:34:40.298Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "piwafwi": "Piwafwi",
+    "steel longsword": "Steel longsword"
+   },
+   "drakaanMin": 95,
+   "drakaanMax": 435
+  },
+  "gorthe": {
+   "key": "gorthe",
+   "name": "Gorthe",
+   "names": [
+    "Gorthe"
+   ],
+   "firstSeenAt": "2026-11-13T20:22:41.114Z",
+   "lastSeenAt": "2026-11-13T20:52:40.757Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "drakaanMin": 323,
+   "drakaanMax": 368
+  },
+  "guard": {
+   "key": "guard",
+   "name": "Guard",
+   "names": [
+    "Guard"
+   ],
+   "firstSeenAt": "2026-11-13T20:24:20.365Z",
+   "lastSeenAt": "2026-11-13T20:24:20.366Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "chainmail shirt": "Chainmail shirt",
+    "battle axe": "Battle axe"
+   },
+   "drakaanMin": 12,
+   "drakaanMax": 43
+  },
+  "balgar": {
+   "key": "balgar",
+   "name": "Balgar",
+   "names": [
+    "Balgar"
+   ],
+   "firstSeenAt": "2026-11-13T20:24:54.562Z",
+   "lastSeenAt": "2026-11-13T20:57:49.240Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "battle axe": "Battle axe"
+   },
+   "drakaanMin": 257,
+   "drakaanMax": 372
+  },
+  "faerny": {
+   "key": "faerny",
+   "name": "Faerny",
+   "names": [
+    "Faerny"
+   ],
+   "firstSeenAt": "2026-11-13T20:27:19.148Z",
+   "lastSeenAt": "2026-11-13T20:45:50.611Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "drakaanMin": 16,
+   "drakaanMax": 53,
+   "seenLoot": {
+    "tiny pick-axe": "Tiny pick-axe"
+   }
+  },
+  "grand faerny": {
+   "key": "grand faerny",
+   "name": "Grand faerny",
+   "names": [
+    "Grand faerny"
+   ],
+   "firstSeenAt": "2026-11-13T21:00:18.452Z",
+   "lastSeenAt": "2026-11-13T21:00:18.453Z",
+   "rooms": {},
+   "moves": [],
+   "route": {},
+   "kills": 0,
+   "currency": 0,
+   "drops": {},
+   "dropNames": {},
+   "expSamples": [],
+   "seenLoot": {
+    "earrings of gloom": "Earrings of Gloom"
+   },
+   "drakaanMin": 269,
+   "drakaanMax": 269
+  }
+ },
+ "items": {
+  "gleaming longsword": {
+   "key": "gleaming longsword",
+   "name": "Gleaming Longsword",
+   "firstSeenAt": "2026-11-11T14:52:51.343Z",
+   "droppedBy": {
+    "loreman": 1
+   },
+   "judge": {
+    "text": "You find that the Gleaming Longsword is an exceptionally excellent weapon.",
+    "verdict": "exceptionally excellent",
+    "kind": "weapon",
+    "at": "2026-11-11T14:52:51.343Z"
+   }
+  },
+  "fine piwafwi": {
+   "key": "fine piwafwi",
+   "name": "Fine Piwafwi",
+   "firstSeenAt": "2026-11-11T14:52:51.534Z",
+   "droppedBy": {
+    "loreman": 1
+   },
+   "judge": {
+    "text": "You find that Fine Piwafwi is a very bad piece of armor.",
+    "verdict": "very bad",
+    "kind": "armor",
+    "at": "2026-11-11T14:52:51.534Z"
+   }
+  },
+  "gold chain": {
+   "key": "gold chain",
+   "name": "Gold Chain",
+   "firstSeenAt": "2026-11-11T14:53:57.129Z",
+   "droppedBy": {
+    "duergar merchant": 1
+   },
+   "judge": {
+    "text": "You find that Gold Chain is an extremely bad piece of armor.",
+    "verdict": "extremely bad",
+    "kind": "armor",
+    "at": "2026-11-11T14:53:57.129Z"
+   }
+  },
+  "piwafwi": {
+   "key": "piwafwi",
+   "name": "Piwafwi",
+   "firstSeenAt": "2026-11-11T14:54:27.112Z",
+   "droppedBy": {
+    "bey-sandrax commoner": 2
+   },
+   "judge": {
+    "text": "You find that Piwafwi is a bad piece of armor.",
+    "verdict": "bad",
+    "kind": "armor",
+    "at": "2026-11-11T14:54:27.112Z"
+   }
+  },
+  "steel longsword": {
+   "key": "steel longsword",
+   "name": "Steel longsword",
+   "firstSeenAt": "2026-11-11T14:54:27.302Z",
+   "droppedBy": {
+    "bey-sandrax commoner": 2
+   },
+   "judge": {
+    "text": "You find that the Steel longsword is a good weapon.",
+    "verdict": "good",
+    "kind": "weapon",
+    "at": "2026-11-11T14:54:27.302Z"
+   }
+  },
+  "white dragonoid scale": {
+   "key": "white dragonoid scale",
+   "name": "White Dragonoid scale",
+   "firstSeenAt": "2026-11-11T22:30:58.314Z",
+   "droppedBy": {
+    "white dragonoid": 9
+   },
+   "judge": {
+    "text": "You can only judge a weapon or a piece of armor or an arrow.",
+    "verdict": null,
+    "kind": null,
+    "at": "2026-11-11T22:30:58.519Z"
+   }
+  },
+  "blue dragonoid scale": {
+   "key": "blue dragonoid scale",
+   "name": "Blue Dragonoid scale",
+   "firstSeenAt": "2026-11-11T22:31:51.992Z",
+   "droppedBy": {
+    "blue dragonoid": 16
+   },
+   "judge": {
+    "text": "You can only judge a weapon or a piece of armor or an arrow.",
+    "verdict": null,
+    "kind": null,
+    "at": "2026-11-11T22:31:52.313Z"
+   }
+  },
+  "red dragonoid scale": {
+   "key": "red dragonoid scale",
+   "name": "Red Dragonoid scale",
+   "firstSeenAt": "2026-11-11T22:52:27.849Z",
+   "droppedBy": {
+    "red dragonoid": 11
+   },
+   "judge": {
+    "text": "You can only judge a weapon or a piece of armor or an arrow.",
+    "verdict": null,
+    "kind": null,
+    "at": "2026-11-11T22:52:28.038Z"
+   }
+  },
+  "dwarven platemail": {
+   "key": "dwarven platemail",
+   "name": "Dwarven Platemail",
+   "firstSeenAt": "2026-11-11T23:15:28.758Z",
+   "droppedBy": {
+    "city guard": 23
+   },
+   "judge": {
+    "text": "You find that Dwarven Platemail is an extremely good piece of armor.",
+    "verdict": "extremely good",
+    "kind": "armor",
+    "at": "2026-11-11T23:15:28.963Z"
+   }
+  },
+  "vampiric sword": {
+   "key": "vampiric sword",
+   "name": "Vampiric sword",
+   "firstSeenAt": "2026-11-11T23:27:57.782Z",
+   "droppedBy": {
+    "vampire": 2
+   },
+   "judge": {
+    "text": "You find that the Vampiric sword is an overly terrific weapon.",
+    "verdict": "overly terrific",
+    "kind": "weapon",
+    "at": "2026-11-11T23:27:57.989Z"
+   }
+  },
+  "thin katana": {
+   "key": "thin katana",
+   "name": "Thin katana",
+   "firstSeenAt": "2026-11-11T23:30:01.881Z",
+   "droppedBy": {
+    "samurai trainer": 25,
+    "samurai youth": 3,
+    "master guard": 4
+   },
+   "judge": {
+    "text": "You find that the Thin katana is an extremely good weapon.",
+    "verdict": "extremely good",
+    "kind": "weapon",
+    "at": "2026-11-11T23:30:02.076Z"
+   }
+  },
+  "dark katana": {
+   "key": "dark katana",
+   "name": "Dark katana",
+   "firstSeenAt": "2026-11-11T23:33:48.489Z",
+   "droppedBy": {
+    "dojo guard": 18,
+    "samurai trainer": 2,
+    "master guard": 1
+   },
+   "judge": {
+    "text": "You find that the Dark katana is an extremely good weapon.",
+    "verdict": "extremely good",
+    "kind": "weapon",
+    "at": "2026-11-12T00:01:51.544Z"
+   }
+  },
+  "lorasin leather armor": {
+   "key": "lorasin leather armor",
+   "name": "Lorasin Leather Armor",
+   "firstSeenAt": "2026-11-11T23:40:41.782Z",
+   "droppedBy": {
+    "captain barbaka": 7
+   },
+   "judge": {
+    "text": "You find that Lorasin Leather Armor is a very poor piece of armor.",
+    "verdict": "very poor",
+    "kind": "armor",
+    "at": "2026-11-11T23:40:41.976Z"
+   }
+  },
+  "black badger fur": {
+   "key": "black badger fur",
+   "name": "Black Badger Fur",
+   "firstSeenAt": "2026-11-12T00:04:34.411Z",
+   "droppedBy": {
+    "huge badger": 1
+   },
+   "judge": {
+    "text": "You find that Black Badger Fur is a bad piece of armor.",
+    "verdict": "bad",
+    "kind": "armor",
+    "at": "2026-11-12T00:04:34.610Z"
+   }
+  },
+  "steel-axe": {
+   "key": "steel-axe",
+   "name": "Steel-Axe",
+   "firstSeenAt": "2026-11-12T00:33:00.621Z",
+   "droppedBy": {
+    "city guard": 18
+   },
+   "judge": {
+    "text": "You find that the Steel-Axe is a good weapon.",
+    "verdict": "good",
+    "kind": "weapon",
+    "at": "2026-11-12T00:33:00.830Z"
+   }
+  },
+  "glowing katana": {
+   "key": "glowing katana",
+   "name": "Glowing Katana",
+   "firstSeenAt": "2026-11-12T00:45:59.132Z",
+   "droppedBy": {
+    "samurai trainer": 4
+   },
+   "judge": {
+    "text": "You find that the Glowing Katana is a very good weapon.",
+    "verdict": "very good",
+    "kind": "weapon",
+    "at": "2026-11-12T00:45:59.339Z"
+   }
+  },
+  "treasure chamber key": {
+   "key": "treasure chamber key",
+   "name": "Treasure chamber key",
+   "firstSeenAt": "2026-11-12T01:09:41.494Z",
+   "droppedBy": {
+    "captain barbaka": 1
+   },
+   "judge": {
+    "text": "You can only judge a weapon or a piece of armor or an arrow.",
+    "verdict": null,
+    "kind": null,
+    "at": "2026-11-12T01:09:41.700Z"
+   }
+  },
+  "barbakas blade": {
+   "key": "barbakas blade",
+   "name": "Barbakas Blade",
+   "firstSeenAt": "2026-11-12T01:54:48.429Z",
+   "droppedBy": {
+    "captain barbaka": 1
+   },
+   "judge": {
+    "text": "You find that the Barbakas Blade is an overly terrific weapon.",
+    "verdict": "overly terrific",
+    "kind": "weapon",
+    "at": "2026-11-12T01:54:48.636Z"
+   }
+  },
+  "crystal dragonoid scale": {
+   "key": "crystal dragonoid scale",
+   "name": "Crystal Dragonoid scale",
+   "firstSeenAt": "2026-11-12T02:36:06.277Z",
+   "droppedBy": {
+    "crystal dragonoid": 1
+   },
+   "judge": {
+    "text": "You can only judge a weapon or a piece of armor or an arrow.",
+    "verdict": null,
+    "kind": null,
+    "at": "2026-11-12T02:36:06.484Z"
+   }
+  },
+  "badger fur": {
+   "key": "badger fur",
+   "name": "Badger fur",
+   "firstSeenAt": "2026-11-12T07:08:14.704Z",
+   "droppedBy": {
+    "badger": 13
+   },
+   "judge": {
+    "text": "You find that Badger fur is a poor piece of armor.",
+    "verdict": "poor",
+    "kind": "armor",
+    "at": "2026-11-12T07:08:14.907Z"
+   }
+  },
+  "broom": {
+   "key": "broom",
+   "name": "Broom",
+   "firstSeenAt": "2026-11-13T20:21:08.956Z",
+   "droppedBy": {}
+  },
+  "rusty rapier": {
+   "key": "rusty rapier",
+   "name": "Rusty Rapier",
+   "firstSeenAt": "2026-11-13T20:21:08.960Z",
+   "droppedBy": {}
+  },
+  "light piwafwi": {
+   "key": "light piwafwi",
+   "name": "Light Piwafwi",
+   "firstSeenAt": "2026-11-13T20:21:08.960Z",
+   "droppedBy": {}
+  },
+  "iron shod boots": {
+   "key": "iron shod boots",
+   "name": "Iron shod boots",
+   "firstSeenAt": "2026-11-13T20:21:09.308Z",
+   "droppedBy": {}
+  },
+  "pick-axe": {
+   "key": "pick-axe",
+   "name": "Pick-axe",
+   "firstSeenAt": "2026-11-13T20:21:09.308Z",
+   "droppedBy": {}
+  },
+  "stubby pick-axe": {
+   "key": "stubby pick-axe",
+   "name": "Stubby Pick-Axe",
+   "firstSeenAt": "2026-11-13T20:21:09.618Z",
+   "droppedBy": {}
+  },
+  "miner's gloves": {
+   "key": "miner's gloves",
+   "name": "Miner's gloves",
+   "firstSeenAt": "2026-11-13T20:21:09.618Z",
+   "droppedBy": {}
+  },
+  "stone boots": {
+   "key": "stone boots",
+   "name": "Stone boots",
+   "firstSeenAt": "2026-11-13T20:21:10.026Z",
+   "droppedBy": {}
+  },
+  "broadsword": {
+   "key": "broadsword",
+   "name": "Broadsword",
+   "firstSeenAt": "2026-11-13T20:21:10.977Z",
+   "droppedBy": {}
+  },
+  "chainmail shirt": {
+   "key": "chainmail shirt",
+   "name": "Chainmail shirt",
+   "firstSeenAt": "2026-11-13T20:24:20.365Z",
+   "droppedBy": {}
+  },
+  "battle axe": {
+   "key": "battle axe",
+   "name": "Battle axe",
+   "firstSeenAt": "2026-11-13T20:24:20.365Z",
+   "droppedBy": {}
+  },
+  "mushroom": {
+   "key": "mushroom",
+   "name": "Mushroom",
+   "firstSeenAt": "2026-11-13T20:28:21.448Z",
+   "droppedBy": {}
+  },
+  "small amethyst": {
+   "key": "small amethyst",
+   "name": "Small Amethyst",
+   "firstSeenAt": "2026-11-13T20:29:05.366Z",
+   "droppedBy": {}
+  },
+  "tiny pick-axe": {
+   "key": "tiny pick-axe",
+   "name": "Tiny pick-axe",
+   "firstSeenAt": "2026-11-13T20:31:04.540Z",
+   "droppedBy": {}
+  },
+  "metal helmet": {
+   "key": "metal helmet",
+   "name": "Metal helmet",
+   "firstSeenAt": "2026-11-13T20:31:49.969Z",
+   "droppedBy": {}
+  },
+  "large quartz": {
+   "key": "large quartz",
+   "name": "Large Quartz",
+   "firstSeenAt": "2026-11-13T20:32:22.400Z",
+   "droppedBy": {}
+  },
+  "iron broadsword": {
+   "key": "iron broadsword",
+   "name": "Iron Broadsword",
+   "firstSeenAt": "2026-11-13T20:36:15.888Z",
+   "droppedBy": {}
+  },
+  "clerical robes": {
+   "key": "clerical robes",
+   "name": "Clerical Robes",
+   "firstSeenAt": "2026-11-13T20:43:10.330Z",
+   "droppedBy": {}
+  },
+  "mace": {
+   "key": "mace",
+   "name": "Mace",
+   "firstSeenAt": "2026-11-13T20:43:10.330Z",
+   "droppedBy": {}
+  },
+  "diamond": {
+   "key": "diamond",
+   "name": "Diamond",
+   "firstSeenAt": "2026-11-13T20:44:22.189Z",
+   "droppedBy": {}
+  },
+  "bag": {
+   "key": "bag",
+   "name": "Bag",
+   "firstSeenAt": "2026-11-13T20:46:46.039Z",
+   "droppedBy": {}
+  },
+  "lead club": {
+   "key": "lead club",
+   "name": "Lead Club",
+   "firstSeenAt": "2026-11-13T20:48:24.664Z",
+   "droppedBy": {}
+  },
+  "earrings of gloom": {
+   "key": "earrings of gloom",
+   "name": "Earrings of Gloom",
+   "firstSeenAt": "2026-11-13T21:00:18.452Z",
+   "droppedBy": {}
+  }
+ },
+ "dragons": {},
+ "secrets": [
+  {
+   "roomId": "r1274",
+   "kind": "smell",
+   "text": "A damp and soggy scent is eminating from the south.\nThere is also a smell of death in the area.",
+   "at": "2026-11-11T06:57:23.784Z"
+  },
+  {
+   "roomId": "r1247",
+   "kind": "listen",
+   "text": "You can hear the bustling activity of Threshold's citizens.",
+   "at": "2026-11-11T06:57:33.185Z"
+  },
+  {
+   "roomId": "r1247",
+   "kind": "smell",
+   "text": "You smell the warmth of human bodies bustling about and getting sweaty.",
+   "at": "2026-11-11T06:57:33.380Z"
+  },
+  {
+   "roomId": "r1246",
+   "kind": "search",
+   "text": "Search what?",
+   "at": "2026-11-11T06:57:34.457Z"
+  },
+  {
+   "roomId": "r1251",
+   "area": "threshold",
+   "kind": "listen",
+   "text": "You can hear several human voices to the south.",
+   "at": "2026-11-11T06:57:56.416Z"
+  },
+  {
+   "roomId": "r1251",
+   "area": "threshold",
+   "kind": "search",
+   "text": "Your eyes sting from the blinding light, leaving you not able to see for a\nbrief moment.",
+   "at": "2026-11-11T06:57:56.816Z"
+  },
+  {
+   "roomId": "r1252",
+   "kind": "listen",
+   "text": "You can hear several human voices to the south.",
+   "at": "2026-11-11T06:58:00.434Z"
+  },
+  {
+   "roomId": "r1253",
+   "area": "threshold",
+   "kind": "listen",
+   "text": "You can hear several human voices to the south.",
+   "at": "2026-11-11T06:58:01.228Z"
+  },
+  {
+   "roomId": "r1253",
+   "area": "threshold",
+   "kind": "search",
+   "text": "Your eyes sting from the bright light, and you are blinded for a moment!",
+   "at": "2026-11-11T06:58:01.653Z"
+  },
+  {
+   "roomId": "r1542",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You can hear several human voices to the south.",
+   "at": "2026-11-11T06:58:02.427Z"
+  },
+  {
+   "roomId": "r349",
+   "area": "underdark",
+   "title": "Absinthe Mountain Range - Caravan Route",
+   "kind": "listen",
+   "text": "You can hear several human voices to the south.",
+   "at": "2026-11-11T06:58:03.232Z"
+  },
+  {
+   "roomId": "r1541",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You can hear several human voices to the south.",
+   "at": "2026-11-11T06:58:04.041Z"
+  },
+  {
+   "roomId": "r323",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T06:58:30.241Z"
+  },
+  {
+   "roomId": "r323",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T06:58:30.437Z"
+  },
+  {
+   "roomId": "r102",
+   "area": "nal-shaddar",
+   "kind": "listen",
+   "text": "You hear a faint echoing of dripping water.",
+   "at": "2026-11-11T06:59:39.427Z"
+  },
+  {
+   "roomId": "r102",
+   "area": "nal-shaddar",
+   "kind": "smell",
+   "text": "You smell a faint acrid scent.\nThere is also a smell of death in the area.",
+   "at": "2026-11-11T06:59:39.632Z"
+  },
+  {
+   "roomId": "r28",
+   "kind": "listen",
+   "text": "You hear a faint clashing of metal upon metal.",
+   "at": "2026-11-11T06:59:44.617Z"
+  },
+  {
+   "roomId": "r29",
+   "area": "melee-magthere",
+   "kind": "listen",
+   "text": "You hear metal clashing upon metal.",
+   "at": "2026-11-11T06:59:52.235Z"
+  },
+  {
+   "roomId": "r30",
+   "area": "melee-magthere",
+   "kind": "listen",
+   "text": "A faint clanking of armor reaches your ears.",
+   "at": "2026-11-11T07:00:00.489Z"
+  },
+  {
+   "roomId": "r30",
+   "area": "melee-magthere",
+   "kind": "smell",
+   "text": "A slightly musty scent is wafting though the area.",
+   "at": "2026-11-11T07:00:00.686Z"
+  },
+  {
+   "roomId": "r31",
+   "area": "melee-magthere",
+   "kind": "listen",
+   "text": "You hear oration from the north.",
+   "at": "2026-11-11T07:00:05.645Z"
+  },
+  {
+   "roomId": "r40",
+   "kind": "smell",
+   "text": "The pleasant smell of baking bread reaches your nostrils.",
+   "at": "2026-11-11T14:53:13.431Z"
+  },
+  {
+   "roomId": "r12",
+   "area": "nal-shaddar",
+   "kind": "listen",
+   "text": "Loud and raucous laughter is eminating from the east.",
+   "at": "2026-11-11T14:53:29.659Z"
+  },
+  {
+   "roomId": "r12",
+   "area": "nal-shaddar",
+   "kind": "smell",
+   "text": "You smell a faint aroma of meat cooking to the east.",
+   "at": "2026-11-11T14:53:30.017Z"
+  },
+  {
+   "roomId": "r10",
+   "area": "nal-shaddar",
+   "kind": "listen",
+   "text": "Loud and raucous laughter is eminating from the east.",
+   "at": "2026-11-11T14:53:50.025Z"
+  },
+  {
+   "roomId": "r10",
+   "area": "nal-shaddar",
+   "kind": "smell",
+   "text": "You smell a faint aroma of meat cooking to the east.",
+   "at": "2026-11-11T14:53:50.220Z"
+  },
+  {
+   "roomId": "r4257",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:12.673Z"
+  },
+  {
+   "roomId": "r4257",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:12.871Z"
+  },
+  {
+   "roomId": "r4262",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:13.486Z"
+  },
+  {
+   "roomId": "r4262",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:13.686Z"
+  },
+  {
+   "roomId": "r4266",
+   "area": "nal-shaddar",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:14.696Z"
+  },
+  {
+   "roomId": "r4266",
+   "area": "nal-shaddar",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:14.893Z"
+  },
+  {
+   "roomId": "r9011",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:15.570Z"
+  },
+  {
+   "roomId": "r9011",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:16.053Z"
+  },
+  {
+   "roomId": "r9012",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:16.665Z"
+  },
+  {
+   "roomId": "r9012",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:16.867Z"
+  },
+  {
+   "roomId": "r4258",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:18.240Z"
+  },
+  {
+   "roomId": "r4258",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:18.448Z"
+  },
+  {
+   "roomId": "r4259",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:28.037Z"
+  },
+  {
+   "roomId": "r4259",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:28.233Z"
+  },
+  {
+   "roomId": "r4260",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:28.814Z"
+  },
+  {
+   "roomId": "r4260",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:29.013Z"
+  },
+  {
+   "roomId": "r4261",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:29.595Z"
+  },
+  {
+   "roomId": "r4261",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:29.784Z"
+  },
+  {
+   "roomId": "r4261",
+   "area": "house",
+   "kind": "search",
+   "text": "You are currently carrying :\nSteel longsword\n(2) Piwafwi\nGold Chain",
+   "at": "2026-11-11T14:54:30.096Z"
+  },
+  {
+   "roomId": "r4263",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:31.462Z"
+  },
+  {
+   "roomId": "r4263",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:31.659Z"
+  },
+  {
+   "roomId": "r4264",
+   "area": "house",
+   "kind": "listen",
+   "text": "You hear faint bits of conversation.",
+   "at": "2026-11-11T14:54:42.618Z"
+  },
+  {
+   "roomId": "r4264",
+   "area": "house",
+   "kind": "smell",
+   "text": "You can smell a faint musty smell.",
+   "at": "2026-11-11T14:54:42.809Z"
+  },
+  {
+   "roomId": "r98",
+   "area": "nal-shaddar",
+   "kind": "listen",
+   "text": "You hear a faint chanting.",
+   "at": "2026-11-11T14:54:45.753Z"
+  },
+  {
+   "roomId": "r98",
+   "area": "nal-shaddar",
+   "kind": "smell",
+   "text": "The smell of incense is strong here.",
+   "at": "2026-11-11T14:54:46.038Z"
+  },
+  {
+   "roomId": "r100",
+   "area": "melee-magthere",
+   "kind": "listen",
+   "text": "You can hear a priestess quietly chanting to her mistress.",
+   "at": "2026-11-11T14:55:13.782Z"
+  },
+  {
+   "roomId": "r100",
+   "area": "melee-magthere",
+   "kind": "smell",
+   "text": "You smell the pungent odor of incense being burned.  It makes your mind\nwander as the smell permeates your senses.  You ask yourself if these are\nreally incense?  Your mind finally comes back under your control.",
+   "at": "2026-11-11T14:55:14.038Z"
+  },
+  {
+   "roomId": "r115",
+   "area": "melee-magthere",
+   "kind": "listen",
+   "text": "The constant and fervent prayers to Loth almost make you retch.",
+   "at": "2026-11-11T14:55:18.262Z"
+  },
+  {
+   "roomId": "r115",
+   "area": "melee-magthere",
+   "kind": "smell",
+   "text": "The incense-smell is overpowering.",
+   "at": "2026-11-11T14:55:18.470Z"
+  },
+  {
+   "roomId": "r95",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear a faint clashing of metal upon metal.",
+   "at": "2026-11-11T14:55:22.842Z"
+  },
+  {
+   "roomId": "r127",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:43.742Z"
+  },
+  {
+   "roomId": "r127",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:44.051Z"
+  },
+  {
+   "roomId": "r128",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:44.648Z"
+  },
+  {
+   "roomId": "r128",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:44.841Z"
+  },
+  {
+   "roomId": "r129",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:45.441Z"
+  },
+  {
+   "roomId": "r129",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:45.642Z"
+  },
+  {
+   "roomId": "r130",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:46.247Z"
+  },
+  {
+   "roomId": "r130",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:46.441Z"
+  },
+  {
+   "roomId": "r131",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:47.043Z"
+  },
+  {
+   "roomId": "r131",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:47.263Z"
+  },
+  {
+   "roomId": "r132",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:48.030Z"
+  },
+  {
+   "roomId": "r132",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "It smells like there is a rotting corpse nearby.",
+   "at": "2026-11-11T14:55:48.233Z"
+  },
+  {
+   "roomId": "r133",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:48.834Z"
+  },
+  {
+   "roomId": "r133",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "The stench is almost overpowering your senses!",
+   "at": "2026-11-11T14:55:49.034Z"
+  },
+  {
+   "roomId": "r134",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "The tunnels are almost too quiet.",
+   "at": "2026-11-11T14:55:49.636Z"
+  },
+  {
+   "roomId": "r134",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:49.831Z"
+  },
+  {
+   "roomId": "r135",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You hear the faint dripping of water.",
+   "at": "2026-11-11T14:55:50.448Z"
+  },
+  {
+   "roomId": "r135",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "You smell the musty smell of the Underdark.",
+   "at": "2026-11-11T14:55:50.651Z"
+  },
+  {
+   "roomId": "r136",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "This place smells rotten.",
+   "at": "2026-11-11T14:55:51.443Z"
+  },
+  {
+   "roomId": "r137",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "This place smells rotten.",
+   "at": "2026-11-11T14:55:52.268Z"
+  },
+  {
+   "roomId": "r138",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You can hear the water dripping down from the ceiling.",
+   "at": "2026-11-11T14:55:52.863Z"
+  },
+  {
+   "roomId": "r138",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "This place smells rotten.",
+   "at": "2026-11-11T14:55:53.059Z"
+  },
+  {
+   "roomId": "r139",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You think you can hear some mumbling sounds coming from the west.",
+   "at": "2026-11-11T14:55:53.671Z"
+  },
+  {
+   "roomId": "r139",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "This place smells rotten.",
+   "at": "2026-11-11T14:55:54.034Z"
+  },
+  {
+   "roomId": "r140",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "This place smells rotten.",
+   "at": "2026-11-11T14:55:54.823Z"
+  },
+  {
+   "roomId": "r141",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You can hear some picking sounds coming from the southwest.",
+   "at": "2026-11-11T14:55:55.423Z"
+  },
+  {
+   "roomId": "r141",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "This place smells rotten.",
+   "at": "2026-11-11T14:55:55.624Z"
+  },
+  {
+   "roomId": "r142",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You can hear the faernies hammering on the walls.",
+   "at": "2026-11-11T14:55:56.627Z"
+  },
+  {
+   "roomId": "r142",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:55:56.829Z"
+  },
+  {
+   "roomId": "r143",
+   "area": "underdark",
+   "kind": "listen",
+   "text": "You can hear the faernies hammering on the walls.",
+   "at": "2026-11-11T14:55:57.714Z"
+  },
+  {
+   "roomId": "r143",
+   "area": "underdark",
+   "kind": "smell",
+   "text": "Faerny says something in an unknown language.\nThere is no particular smell in this area.",
+   "at": "2026-11-11T14:55:58.100Z"
+  },
+  {
+   "roomId": "r144",
+   "area": "faerny",
+   "kind": "listen",
+   "text": "You can hear a creek flowing to the west.",
+   "at": "2026-11-11T14:55:58.690Z"
+  },
+  {
+   "roomId": "r144",
+   "area": "faerny",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:55:58.887Z"
+  },
+  {
+   "roomId": "r145",
+   "kind": "listen",
+   "text": "You can hear the water pouring down from a hole in the north wall.",
+   "at": "2026-11-11T14:55:59.480Z"
+  },
+  {
+   "roomId": "r145",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:55:59.671Z"
+  },
+  {
+   "roomId": "r146",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from the large cavern.",
+   "at": "2026-11-11T14:56:00.428Z"
+  },
+  {
+   "roomId": "r146",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:00.619Z"
+  },
+  {
+   "roomId": "r147",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:01.218Z"
+  },
+  {
+   "roomId": "r147",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:01.410Z"
+  },
+  {
+   "roomId": "r148",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:02.020Z"
+  },
+  {
+   "roomId": "r148",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:02.244Z"
+  },
+  {
+   "roomId": "r149",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:02.846Z"
+  },
+  {
+   "roomId": "r149",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:03.041Z"
+  },
+  {
+   "roomId": "r150",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:03.739Z"
+  },
+  {
+   "roomId": "r150",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:04.027Z"
+  },
+  {
+   "roomId": "r151",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:04.632Z"
+  },
+  {
+   "roomId": "r151",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:04.827Z"
+  },
+  {
+   "roomId": "r152",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:05.500Z"
+  },
+  {
+   "roomId": "r152",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:05.692Z"
+  },
+  {
+   "roomId": "r153",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:06.466Z"
+  },
+  {
+   "roomId": "r153",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:06.668Z"
+  },
+  {
+   "roomId": "r154",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:07.256Z"
+  },
+  {
+   "roomId": "r154",
+   "kind": "smell",
+   "text": "You think you smell some food coming from one of the shops.",
+   "at": "2026-11-11T14:56:07.463Z"
+  },
+  {
+   "roomId": "r155",
+   "kind": "listen",
+   "text": "Autosave.\nYour stomach rumbles.\nYou can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:08.098Z"
+  },
+  {
+   "roomId": "r155",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:08.293Z"
+  },
+  {
+   "roomId": "r156",
+   "kind": "listen",
+   "text": "You can hear the sound of hundreds of faernies coming from all around the large cavern.",
+   "at": "2026-11-11T14:56:14.662Z"
+  },
+  {
+   "roomId": "r156",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:14.869Z"
+  },
+  {
+   "roomId": "r157",
+   "kind": "listen",
+   "text": "You can hear the sound of many faernies coming from outside the north gate.",
+   "at": "2026-11-11T14:56:16.331Z"
+  },
+  {
+   "roomId": "r157",
+   "kind": "smell",
+   "text": "There is no particular smell in this area.",
+   "at": "2026-11-11T14:56:16.529Z"
+  }
+ ],
+ "chanceDrops": [
+  {
+   "npc": "samurai youth",
+   "item": "Thin katana",
+   "roomId": "r5336",
+   "kills": 4,
+   "dropped": 3,
+   "at": "2026-11-11T23:37:20.322Z"
+  },
+  {
+   "npc": "huge badger",
+   "item": "Black Badger Fur",
+   "roomId": "r4894",
+   "kills": 3,
+   "dropped": 1,
+   "at": "2026-11-12T00:04:34.411Z"
+  },
+  {
+   "npc": "captain barbakas",
+   "item": "Treasure chamber key",
+   "roomId": "r4900",
+   "kills": 3,
+   "dropped": 1,
+   "at": "2026-11-12T01:09:41.494Z"
+  },
+  {
+   "npc": "captain barbakas",
+   "item": "Barbakas Blade",
+   "roomId": "r4900",
+   "kills": 4,
+   "dropped": 1,
+   "at": "2026-11-12T01:54:48.429Z"
+  },
+  {
+   "npc": "vampire",
+   "item": "Vampiric sword",
+   "roomId": "r7142",
+   "kills": 4,
+   "dropped": 2,
+   "at": "2026-11-12T03:02:10.682Z"
+  },
+  {
+   "npc": "master guard",
+   "item": "Thin katana",
+   "roomId": "r5340",
+   "kills": 5,
+   "dropped": 4,
+   "at": "2026-11-12T06:32:50.775Z"
+  },
+  {
+   "npc": "white dragonoid",
+   "item": "White Dragonoid scale",
+   "roomId": "r8903",
+   "kills": 11,
+   "dropped": 9,
+   "at": "2026-11-12T06:34:45.561Z"
+  },
+  {
+   "npc": "samurai trainer",
+   "item": "Dark katana",
+   "roomId": "r5335",
+   "kills": 33,
+   "dropped": 2,
+   "at": "2026-11-12T06:52:25.254Z"
+  },
+  {
+   "npc": "city guard",
+   "item": "Dwarven Platemail",
+   "roomId": "r4970",
+   "kills": 29,
+   "dropped": 23,
+   "at": "2026-11-12T07:12:41.062Z"
+  },
+  {
+   "npc": "city guard",
+   "item": "Steel-Axe",
+   "roomId": "r4970",
+   "kills": 29,
+   "dropped": 18,
+   "at": "2026-11-12T07:12:41.062Z"
+  },
+  {
+   "npc": "dojo guard",
+   "item": "Dark katana",
+   "roomId": "r4918",
+   "kills": 25,
+   "dropped": 18,
+   "at": "2026-11-12T07:21:12.751Z"
+  },
+  {
+   "npc": "master guard",
+   "item": "Dark katana",
+   "roomId": "r5340",
+   "kills": 6,
+   "dropped": 1,
+   "at": "2026-11-12T07:21:17.522Z"
+  },
+  {
+   "npc": "samurai trainer",
+   "item": "Thin katana",
+   "roomId": "r5335",
+   "kills": 37,
+   "dropped": 25,
+   "at": "2026-11-12T07:23:04.662Z"
+  },
+  {
+   "npc": "samurai trainer",
+   "item": "Glowing Katana",
+   "roomId": "r5337",
+   "kills": 38,
+   "dropped": 4,
+   "at": "2026-11-12T07:23:39.833Z"
+  },
+  {
+   "npc": "red dragonoid",
+   "item": "Red Dragonoid scale",
+   "roomId": "r8951",
+   "kills": 13,
+   "dropped": 11,
+   "at": "2026-11-12T07:31:44.693Z"
+  },
+  {
+   "npc": "blue dragonoid",
+   "item": "Blue Dragonoid scale",
+   "roomId": "r8908",
+   "kills": 17,
+   "dropped": 16,
+   "at": "2026-11-12T07:37:12.172Z"
+  }
+ ]
+}

@@ -34,9 +34,11 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | Wiki page | Topic |
 |-----------|--------|
 | [Items](../public/wiki/items/index.html) | Plus formula, sacrifice note, shop stock |
-| [Normal equipment](../public/wiki/items/normal-equipment.html) | Mundane gear and locations |
-| [Magic items](../public/wiki/items/magic-items.html) | Slot, plus, effects |
+| [Normal equipment](../public/wiki/items/normal-equipment.html) | Mundane gear and locations (hand rows in `scripts/items-hand-data.mjs`, hub stats merged at build) |
+| [Magic items](../public/wiki/items/magic-items.html) | Slot, plus, effects, hub judge/sell/drop columns |
 | [Crafting components](../public/wiki/items/components.html) | Component pairs |
+
+Hand-curated equipment rows: `scripts/items-hand-data.mjs`. After copying `data/stats/world-knowledge.json` and `item-values.json` from mudwithme (see repo README), run `yarn build:wiki` to refresh judge, sell, and drop columns.
 
 ## NPCs and drops
 
@@ -58,7 +60,8 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | [Combat](../public/wiki/mechanics/combat.html) | Hit words, stun, dragon notes |
 | [Stats and ranks](../public/wiki/mechanics/stats.html) | Abilities and dragon killer rank names |
 | [Professions](../public/wiki/mechanics/professions.html) | Lower and upper professions |
-| [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Trainer locations, costs, stat reqs |
+| [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Profession NPCs, costs, stat reqs |
+| [Skill trainers](../public/wiki/mechanics/skill-trainers.html) | Standalone skill NPCs (riding, tailoring, etc.) |
 | [Doctor and herbs](../public/wiki/mechanics/doctor.html) | Doctor, harvest, intensify |
 | [PK areas](../public/wiki/mechanics/pk-areas.html) | `help pkareas` |
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Drow in Powermud: noble houses in Nal Shaddar and joining House Bey-Sandrax." />
+    <meta name="description" content="Drow in Powermud: noble houses in Nal Shaddar, joining House Bey-Sandrax, and the house smith (repair and armor resize)." />
     <title>Drow — Play Powermud wiki</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/wiki/wiki.css" />
@@ -30,6 +30,7 @@
       <h3>Contents</h3>
       <ul>
         <li><a href="#houses">Noble houses and Bey-Sandrax</a></li>
+        <li><a href="#smith">House smith — repair and resize</a></li>
       </ul>
 
       <h3 id="houses">Noble houses and Bey-Sandrax</h3>
@@ -48,6 +49,28 @@
         <li><strong>Rest of the compound</strong> — Temple of Loth to the east (an altar 'covered in what looks like blood'), commoners' barracks to the north, and a smithy exit by the gates.</li>
       </ul>
       <div class="wiki-callout"><strong>Think before you commit.</strong> House commands like joining and <code>forsake house</code> can't be undone.</div>
+
+      <h3 id="smith">House smith — repair and resize</h3>
+      <p>
+        A well-trained Drow warrior smith serves House Bey-Sandrax in the house smithy (exit by the gates).
+        <code>l at smith</code> notes that he repairs armor and can resize it.
+        Ask with <code>ask smith about repairing</code> or <code>ask smith about resizing</code> (lower case).
+      </p>
+      <p>
+        Resizing only works on armor that has <strong>not</strong> been resized before — a second resize weakens the material.
+        Quote a job with <code>rprice &lt;armor&gt; to &lt;size&gt;</code>, then
+        <code>resize &lt;armor&gt; to &lt;size&gt;</code> to have it done.
+      </p>
+      <table>
+        <thead><tr><th>Size</th><th>Races</th></tr></thead>
+        <tbody>
+          <tr><td>Tiny</td><td>Halfling, Gnome</td></tr>
+          <tr><td>Small</td><td>Dwarf, Duergar, Svirfneblin</td></tr>
+          <tr><td>Medium</td><td>Elf, Drow</td></tr>
+          <tr><td>Regular</td><td>Human, Half-Elf, Half-Orc</td></tr>
+          <tr><td>Large</td><td>Half-Ogre, Minotaur</td></tr>
+        </tbody>
+      </table>
     </main>
 
     <footer class="wiki-foot">

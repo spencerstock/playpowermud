@@ -63,6 +63,19 @@ uninterrupted play, run `yarn relay` on an always-on host and build with
 `public/data/powermud.graph.json` is copied from `mudwithme/data/world/powermud.graph.json`.
 Browsers keep their own learned copy until a shipped map with a newer `updatedAt` arrives.
 
+## Updating equipment wiki stats
+
+Judge, sell, and drop columns on the normal and magic equipment pages come from vendored hub stats. Copy from mudwithme, then regenerate the wiki:
+
+```bash
+cp ~/src/mudwithme/data/stats/world-knowledge.json data/stats/
+cp ~/src/mudwithme/data/stats/item-values.json data/stats/
+cp data/stats/*.json public/data/stats/   # optional static download mirror
+yarn build:wiki
+```
+
+Hand-curated rows live in `scripts/items-hand-data.mjs`; `build-wiki-items.mjs` merges them with the JSON files.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE). Contributions welcome via pull request on GitHub.
