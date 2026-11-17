@@ -23,7 +23,7 @@ Browser (one tab = one MUD session)
   src/client/aliases.ts     AliasEngine + localStorage alias table
   src/client/comms.ts       commsLogIngest → side panel, localStorage
   src/client/mapApi.ts      in-process stand-in for the hub's /api/map/* routes (worldPanel uses it)
-  src/client/mapStore.ts    shipped graph (public/data/powermud.graph.json) + IndexedDB copy of what you learn
+  src/client/mapStore.ts    this browser's learned graph in IndexedDB (starts empty)
         │  wss://…/api/ws   (binary frames, raw MUD bytes both ways)
 Relay  server/relay.ts      ws ↔ net.Socket to powermud.com:2000 — target is fixed, never client-chosen
   api/ws.ts                 Vercel Function entry (WebSocket on Fluid compute)

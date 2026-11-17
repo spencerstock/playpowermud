@@ -312,3 +312,40 @@ test("score block: guild line without `the` (e.g. Melee-Magthere) still parses e
   assert.equal(score.status.hpMax, 463);
   assert.equal(score.status.bank, 27588);
 });
+
+test("auto-flee emits the direction before the destination room in the same packet", () => {
+  const s = new GameStream();
+  const ev = s.feed(
+    [
+      "You are traveling down a wide hallway that leads through the upper floor of",
+      "the academy of magic, Sorcere.",
+      "The only obvious exits are : north, south, east.",
+      "You flee like the wind, south!",
+      "[ HP : 387(1142) SP : 229(240) ]",
+      "",
+    ].join("\n"),
+  );
+  const types = ev.filter((e) => e.type === "flee" || e.type === "room").map((e) => e.type);
+  assert.deepEqual(types, ["flee", "room"], "flee dir must land before the arrival room");
+  const flee = ev.find((e) => e.type === "flee");
+  assert.equal(flee?.type === "flee" && flee.dir, "s");
+});
+
+test("Kelton street bright-light glare is an unseen dark room, not a refusal", () => {
+  const s = new GameStream();
+  const ev = s.feed(
+    ["The moon is at Eye.", "", "The bright light blinds you for a moment!", "[HP: 626(1182(52%)) SP: 213(260(81%))]", ""].join(
+      "\n",
+    ),
+  );
+  const room = ev.find((e) => e.type === "room");
+  assert.equal(room?.type === "room" && room.room.mode, "dark");
+  assert.ok(!ev.some((e) => e.type === "move-failed"));
+});
+
+test("a dojo guard blocking the exit is a hindered move, not a refusal", () => {
+  const s = new GameStream();
+  const ev = s.feed(["The dojo guard quickly blocks your way.", "[HP: 757(1201(63%)) SP: 94(260(36%))]", ""].join("\n"));
+  assert.ok(ev.some((e) => e.type === "move-hindered"));
+  assert.ok(!ev.some((e) => e.type === "move-failed"));
+});

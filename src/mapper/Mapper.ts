@@ -12,7 +12,7 @@ import { isFlakyTravelCommand, outputSaysMoveFailed } from "./navFailure.js";
 import { isTeleportOnlyCommand } from "./pathPolicy.js";
 import { ESTABLISHED_USES, looksLikeTravelCommand } from "./specialExits.js";
 import {
-  OPEN_DOOR_COMMAND,
+  isOpenDoorCommand,
   outputSaysAlreadyOpen,
   outputSaysClosedDoor,
   outputSaysLockedDoor,
@@ -35,6 +35,8 @@ type Pending = {
   responded: boolean;
   /** The MUD printed some line while this was the oldest command awaiting its prompt. */
   heard?: boolean;
+  /** This move's reply was `You are blinded and cannot see` — follow the known link anyway. */
+  blindStep?: boolean;
 };
 
 export type MapperEvent =
@@ -239,7 +241,13 @@ export class Mapper {
     const dir = canonicalDirection(n);
     if (dir) return { kind: "move", key: dir };
     if (this.profile.lookCommands.test(n)) return { kind: "look", key: n };
-    if (n === "flee") return { kind: "flee", key: n };
+    // `flee` or `flee northeast`: survival's directed flee must not be a special move.
+    // Live 2026-11-13 5:48 PM MST: `flee northeast` + glare minted r11575 on a new plane.
+    const flee = /^flee(?:\s+(.+))?$/.exec(n);
+    if (flee) {
+      const dir = flee[1] ? canonicalDirection(flee[1]) ?? flee[1] : "flee";
+      return { kind: "flee", key: dir };
+    }
     if (this.profile.teleportCommands.test(n)) return { kind: "teleport", key: n };
     if (isTeleportOnlyCommand(n)) return { kind: "teleport", key: n };
     const cur = this.current();
@@ -269,7 +277,18 @@ export class Mapper {
       case "prompt": {
         if (ev.vitals) this.loggingIn = false;
         const done = this.queue.shift();
-        if (done?.kind === "move" && !done.responded) this.unseenMove(done.key, !done.heard);
+        if (done && !done.responded && done.key && done.key !== "flee") {
+          if (done.kind === "move") {
+            if (done.blindStep) this.followBlindStep(done.key);
+            else this.unseenMove(done.key, !done.heard);
+          } else if (done.kind === "flee" && (done.blindStep || this.fleeDir)) {
+            // Directed flee with no room display (spell blindness): follow the exit.
+            // Live 2026-11-13 8:07 PM MST: `flee northwest` from r7142 while blind left
+            // the mapper in the vampire room; `nw` then failed in the real landing (r7141).
+            this.followBlindStep(done.key);
+            this.fleeDir = null;
+          }
+        }
         return;
       }
       case "room":
@@ -297,10 +316,20 @@ export class Mapper {
         return;
       case "line":
         if (this.queue[0] && ev.text.trim()) this.queue[0].heard = true;
+        if (/^You are blinded and cannot see\.?\s*$/i.test(ev.text)) {
+          const e = this.inFlight();
+          if (e && (e.kind === "move" || e.kind === "flee") && !e.responded) e.blindStep = true;
+        }
         this.onDoorResult(ev.text);
         this.onMenuLine(ev.text);
         return;
       case "flee": {
+        // Directed `flee <dir>` may already have landed (glare/dark room before this line).
+        // Do not keep fleeDir or a later look will walk one more room (Gorthe r11525).
+        if (this.queue.some((q) => q.kind === "flee" && q.responded)) {
+          this.fleeDir = null;
+          return;
+        }
         this.fleeDir = ev.dir;
         return;
       }
@@ -427,7 +456,7 @@ export class Mapper {
       this.map.applyDoors(cur, withDoorState(cur.doors, { name: prev?.name ?? "door", direction: move.key, state: "closed" }));
       return;
     }
-    const opening = this.queue.some((q) => !q.responded && q.key === OPEN_DOOR_COMMAND);
+    const opening = this.queue.some((q) => !q.responded && isOpenDoorCommand(q.key));
     const closing = this.queue.some((q) => !q.responded && q.key === "close door");
     if (!cur.doors?.length) return;
     if (opening && (outputSaysOpenedDoor(text) || outputSaysAlreadyOpen(text))) {
@@ -665,6 +694,10 @@ export class Mapper {
     }
     switch (e.kind) {
       case "look":
+        // Dizzy / too-dark after `look` is not a move into darkness: the last move already
+        // showed this room (or we are still here). Treating it as a dark room used to
+        // relocate or leave a leftover pending move a step behind.
+        if (obs.mode === "dark") return;
         this.reobserve(obs);
         return;
       case "move":
@@ -672,6 +705,16 @@ export class Mapper {
         this.arrive(obs, e.key);
         return;
       case "flee":
+        // Directed `flee northeast` plus glare (no room display): follow that exit.
+        // Treating the command as a special move minted r11575 on a new plane
+        // (Merevia, 2026-11-13 5:48 PM MST, r8914.ne was already r8915).
+        if (e.key && e.key !== "flee") {
+          e.responded = true;
+          if (obs.mode === "dark") this.followBlindStep(e.key);
+          else this.arrive(obs, e.key);
+          this.fleeDir = null;
+          return;
+        }
         // Fled without the "you flee <dir>" line: we went through one of our exits.
         this.relocate(obs, "?");
         return;
@@ -836,11 +879,24 @@ export class Mapper {
   }
 
   /**
-   * A move's prompt came back with neither a room display nor a failure we recognize. Maybe
-   * the display was lost, maybe something blocked us in words we do not parse. Stay put, but
-   * remember the step so a later contradiction can be explained by it. Prompts and commands
-   * do not always pair up on a busy MUD, so this alone is no reason for doubt.
+   * A move while blinded has no room display. The command still went through when the MUD did not
+   * refuse it: follow the charted link so a walk can keep sending the path (Wybie vampire cave,
+   * 2026-11-11). A real refusal (`move-failed`) marks the command responded first, so it never
+   * lands here.
    */
+  private followBlindStep(key: string): void {
+    const from = this.current();
+    const toId = from?.links[key]?.to;
+    const to = toId ? this.map.room(this.map.canonicalId(toId) ?? toId) : undefined;
+    if (!from || !to || to.id === from.id) {
+      this.unseenMove(key, false);
+      return;
+    }
+    this.setHere(to.id);
+    this.record(key, UNSEEN, to.id, { sure: true });
+    this.emit({ type: "moved", from: from.id, to: to.id, via: key, how: "exit", created: false });
+  }
+
   private unseenMove(key: string, silent: boolean): void {
     const cur = this.current();
     if (!cur || (!cur.exits.includes(key) && !cur.links[key]?.to)) return;
@@ -1321,14 +1377,26 @@ export class Mapper {
       }
     }
 
-    // An unlisted move answered by this very room (long description and exits agree): the
-    // step never happened — a mid-fight redisplay, or a refusal we did not recognise. Never
-    // mint a look-alike copy beside the room we are in (Rothe Island shore r88 → r471/r472).
-    if (!target && !from.exits.includes(key) && !link?.to && this.isSameSpot(from, obs)) {
-      this.map.applyObservation(from, obs);
-      this.record("=", obs, from.id, { sure: this.history.at(-1)?.sure });
-      this.emit({ type: "moved", from: from.id, to: from.id, how: "look", created: false });
-      return;
+    // Arrival is this very room (long description and exits agree). An unlisted command is a
+    // mid-fight redisplay (Rothe Island shore r88 → r471/r472). The same text after a listed
+    // exit whose charted destination looks nothing like this — or whose landing coordinate is
+    // already occupied by a different room — is a stale flee dir (auto-flee printed the
+    // destination, then "You flee like the wind, south!", then a look reused the leftover
+    // dir) or a lagged step, not a new look-alike beside us.
+    if (this.isSameSpot(from, obs)) {
+      const origin = from;
+      const dest = link?.to ? this.map.room(link.to) : undefined;
+      const destMismatch = !!dest && this.map.compatibility(dest, obs) < 0;
+      const expected = geometric ? this.map.expectedPos(origin, key) : null;
+      const occupiedByOther =
+        !!expected &&
+        this.map.roomsAt(expected).some((r) => r.id !== origin.id && this.map.compatibility(r, obs) < 0);
+      if (destMismatch || occupiedByOther || (!from.exits.includes(key) && !link?.to)) {
+        this.map.applyObservation(from, obs);
+        this.record("=", obs, from.id, { sure: this.history.at(-1)?.sure });
+        this.emit({ type: "moved", from: from.id, to: from.id, how: "look", created: false });
+        return;
+      }
     }
 
     if (!target && geometric) {
@@ -1388,6 +1456,34 @@ export class Mapper {
 
     let created = false;
     if (!target) {
+      // Before minting a room, prefer an existing one on this plane whose description
+      // matches and that sits here or one step away. Staying in `from` is only right when
+      // the attempted landing is already occupied by a different room or the charted dest
+      // does not match — otherwise identical corridors would never gain a second tile.
+      const origin = from;
+      const expected = geometric ? this.map.expectedPos(origin, key) : null;
+      const occupiedByOther =
+        !!expected &&
+        this.map.roomsAt(expected).some((r) => r.id !== origin.id && this.map.compatibility(r, obs) < 0);
+      const destRoom = origin.links[key]?.to ? this.map.room(origin.links[key]!.to) : undefined;
+      const destMismatch = !!destRoom && this.map.compatibility(destRoom, obs) < 0;
+      const nearby = this.nearbyKnownByDescription(from, obs);
+      // Only absorb a nearby look-alike when this step cannot be a genuine twin corridor
+      // (Oasis Avenue north of Vedny is the same prose as the block south of it, on an empty tile).
+      if (nearby && (occupiedByOther || destMismatch)) {
+        if (nearby.id === from.id) {
+          this.map.applyObservation(from, obs);
+          this.record("=", obs, from.id, { sure: this.history.at(-1)?.sure });
+          this.emit({ type: "moved", from: from.id, to: from.id, how: "look", created: false });
+          return;
+        }
+        this.map.applyObservation(nearby, obs);
+        const was = from.id;
+        this.setHere(nearby.id);
+        this.record(key, obs, nearby.id);
+        this.emit({ type: "moved", from: was, to: nearby.id, via: key, how: "relocate", created: false });
+        return;
+      }
       if (geometric) {
         target = this.map.createRoom(this.map.expectedPos(from, key)!);
       } else {
@@ -1505,6 +1601,24 @@ export class Mapper {
    * has (or three identical displays when that prose is shared), or a title only it has
    * (with matching exits) when it is the only room by that name.
    */
+  /**
+   * A known room on `from`'s plane, at most one step away, whose long description matches
+   * `obs`. Used to absorb a stale step instead of minting a look-alike at an occupied
+   * coordinate (Gorthe auto-flee → r11525).
+   */
+  private nearbyKnownByDescription(from: MapRoom, obs: RoomObservation): MapRoom | undefined {
+    if (obs.mode === "dark" || !obs.description || obs.description.trim().length < MIN_MERGE_DESC) return undefined;
+    const hits: MapRoom[] = [];
+    for (const r of this.map.rooms()) {
+      if (r.pos.plane !== from.pos.plane) continue;
+      const dx = Math.abs(r.pos.x - from.pos.x) + Math.abs(r.pos.y - from.pos.y) + Math.abs(r.pos.z - from.pos.z);
+      if (dx > 1) continue;
+      if (this.isSameSpot(r, obs) || this.map.compatibility(r, obs) > 1) hits.push(r);
+    }
+    if (hits.length === 1) return hits[0];
+    return undefined;
+  }
+
   private describedRoom(obs: RoomObservation, from: MapRoom): MapRoom | undefined {
     if (obs.description && obs.description.trim().length >= MIN_MERGE_DESC) {
       if (!this.descriptionPinAllowed(obs)) return undefined;

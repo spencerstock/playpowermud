@@ -49,14 +49,13 @@
         shows a path as MUD commands — it does not auto-walk yet (no speedwalk or click-to-walk).
       </p>
 
-      <h3>Shipped map vs your discoveries</h3>
+      <h3>Your map</h3>
       <p>
-        The site ships a Powermud world graph at
-        <code>/data/powermud.graph.json</code> (a community baseline). As you explore, new rooms and
-        links merge into your local copy. If a newer shipped file arrives (newer
-        <code>updatedAt</code>), new baseline rooms are merged in without wiping what you mapped.
+        The map starts empty. Rooms and exits are added only as you walk them. That graph is saved
+        in <strong>IndexedDB</strong> (<code>playpowermud</code> database, key <code>player-map</code>)
+        on this browser and loaded again next visit. Export config if you want a copy you can import
+        on another browser.
       </p>
-      <p>Your learned map is saved in <strong>IndexedDB</strong> (<code>playpowermud</code> database) on this browser.</p>
 
       <h3>How mapping works (short)</h3>
       <p>Each command you send is queued; each room display is matched to the command that caused it. The mapper:</p>
@@ -66,11 +65,6 @@
         <li>Re-localizes when dead reckoning disagrees with room text, so the pin stays on the right room.</li>
         <li>Periodically heals duplicate rooms and bad links (on load and as you move).</li>
       </ul>
-      <h3>Updating the shipped graph</h3>
-      <p>
-        Site deploys include <code>public/data/powermud.graph.json</code>. When maintainers publish a
-        newer graph, your browser merges it if the file’s <code>updatedAt</code> is newer than your saved base.
-      </p>
     </main>
 
     <footer class="wiki-foot">

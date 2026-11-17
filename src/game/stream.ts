@@ -427,6 +427,16 @@ export class GameStream {
         this.exitListOpen = /,\s*$/.test(t);
         return;
       }
+      // Auto-flee prints the destination room, then "You flee like the wind, <dir>!".
+      // Emit the flee first so the mapper applies that dir to the pre-flee room, not to a
+      // leftover fleeDir on the next look (Sorcere hallway, 2026-11-13).
+      const fleeEarly = t.match(p.fleeMoved);
+      if (fleeEarly) {
+        this.descBuf = [];
+        this.emit({ type: "flee", dir: canonicalDirection(fleeEarly[1]!) ?? fleeEarly[1]!.toLowerCase() });
+        this.finishRoom();
+        return;
+      }
       this.finishRoom();
     }
 

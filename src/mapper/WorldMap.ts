@@ -8,7 +8,7 @@ import {
   subVec,
   type Vec3,
 } from "../game/directions.js";
-import { descriptionWithDoorStates, OPEN_DOOR_COMMAND, parseDoors } from "../game/doors.js";
+import { descriptionWithDoorStates, isOpenDoorCommand, openDoorOnExit, parseDoors } from "../game/doors.js";
 import { cleanseRoomDescription, isRoomDescriptionNoiseLine } from "../game/roomDescriptionNoise.js";
 import { isLearnedSpecial, looksLikeTravelCommand } from "./specialExits.js";
 import type { DoorState, RoomDoor, RoomObservation } from "../game/types.js";
@@ -721,7 +721,7 @@ export class WorldMap {
             uses: 0,
           };
         }
-        if (link.pre?.length === 1 && link.pre[0] === OPEN_DOOR_COMMAND) delete link.pre;
+        if (link.pre?.length === 1 && isOpenDoorCommand(link.pre[0]!)) delete link.pre;
         link.blocked = { reason: "locked", at: nowIso() };
         continue;
       }
@@ -738,10 +738,11 @@ export class WorldMap {
       if (!link) continue;
       if (link.blocked?.reason === "locked") delete link.blocked;
       if (door.state === "closed") {
-        if (!link.pre?.length || (link.pre.length === 1 && link.pre[0] === OPEN_DOOR_COMMAND)) {
-          link.pre = [OPEN_DOOR_COMMAND];
+        const openCmd = openDoorOnExit(dir, room);
+        if (!link.pre?.length || (link.pre.length === 1 && isOpenDoorCommand(link.pre[0]!))) {
+          link.pre = [openCmd];
         }
-      } else if (link.pre?.length === 1 && link.pre[0] === OPEN_DOOR_COMMAND) {
+      } else if (link.pre?.length === 1 && isOpenDoorCommand(link.pre[0]!)) {
         delete link.pre;
       }
     }
@@ -1202,6 +1203,16 @@ export class WorldMap {
     redirects[dropId] = keepId;
     delete redirects[keepId];
     for (const [from, to] of Object.entries(redirects)) if (to === dropId) redirects[from] = keepId;
+    // A contested destination that was the dropped copy (or now redirects to `keep`) is stale.
+    // Leave `link.to` alone — merge already re-pointed those; only drop the doubt marker
+    // (r3766.s stayed on r3764 but contested r11525 after that phantom was folded in).
+    for (const room of this.rooms()) {
+      for (const link of Object.values(room.links)) {
+        const ct = link.contested?.to;
+        if (!ct) continue;
+        if (ct === dropId || this.canonicalId(ct) === keepId) delete link.contested;
+      }
+    }
     this.indexRoom(keep);
     this.touch();
     if (depth < 64) {
@@ -2054,7 +2065,12 @@ export class WorldMap {
     }
     if (opts.allowInferred === false && !link.confirmed) return false;
     if (opts.allowSpecial === false && link.kind === "special") return false;
-    if (link.blocked && now - Date.parse(link.blocked.at) < BLOCK_TTL_MS) return false;
+    if (link.blocked && now - Date.parse(link.blocked.at) < BLOCK_TTL_MS) {
+      // A confirmed, already-walked exit that only failed with "did not move" is almost
+      // always a mob in the way (dojo guards at r4918), not a dead link. Keep it on the path.
+      if (link.blocked.reason === "did not move" && link.confirmed && (link.uses ?? 0) >= 3) return true;
+      return false;
+    }
     return true;
   }
 

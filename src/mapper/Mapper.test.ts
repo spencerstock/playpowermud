@@ -477,3 +477,55 @@ test("the small boy's trips eat queued moves without moving or blaming the exit 
   assert.equal(ne.failCount ?? 0, 0);
   assert.equal(ne.to, sturdy.id, "the link is kept");
 });
+
+test("Kelton 'The bright light blinds you for a moment!' follows the confirmed link", () => {
+  const h = harness();
+  h.step(null, `Cobbled street (n, s, e, ne)\n${P}`);
+  const street = h.here();
+  h.step("s", `Kelton street (n, e, w)\n${P}`);
+  const south = h.here();
+  h.step("n", `Cobbled street (n, s, e, ne)\n${P}`);
+  assert.equal(h.here().id, street.id);
+  h.step("s", `The moon is at Eye.\n\nThe bright light blinds you for a moment!\n${P}`);
+  assert.equal(h.here().id, south.id, "the move landed; only the display was lost to the glare");
+  assert.equal(street.links.s?.blocked, undefined);
+  assert.equal(street.links.s?.failCount, undefined);
+  h.step("s", `You cannot go that direction.\n${P}`);
+  assert.equal(h.here().id, south.id, "refusal is from the room the glare landed in");
+  assert.equal(street.links.s?.failCount ?? 0, 0);
+});
+
+test("directed flee into bright-light glare follows the confirmed exit", () => {
+  const h = harness();
+  h.step(null, `Lake path (ne, sw)\n${P}`);
+  const path = h.here();
+  h.step("ne", `Ditch path (e, sw)\n${P}`);
+  const ditch = h.here();
+  h.step("sw", `Lake path (ne, sw)\n${P}`);
+  assert.equal(h.here().id, path.id);
+  const rooms = h.map.roomCount();
+  h.step(
+    "flee northeast",
+    `Your eyes sting from the bright light, and you are blinded for a moment!\nYou flee like the wind, northeast!\n${P}`,
+  );
+  assert.equal(h.here().id, ditch.id, "directed flee + glare follows confirmed ne");
+  assert.equal(h.map.roomCount(), rooms, "must not mint a dark plane");
+  assert.equal(path.links["flee northeast"], undefined);
+  assert.equal(path.links.ne?.to, ditch.id);
+});
+
+test("directed flee while spell-blind follows the confirmed exit with no room display", () => {
+  const h = harness();
+  h.step(null, `You stand in the middle of a cold dark room.\nThe only obvious exits are : west and southeast.\n${P}`);
+  const ledge = h.here();
+  h.step(
+    "se",
+    `There are steps leading further down into the cave here.\nThe only obvious exits are : northwest, northeast, south.\n${P}`,
+  );
+  const vampire = h.here();
+  assert.equal(vampire.links.nw?.to, ledge.id);
+  const rooms = h.map.roomCount();
+  h.step("flee northwest", `You are blinded and cannot see.\nYou flee like the wind, northwest!\n${P}`);
+  assert.equal(h.here().id, ledge.id, "directed flee while blind must follow confirmed nw");
+  assert.equal(h.map.roomCount(), rooms);
+});

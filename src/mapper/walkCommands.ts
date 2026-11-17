@@ -1,13 +1,13 @@
 import { isGeometricDirection } from "../game/directions.js";
-import { OPEN_DOOR_COMMAND } from "../game/doors.js";
+import { openDoorOnExit } from "../game/doors.js";
 import { flakyBatchRepeatCount } from "./navFailure.js";
 import type { MapRoom, PathStep } from "./types.js";
 
-export type DoorOpener = (dir: string, doorName?: string) => string;
+export type DoorOpener = (dir: string, doorName?: string, room?: Parameters<typeof openDoorOnExit>[1]) => string;
 
 /** Powermud compass doors use `open door`; named exits use `open <exit>`. */
-export const defaultDoorOpener: DoorOpener = (dir) =>
-  isGeometricDirection(dir) ? OPEN_DOOR_COMMAND : `open ${dir}`;
+export const defaultDoorOpener: DoorOpener = (dir, _doorName, room) =>
+  room ? openDoorOnExit(dir, room) : isGeometricDirection(dir) ? openDoorOnExit(dir) : `open ${dir}`;
 
 export function hasOpenAttempt(pres: readonly string[]): boolean {
   return pres.some((p) => /^open\b/i.test(p.trim()));
@@ -31,7 +31,7 @@ export function mergeStepPre(
   for (const p of stepPre ?? []) push(p);
   for (const p of room?.links[cmd]?.pre ?? []) push(p);
   const door = room?.doors?.find((d) => d.direction === cmd);
-  if (door && door.state !== "locked" && !hasOpenAttempt(out)) push(openDoor(cmd, door.name));
+  if (door && door.state !== "locked" && !hasOpenAttempt(out)) push(openDoor(cmd, door.name, room));
   return out;
 }
 

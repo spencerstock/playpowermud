@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  openDoorOnExit,
   outputSaysClosedDoor,
   outputSaysLockedDoor,
   outputSaysOpenedDoor,
@@ -26,6 +27,18 @@ test("door lines name the direction and whether open door will work", () => {
   });
   assert.equal(parseDoorLine("There is one Loreman."), null);
   assert.equal(parseDoors("There is a stone door leading up ( CLOSED ).\nThere is one guard.").length, 1);
+});
+
+test("openDoorOnExit disambiguates when a room has more than one door", () => {
+  const twoDoors = {
+    doors: [
+      { name: "stone door", direction: "e", state: "closed" as const },
+      { name: "wood door", direction: "w", state: "closed" as const },
+    ],
+  };
+  assert.equal(openDoorOnExit("e", twoDoors), "open east door");
+  assert.equal(openDoorOnExit("w", twoDoors), "open west door");
+  assert.equal(openDoorOnExit("e", { doors: [{ name: "stone door", direction: "e", state: "closed" }] }), "open door");
 });
 
 test("look text is not a failed open", () => {

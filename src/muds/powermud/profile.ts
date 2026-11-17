@@ -100,15 +100,20 @@ export const POWERMUD_PROFILE: GameProfile = {
   ],
   // The small boy at the Caravan Route's north end (below Mt. Kulajo) trips you as you leave,
   // usually twice: each trip eats one queued move (live 2026-11-04).
-  moveHindered: [/^The small boy trips you!/i],
+  // Dojo guards (r4918 n into the samurai sect) and similar mobs refuse the exit until they
+  // are killed. That is not a bad map link: charging it as `did not move` 20 times marks the
+  // exit blocked and every path to r5335 dies (Merevia 2026-11-15 12:36 PM MST).
+  moveHindered: [/^The small boy trips you!/i, /\bblocks your way\b/i],
   // Deepwater docks / Waterside Road: `Your eyes sting from the blinding light, leaving you not
   // able to see for a` / `brief moment.` (live 2026-11-04). Threshold goat pen / outdoor cave:
   // `Your eyes sting from the bright light, and you are blinded for a moment!` (live 2026-11-05
   // Wybie r2768→r2767 / r2767→r2764). Both mean the move went through into a room we cannot see;
   // treating them as a lost display left the mapper put and falsely blocked the exit ("did not
-  // move"), breaking the goat lap (No known path from r2768 to r2767).
+  // move"), breaking the goat lap (No known path from r2768 to r2767). Kelton streets (live 2026-11-13
+  // Merevia, r5043 south / r9042 north): `The bright light blinds you for a moment!` is the same
+  // unseen landing, often after `The moon is at Eye.`
   darkRoom:
-    /^(?:It is too dark\.?\s*|You may get dizzy if you look around like that!?\s*|Your eyes sting from the (?:bright|blinding) light\b.*)$/i,
+    /^(?:It is too dark\.?\s*|You may get dizzy if you look around like that!?\s*|Your eyes sting from the (?:bright|blinding) light\b.*|The bright light blinds you for a moment!?)$/i,
   fleeMoved: /^You flee like the wind, (\w+)!/i,
   fleeFailed: [/^You fail to flee/i, /^You attempt to flee,? but (?:go nowhere|fail)/i],
   killLine: /^You killed (.+?)\.\s*$/i,

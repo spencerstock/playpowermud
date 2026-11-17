@@ -54,6 +54,21 @@ test("death ends combat", () => {
   assert.equal(s.inCombat, false);
 });
 
+test("a score block with no HP or SP does not freeze the next prompt", () => {
+  const s = new GameStateTracker();
+  s.onEvent({
+    type: "score",
+    status: { name: "Wybie", updatedAt: Date.now() },
+  });
+  s.onEvent({
+    type: "prompt",
+    bare: false,
+    vitals: { hp: 361, sp: 40, at: Date.now() },
+  });
+  assert.equal(s.vitals?.hp, 361);
+  assert.equal(s.vitals?.sp, 40);
+});
+
 test("prompt after score does not regress SP from stale status line", () => {
   const s = new GameStateTracker();
   s.onEvent({

@@ -12,8 +12,9 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
 - **Config** — **Export config** / **Import config** in the header backs up aliases, comms, skin,
   panel prefs, and the learned map (JSON file).
 - **Comms** — tells, says, and shouts in the side panel (Option+C), kept per character.
-- **Map** — the shipped Powermud world graph with live position tracking, level/plane view,
-  search and a room inspector (Option+M). What you map is saved in this browser (IndexedDB).
+- **Map** — starts empty in each browser. As you walk, rooms and exits are learned, with live
+  position tracking, level/plane view, search, and a room inspector (Option+M). The map is saved
+  in this browser (IndexedDB) and restored next time.
 - **Wiki** — [/wiki](/wiki): **Using the client** and **Powermud game wiki** (characters, items, quests, professions).
 
 ## Run locally
@@ -57,11 +58,6 @@ Environment variables (all optional):
 character goes link-dead and the client shows the login prompt again on reconnect. For
 uninterrupted play, run `yarn relay` on an always-on host and build with
 `RELAY_URL=wss://<host>/api/ws`. `?relay=wss://…` on the page URL overrides it for testing.
-
-## Updating the map
-
-`public/data/powermud.graph.json` is copied from `mudwithme/data/world/powermud.graph.json`.
-Browsers keep their own learned copy until a shipped map with a newer `updatedAt` arrives.
 
 ## Updating equipment wiki stats
 

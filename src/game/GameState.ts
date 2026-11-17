@@ -135,7 +135,9 @@ export class GameStateTracker {
         if (this.phase !== "in-game") this.phase = "in-game";
         break;
       case "score":
-        this.trustScoreVitalsOnNextPrompt = true;
+        // Only a score that carried HP/SP outranks the next prompt; a cut-short block must not
+        // make the prompt's live HP get dropped (live 2026-11-02: HP stuck at 361).
+        this.trustScoreVitalsOnNextPrompt = ev.status.hp !== undefined || ev.status.sp !== undefined;
         this.status = { ...this.status, ...ev.status };
         if (ev.status.name) this.character = ev.status.name;
         this.mergeVitals({
@@ -177,7 +179,7 @@ export class GameStateTracker {
   private mergeVitals(v: Partial<Vitals>): void {
     const prev = this.vitals ?? { at: Date.now() };
     const next: Vitals = { ...prev, at: v.at ?? Date.now() };
-    for (const k of ["hp", "hpMax", "sp", "spMax", "pp", "ppMax", "attacker"] as const) {
+    for (const k of ["hp", "hpMax", "sp", "spMax", "pp", "ppMax", "mv", "mvMax", "hpText", "spText", "mvText", "attacker"] as const) {
       if (v[k] !== undefined) (next as Record<string, unknown>)[k] = v[k];
     }
     // Prompts carry current values only; keep max from score/combat lines but never below current.

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Shared world graph and your personal map." />
+    <meta name="description" content="The map this browser learns as you play." />
     <title>Explored map data — Play Powermud wiki</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/wiki/wiki.css" />
@@ -24,15 +24,8 @@
 
       <h2>Explored map data</h2>
       <p class="wiki-lede">
-        Play Powermud ships a starting map of Powermud and grows it as you walk around.
-        Your personal discoveries stay on this browser; the shared file updates when the site is redeployed.
+        Each browser builds its own map of Powermud as you walk. Nothing is preloaded from a shared world file.
       </p>
-
-      <h3>Shared baseline</h3>
-      <ul>
-        <li><code>/data/powermud.graph.json</code> — rooms and links many players have already mapped</li>
-        <li>New deploys may ship a newer graph; your browser merges it if the file’s <code>updatedAt</code> is newer</li>
-      </ul>
 
       <h3>Your map</h3>
       <ul>

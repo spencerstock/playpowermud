@@ -903,7 +903,7 @@ async function boot(): Promise<void> {
   mapApiFn = createMapApi(runtime);
   worldPanel = createWorldPanel({ mount: mapPanelMount, api: mapApiFn });
   meta(
-    `Map ready: ${store.map.roomCount()} rooms (${source === "saved" ? "with what this browser learned" : source}). ` +
+    `Map ready: ${store.map.roomCount()} rooms (${source === "saved" ? "saved in this browser" : "empty until you explore"}). ` +
       `Aliases: ${aliases.names().length}. Type /alias NAME EXPANSION to add one.`,
   );
   window.addEventListener("pagehide", () => void store.flush());

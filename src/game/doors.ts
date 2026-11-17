@@ -1,8 +1,26 @@
-import { canonicalDirection, longDirection } from "./directions.js";
+import { canonicalDirection, isGeometricDirection, longDirection, normalizeCommand } from "./directions.js";
 import type { RoomDoor, RoomObservation } from "./types.js";
 
 /** Powermud opens a compass door with this, then the direction is a normal exit. */
 export const OPEN_DOOR_COMMAND = "open door";
+
+const DIRECTIONAL_OPEN_DOOR =
+  /^open(?:\s+(?:north|south|east|west|northeast|northwest|southeast|southwest|up|down|n|s|e|w|ne|nw|se|sw|u|d))?\s+door$/;
+
+export function isOpenDoorCommand(cmd: string): boolean {
+  const n = normalizeCommand(cmd);
+  return n === normalizeCommand(OPEN_DOOR_COMMAND) || DIRECTIONAL_OPEN_DOOR.test(n);
+}
+
+type DoorRoom = Pick<{ doors?: readonly RoomDoor[] }, "doors">;
+
+/** When a room has more than one door, Powermud needs `open east door`, not bare `open door`. */
+export function openDoorOnExit(dir: string, room?: DoorRoom | null): string {
+  if (!isGeometricDirection(dir)) return `open ${dir}`;
+  const doors = room?.doors ?? [];
+  if (doors.filter((d) => d.state !== "locked").length > 1) return `open ${longDirection(dir)} door`;
+  return OPEN_DOOR_COMMAND;
+}
 
 const DOOR_LINE =
   /^(?:there is an?\s+)?(.+?)\s+door leading\s+([a-z]+)\s+\(\s*(opened|closed|locked)\s*\)\.?$/i;
