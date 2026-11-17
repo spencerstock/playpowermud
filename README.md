@@ -53,7 +53,7 @@ Environment variables (all optional):
 | `RELAY_URL` | *(this site's `/api/ws`)* | Build-time: point the client at an external relay |
 
 **Session length:** a Vercel WebSocket closes when the function reaches its max duration —
-300 s on Hobby (set in `vercel.json`), up to 800 s on Pro (1800 s in beta). When it closes the
+1800 s (30 min) on Pro/Enterprise with extended duration (set in `vercel.json`; 300 s on Hobby). When it closes the
 character goes link-dead and the client shows the login prompt again on reconnect. For
 uninterrupted play, run `yarn relay` on an always-on host and build with
 `RELAY_URL=wss://<host>/api/ws`. `?relay=wss://…` on the page URL overrides it for testing.

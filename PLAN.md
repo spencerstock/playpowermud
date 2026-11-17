@@ -40,7 +40,8 @@ only), `web/sidePanel.ts` (comms only), `web/worldPanel.ts` (no bots/logins/walk
 ## Session length on Vercel
 
 Vercel Functions serve WebSockets, but a connection closes when the function hits its max
-duration: **5 min on Hobby**, 800 s on Pro (1800 s beta). When the relay closes, the MUD socket
+duration: **5 min on Hobby**, up to **1800 s (30 min)** on Pro/Enterprise with extended duration
+(configured in `vercel.json`). When the relay closes, the MUD socket
 closes and the character goes link-dead; the client reconnects to the login prompt.
 
 For uninterrupted play, run `server/standalone.ts` on any always-on host (Fly.io, Railway, a VPS)

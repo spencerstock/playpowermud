@@ -11,6 +11,6 @@
     { "source": "/wiki/items", "destination": "/wiki/items/index.html" }
   ],
   "functions": {
-    "api/ws.ts": { "maxDuration": 300 }
+    "api/ws.ts": { "maxDuration": 1800 }
   }
 }
