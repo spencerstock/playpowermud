@@ -47,6 +47,8 @@ import {
   type RoomSearchHitBrief,
 } from "./roomAutocomplete.js";
 import { createWorldPanel } from "./worldPanel.js";
+import { createAppMenu } from "./appMenu.js";
+import { createHotkeyMenu } from "./hotkeyMenu.js";
 import { createWikiOverlay } from "./wikiOverlay.js";
 
 /** Replaced at build time (scripts/build.mjs); empty = this site's own /api/ws. */
@@ -73,6 +75,9 @@ const wireHintEl = byId("wire-hint");
 const mapPanelMount = byId("map-panel-mount");
 const sidePanelMount = byId("chat-panel-mount");
 const wikiOpenBtn = byId<HTMLButtonElement>("wiki-open");
+const appMenuBtn = byId<HTMLButtonElement>("app-menu-btn");
+const appMenuPanel = byId("app-menu-panel");
+const hotkeyMenuOpenBtn = byId<HTMLButtonElement>("hotkey-menu-open");
 
 const mudTerm = createMudTerminal(logEl, 10_000);
 const aliases = new AliasStore();
@@ -181,13 +186,35 @@ const wikiOverlay = createWikiOverlay({
 
 wikiOpenBtn.addEventListener("click", () => wikiOverlay.toggle());
 
+const appMenu = createAppMenu(appMenuBtn, appMenuPanel);
+const hotkeyMenu = createHotkeyMenu(hotkeyRules, {
+  onClose: () => {
+    mudTerm.scrollToBottom();
+    input.focus();
+  },
+});
+hotkeyMenuOpenBtn.addEventListener("click", () => {
+  appMenu.setOpen(false);
+  hotkeyMenu.open();
+});
+
 document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && hotkeyMenu.isOpen()) {
+    e.preventDefault();
+    hotkeyMenu.close();
+    return;
+  }
+  if (e.key === "Escape" && appMenu.isOpen()) {
+    e.preventDefault();
+    appMenu.setOpen(false);
+    return;
+  }
   if (e.key === "Escape" && wikiOverlay.isOpen()) {
     e.preventDefault();
     wikiOverlay.close();
     return;
   }
-  if (!passwordMode()) {
+  if (!passwordMode() && !hotkeyMenu.isOpen()) {
     const hotkeyCmd = hotkeyRules.commandForEvent(e);
     if (hotkeyCmd) {
       e.preventDefault();
@@ -473,7 +500,9 @@ function getCommandInputSelectionSpan(): { from: number; to: number } | null {
 function isCommandTypingChromeTarget(node: Element | null): boolean {
   if (!node) return true;
   if (node.closest("#input")) return false;
-  return !node.closest("button, a, select, textarea, input, label, .map-panel-root, .side-panel-root, .chat-panel-root");
+  return !node.closest(
+    "button, a, select, textarea, input, label, .map-panel-root, .side-panel-root, .chat-panel-root, .client-dialog-backdrop",
+  );
 }
 
 function shouldRedirectKeyToCommand(e: KeyboardEvent): boolean {

@@ -32,6 +32,25 @@
         <button type="button" id="config-import-btn" title="Restore a config file from this browser or another device">Import config</button>
         <input type="file" id="config-import" accept="application/json,.json" hidden />
         <button type="button" id="skin-cycle" title="Switch color theme (dark / light)">Skin: Dark</button>
+        <div class="header-menu-wrap">
+          <button
+            type="button"
+            id="app-menu-btn"
+            class="app-menu-btn header-wiki-link"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="app-menu-panel"
+            title="Client options (hotkeys, …)"
+          >
+            <span class="app-menu-icon" aria-hidden="true"></span>
+            <span class="app-menu-label">Menu</span>
+          </button>
+          <div id="app-menu-panel" class="app-menu-panel" hidden role="menu" aria-labelledby="app-menu-btn">
+            <button type="button" id="hotkey-menu-open" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              Hotkeys…
+            </button>
+          </div>
+        </div>
       </div>
     </header>
     <div class="play-stack">

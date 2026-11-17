@@ -159,6 +159,253 @@ a.header-wiki-link:hover {
   color: var(--ui-hint);
 }
 
+header.app-menu-open {
+  position: relative;
+  z-index: 90;
+}
+
+.header-menu-wrap {
+  position: relative;
+}
+
+.app-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: auto;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.app-menu-label {
+  font-size: 0.82rem;
+}
+
+.app-menu-icon {
+  display: block;
+  width: 1rem;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  box-shadow:
+    0 -5px 0 currentColor,
+    0 5px 0 currentColor;
+}
+
+.app-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 50;
+  min-width: 11rem;
+  padding: 0.35rem;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 6px;
+  background: var(--ui-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.app-menu-action {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.app-menu-action:hover {
+  background: var(--ui-surface-raised);
+  color: var(--ui-hint);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body.client-dialog-open {
+  overflow: hidden;
+}
+
+.client-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.client-dialog-backdrop[hidden] {
+  display: none !important;
+}
+
+.client-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(32rem, 100%);
+  max-height: min(88vh, 40rem);
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 0.35rem;
+  background: var(--ui-surface);
+  color: var(--ui-fg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.client-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.client-dialog-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.client-dialog-close {
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.1rem 0.45rem;
+}
+
+.client-dialog-sub {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ui-meta);
+  line-height: 1.35;
+}
+
+.client-dialog-notice {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ui-hint);
+}
+
+.client-dialog-notice-error {
+  color: var(--ui-error);
+}
+
+.hotkey-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: min(28vh, 14rem);
+  overflow: auto;
+  border: 1px solid var(--ui-border);
+  border-radius: 4px;
+  padding: 0.35rem;
+  background: var(--ui-surface-raised);
+}
+
+.hotkey-menu-empty {
+  font-size: 0.82rem;
+  color: var(--ui-meta);
+  padding: 0.35rem;
+}
+
+.hotkey-menu-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.15rem;
+}
+
+.hotkey-menu-num {
+  color: var(--ui-meta);
+  min-width: 1.5rem;
+}
+
+.hotkey-menu-key {
+  font-size: 0.82rem;
+}
+
+.hotkey-menu-arrow {
+  color: var(--ui-meta);
+}
+
+.hotkey-menu-cmd {
+  flex: 1 1 6rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hotkey-menu-remove {
+  margin-left: auto;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.4rem;
+}
+
+.hotkey-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.hotkey-add-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hotkey-add-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ui-meta);
+}
+
+.hotkey-key-field {
+  text-align: left;
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px dashed var(--ui-border-strong);
+  background: var(--ui-surface-raised);
+  cursor: pointer;
+}
+
+.hotkey-key-field-recording {
+  border-color: var(--ui-hint);
+  color: var(--ui-hint);
+}
+
+.hotkey-command-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hotkey-add-btn {
+  align-self: flex-start;
+  font-size: 0.85rem;
+}
+
 .wiki-overlay {
   position: fixed;
   inset: 0;
@@ -2109,8 +2356,17 @@ body.bot-advanced-open {
 
 @media (max-width: 720px) {
   header .conn-controls,
-  header .controls,
   header h1 {
+    display: none;
+  }
+
+  header .controls {
+    display: flex;
+    margin-left: auto;
+    gap: 0;
+  }
+
+  header .controls > :not(.header-menu-wrap) {
     display: none;
   }
 

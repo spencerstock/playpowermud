@@ -89,6 +89,44 @@ export function bindingFromStoredKey(key: string): KeyBinding | null {
   return parsed.ok ? parsed.binding : null;
 }
 
+const MODIFIER_ONLY = new Set([
+  "Control",
+  "Shift",
+  "Alt",
+  "Meta",
+  "OS",
+  "AltGraph",
+  "CapsLock",
+  "NumLock",
+  "ScrollLock",
+]);
+
+/** Build a `/hotkey`-compatible spec from a capture `keydown` (menu recorder). */
+export function keySpecFromKeyboardEvent(
+  e: KeyboardEvent,
+): { ok: true; key: string } | { ok: false; reason: string } {
+  if (e.repeat) return { ok: false, reason: "duplicate key repeat" };
+  if (MODIFIER_ONLY.has(e.key)) return { ok: false, reason: "modifier only" };
+  const binding: KeyBinding = {
+    ctrl: e.ctrlKey,
+    alt: e.altKey,
+    shift: e.shiftKey,
+    meta: e.metaKey,
+    code: e.code,
+  };
+  if (!isAllowedUserBinding(binding)) {
+    return {
+      ok: false,
+      reason: "use F1–F12 or a chord with Ctrl, Alt, Shift, or Meta",
+    };
+  }
+  if (isReservedBinding(binding)) {
+    return { ok: false, reason: "that key is reserved for a built-in client shortcut" };
+  }
+  const key = formatKeyBinding(binding);
+  return normalizeKeySpec(key);
+}
+
 function isAllowedUserBinding(binding: KeyBinding): boolean {
   if (FN.test(binding.code)) return true;
   return binding.ctrl || binding.alt || binding.shift || binding.meta;

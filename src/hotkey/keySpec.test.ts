@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { eventMatchesBinding, formatKeyBinding, isReservedBinding, parseKeyBinding } from "./keySpec.js";
+import {
+  eventMatchesBinding,
+  formatKeyBinding,
+  isReservedBinding,
+  keySpecFromKeyboardEvent,
+  parseKeyBinding,
+} from "./keySpec.js";
 
 test("parseKeyBinding accepts F-keys and modified letters", () => {
   assert.deepEqual(parseKeyBinding("F2"), {
@@ -26,6 +32,34 @@ test("isReservedBinding matches built-in panel shortcuts", () => {
     isReservedBinding({ ctrl: false, alt: true, shift: false, meta: false, code: "KeyM" }),
     true,
   );
+});
+
+test("keySpecFromKeyboardEvent rejects reserved Alt+W", () => {
+  const e = {
+    repeat: false,
+    key: "w",
+    code: "KeyW",
+    ctrlKey: false,
+    altKey: true,
+    shiftKey: false,
+    metaKey: false,
+  } as KeyboardEvent;
+  const spec = keySpecFromKeyboardEvent(e);
+  assert.equal(spec.ok, false);
+});
+
+test("keySpecFromKeyboardEvent accepts Ctrl+F5", () => {
+  const e = {
+    repeat: false,
+    key: "F5",
+    code: "F5",
+    ctrlKey: true,
+    altKey: false,
+    shiftKey: false,
+    metaKey: false,
+  } as KeyboardEvent;
+  const spec = keySpecFromKeyboardEvent(e);
+  assert.deepEqual(spec, { ok: true, key: "Ctrl+F5" });
 });
 
 test("eventMatchesBinding compares modifiers and code", () => {
