@@ -116,6 +116,36 @@ test("whole-line exact alias is not split on separator", () => {
   assert.deepEqual(r.commands, ["look"]);
 });
 
+test("@delay stays in the command list and is not a variable", () => {
+  const engine = new AliasEngine({ commandSeparator: ";", variables: { spell: "bless", delay: "nope" } });
+  engine.loadAliases(new Map([["buff", "cast @spell; @delay 2; cast mirror"]]));
+  const r = engine.resolveInput("buff");
+  assert.equal(r.kind, "alias");
+  assert.deepEqual(r.commands, ["cast bless", "@delay 2", "cast mirror"]);
+  assert.deepEqual(engine.resolveInput("cast $delay$").commands, ["cast nope"]);
+  assert.equal(engine.resolveInput("@delay").kind, "blocked");
+});
+
+test("@delay inside one segment splits around the wait", () => {
+  const engine = new AliasEngine({ commandSeparator: ";", variables: {} });
+  engine.loadAliases(new Map([["combo", "say hi @delay 1.5 say bye"]]));
+  assert.deepEqual(engine.resolveInput("combo").commands, ["say hi", "@delay 1.5", "say bye"]);
+});
+
+test("trailing alias args skip @delay segments", () => {
+  const engine = new AliasEngine({ commandSeparator: ";", variables: {} });
+  engine.loadAliases(new Map([["bs", "backstab @delay 1"]]));
+  assert.deepEqual(engine.resolveInput("bs orc").commands, ["backstab orc", "@delay 1"]);
+});
+
+test("bad @delay blocks the alias", () => {
+  const engine = new AliasEngine({ commandSeparator: ";", variables: {} });
+  engine.loadAliases(new Map([["buff", "cast bless; @delay soon"]]));
+  const r = engine.resolveInput("buff");
+  assert.equal(r.kind, "blocked");
+  assert.match(r.note ?? "", /@delay/);
+});
+
 test("nested alias chain expands to mud commands (fi / dcore)", () => {
   const engine = new AliasEngine({ commandSeparator: ";", variables: {} });
   engine.loadAliases(

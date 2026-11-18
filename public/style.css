@@ -406,6 +406,12 @@ body.client-dialog-open {
   font-size: 0.85rem;
 }
 
+.alias-dialog .hotkey-menu-cmd,
+.when-dialog .hotkey-menu-cmd {
+  white-space: normal;
+  text-overflow: unset;
+}
+
 .wiki-overlay {
   position: fixed;
   inset: 0;
@@ -2486,6 +2492,13 @@ body.bot-advanced-open {
     gap: 0.4rem;
     padding: 0.4rem 0.65rem 0;
     flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.layout-mobile .mobile-commands::-webkit-scrollbar {
+    display: none;
   }
 
   body.layout-mobile .mobile-commands[hidden] {
@@ -2493,10 +2506,17 @@ body.bot-advanced-open {
   }
 
   .mobile-command {
-    flex: 1 1 0;
+    flex: 1 1 4.5rem;
+    min-width: 4.5rem;
     min-height: 2.75rem;
     font-size: 1rem;
     text-transform: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
 
   .mobile-actions {
@@ -2526,6 +2546,52 @@ body.bot-advanced-open {
     padding: 0.35rem 0.55rem;
     min-height: 2.5rem;
     flex: 0 0 auto;
+  }
+
+  .mobile-action-add {
+    min-width: 2.6rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1;
+    padding-inline: 0.55rem;
+  }
+
+  .mobile-btn-dialog {
+    overflow: auto;
+  }
+
+  .mobile-btn-dialog input {
+    font-size: 16px;
+  }
+
+  .mobile-btn-picks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    max-height: 7.5rem;
+    overflow: auto;
+    margin: 0;
+  }
+
+  .mobile-btn-pick {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
+    padding: 0.28rem 0.5rem;
+  }
+
+  .mobile-btn-empty {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ui-meta);
+  }
+
+  .mobile-btn-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
   }
 
   .mobile-action-bot {

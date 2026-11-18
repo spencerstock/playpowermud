@@ -1,4 +1,5 @@
 import { parseSlashAliasesLine } from "../aliases/slashCommands.js";
+import { runActionSteps } from "../scripting/actionDelay.js";
 import { AliasStore } from "../client/aliases.js";
 import { HotkeyRulesStore } from "../client/hotkeyRules.js";
 import { WhenRulesStore } from "../client/whenRules.js";
@@ -47,9 +48,12 @@ import {
   type RoomSearchHitBrief,
 } from "./roomAutocomplete.js";
 import { createWorldPanel } from "./worldPanel.js";
+import { createAliasMenu } from "./aliasMenu.js";
 import { createAppMenu } from "./appMenu.js";
 import { createHotkeyMenu } from "./hotkeyMenu.js";
+import { createWhenMenu } from "./whenMenu.js";
 import { createWikiOverlay } from "./wikiOverlay.js";
+import { mountMobileCommandButtons } from "./mobileButtons.js";
 
 /** Replaced at build time (scripts/build.mjs); empty = this site's own /api/ws. */
 declare const __RELAY_URL__: string;
@@ -77,6 +81,8 @@ const sidePanelMount = byId("chat-panel-mount");
 const wikiOpenBtn = byId<HTMLButtonElement>("wiki-open");
 const appMenuBtn = byId<HTMLButtonElement>("app-menu-btn");
 const appMenuPanel = byId("app-menu-panel");
+const aliasMenuOpenBtn = byId<HTMLButtonElement>("alias-menu-open");
+const whenMenuOpenBtn = byId<HTMLButtonElement>("when-menu-open");
 const hotkeyMenuOpenBtn = byId<HTMLButtonElement>("hotkey-menu-open");
 
 const mudTerm = createMudTerminal(logEl, 10_000);
@@ -186,12 +192,26 @@ const wikiOverlay = createWikiOverlay({
 
 wikiOpenBtn.addEventListener("click", () => wikiOverlay.toggle());
 
+const clientDialogOnClose = () => {
+  mudTerm.scrollToBottom();
+  input.focus();
+};
+
 const appMenu = createAppMenu(appMenuBtn, appMenuPanel);
-const hotkeyMenu = createHotkeyMenu(hotkeyRules, {
-  onClose: () => {
-    mudTerm.scrollToBottom();
-    input.focus();
-  },
+const aliasMenu = createAliasMenu(aliases, { onClose: clientDialogOnClose });
+const whenMenu = createWhenMenu(whenRules, { onClose: clientDialogOnClose });
+const hotkeyMenu = createHotkeyMenu(hotkeyRules, { onClose: clientDialogOnClose });
+function clientDialogOpen(): boolean {
+  return aliasMenu.isOpen() || whenMenu.isOpen() || hotkeyMenu.isOpen();
+}
+
+aliasMenuOpenBtn.addEventListener("click", () => {
+  appMenu.setOpen(false);
+  aliasMenu.open();
+});
+whenMenuOpenBtn.addEventListener("click", () => {
+  appMenu.setOpen(false);
+  whenMenu.open();
 });
 hotkeyMenuOpenBtn.addEventListener("click", () => {
   appMenu.setOpen(false);
@@ -199,9 +219,11 @@ hotkeyMenuOpenBtn.addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && hotkeyMenu.isOpen()) {
+  if (e.key === "Escape" && clientDialogOpen()) {
     e.preventDefault();
-    hotkeyMenu.close();
+    if (aliasMenu.isOpen()) aliasMenu.close();
+    else if (whenMenu.isOpen()) whenMenu.close();
+    else hotkeyMenu.close();
     return;
   }
   if (e.key === "Escape" && appMenu.isOpen()) {
@@ -214,7 +236,7 @@ document.addEventListener("keydown", (e) => {
     wikiOverlay.close();
     return;
   }
-  if (!passwordMode() && !hotkeyMenu.isOpen()) {
+  if (!passwordMode() && !clientDialogOpen()) {
     const hotkeyCmd = hotkeyRules.commandForEvent(e);
     if (hotkeyCmd) {
       e.preventDefault();
@@ -311,7 +333,7 @@ disconnectBtn.addEventListener("click", () => connection.close());
 // ---- input line ---------------------------------------------------------------------------
 
 const lineEditor = new TelnetLineEditor();
-type HistoryEntry = { wire: string; display: string };
+type HistoryEntry = { wire: string; display: string; expandClient?: boolean };
 let lastSubmit: HistoryEntry | null = null;
 const commandHistory: HistoryEntry[] = [];
 let historyBrowseIndex = -1;
@@ -607,6 +629,80 @@ document.addEventListener(
 
 // ---- submit -------------------------------------------------------------------------------
 
+/** `/wp`, `/to`, `/alias`, `/when`, `/hotkey`, and their list/remove forms. Not a MUD command. */
+function isClientSlashAction(line: string): boolean {
+  const text = line.trim();
+  if (!text.startsWith("/")) return false;
+  return !!(
+    parseSlashWpLine(text) ||
+    parseSlashToLine(text) ||
+    isSlashAliasDefinePrefix(text) ||
+    isSlashAliasUndefinePrefix(text) ||
+    parseSlashAliasesLine(text) ||
+    isSlashHotkeyManageLine(text) ||
+    isSlashWhenManageLine(text)
+  );
+}
+
+async function saveWaypoint(name: string): Promise<void> {
+  if (!mapApiFn) throw new Error("Map not ready");
+  if (!name.trim()) throw new Error("Usage: /wp <name> — save the current room as a waypoint");
+  const r = await mapApiFn<{
+    roomId: string;
+    room?: { label?: string | null; title?: string | null };
+  }>("/api/map/waypoint", { name });
+  const where = r.room?.label ?? r.room?.title ?? r.roomId;
+  meta(`Waypoint "${name.trim()}" → ${where} (${r.roomId})`);
+  worldPanel?.refresh?.();
+}
+
+/** `/to` from the command line prints the path. From a button (and anything that button expands) it walks. */
+async function followSlashTo(line: string, walk: boolean): Promise<void> {
+  if (!mapApiFn) throw new Error("Map not ready");
+  const roomId = await resolveSlashToRoomId(line);
+  if (!roomId) throw new Error("No mapped room matches that /to query.");
+  const path = await mapApiFn<{
+    found: boolean;
+    commands: string[];
+    to?: { title?: string | null; id?: string };
+  }>("/api/map/path", { to: roomId });
+  if (!path.found || path.commands.length === 0) throw new Error("No known path from here to that room.");
+  const dest = path.to?.title ?? path.to?.id ?? roomId;
+  if (!walk) {
+    meta(`Path to ${dest} (${path.commands.length} steps): ${path.commands.join("; ")}`);
+    return;
+  }
+  if (!connection.connected) throw new Error("Not connected.");
+  meta(`Walking to ${dest} (${path.commands.length} steps).`);
+  connection.sendLines(path.commands);
+  mudTerm.scrollToBottom();
+}
+
+async function runClientSlashAction(line: string): Promise<void> {
+  const wp = parseSlashWpLine(line);
+  if (wp) {
+    await saveWaypoint(wp.name);
+    return;
+  }
+  if (parseSlashToLine(line)) {
+    await followSlashTo(line, true);
+    return;
+  }
+  handleSlashCommand(line);
+}
+
+/** Send resolved lines, pausing on `@delay N` before the commands that follow it. */
+function sendResolvedCommands(commands: string[], opts?: { expandClient?: boolean }): void {
+  void runActionSteps(commands.length ? commands : [""], {
+    send: (lines) => connection.sendLines(lines),
+    connected: () => connection.connected,
+    onError: (err) => errorLine(err instanceof Error ? err.message : String(err)),
+    ...(opts?.expandClient
+      ? { takes: (command: string) => isClientSlashAction(command), run: (command: string) => runClientSlashAction(command) }
+      : {}),
+  }).then(() => mudTerm.scrollToBottom());
+}
+
 /** Alias-expanded send without echo (for `/when` auto-replies). */
 function sendAutomationLine(wire: string): void {
   if (!connection.connected) return;
@@ -616,14 +712,14 @@ function sendAutomationLine(wire: string): void {
       errorLine(error);
       return;
     }
-    connection.sendLines(commands.length ? commands : [""]);
+    sendResolvedCommands(commands);
   } catch (err) {
     errorLine(err instanceof Error ? err.message : String(err));
   }
 }
 
 /** Expand aliases and write to the MUD; echo what you typed (never a password). */
-function submitLine(wire: string, display: string): void {
+function submitLine(wire: string, display: string, opts?: { expandClient?: boolean }): void {
   if (!connection.connected) {
     if (connection.status !== "connecting") connect();
     else errorLine("Still connecting…");
@@ -643,7 +739,8 @@ function submitLine(wire: string, display: string): void {
       return;
     }
     // An empty line still means "press Enter" (pagers, prompts).
-    connection.sendLines(commands.length ? commands : [""]);
+    // Buttons ask for client expansion so aliases, /wp, and /to walks run here too.
+    sendResolvedCommands(commands, { expandClient: opts?.expandClient === true });
   } catch (err) {
     errorLine(err instanceof Error ? err.message : String(err));
   }
@@ -729,7 +826,9 @@ form.addEventListener("submit", (e) => {
   if (lineEditor.isEmpty()) {
     if (!connection.connected) {
       if (connection.status !== "connecting") connect();
-    } else if (lastSubmit && !passwordMode()) submitLine(lastSubmit.wire, lastSubmit.display);
+    } else if (lastSubmit && !passwordMode()) {
+      submitLine(lastSubmit.wire, lastSubmit.display, { expandClient: lastSubmit.expandClient === true });
+    }
     else submitLine("", "");
     return;
   }
@@ -738,20 +837,9 @@ form.addEventListener("submit", (e) => {
     const slashWpLine = lineEditor.text.trim();
     void (async () => {
       try {
-        if (!mapApiFn) throw new Error("Map not ready");
-        if (!slashWp.name.trim()) {
-          errorLine('Usage: /wp <name> — save the current room as a waypoint');
-          return;
-        }
-        const r = await mapApiFn<{
-          roomId: string;
-          room?: { label?: string | null; title?: string | null };
-        }>("/api/map/waypoint", { name: slashWp.name });
-        const where = r.room?.label ?? r.room?.title ?? r.roomId;
-        meta(`Waypoint "${slashWp.name.trim()}" → ${where} (${r.roomId})`);
+        await saveWaypoint(slashWp.name);
         pushCommandHistory({ wire: slashWpLine, display: slashWpLine });
         clearHistoryBrowse();
-        worldPanel?.refresh?.();
       } catch (err) {
         errorLine(err instanceof Error ? err.message : String(err));
       } finally {
@@ -764,23 +852,7 @@ form.addEventListener("submit", (e) => {
   if (parseSlashToLine(slashToLine) && !passwordMode()) {
     void (async () => {
       try {
-        if (!mapApiFn) throw new Error("Map not ready");
-        const roomId = await resolveSlashToRoomId(slashToLine);
-        if (!roomId) {
-          errorLine("No mapped room matches that /to query.");
-          return;
-        }
-        const path = await mapApiFn<{
-          found: boolean;
-          commands: string[];
-          to?: { title?: string | null; id?: string };
-        }>("/api/map/path", { to: roomId });
-        if (!path.found || path.commands.length === 0) {
-          errorLine("No known path from here to that room.");
-          return;
-        }
-        const dest = path.to?.title ?? path.to?.id ?? roomId;
-        meta(`Path to ${dest} (${path.commands.length} steps): ${path.commands.join("; ")}`);
+        await followSlashTo(slashToLine, false);
         pushCommandHistory({ wire: slashToLine, display: slashToLine });
         clearHistoryBrowse();
       } catch (err) {
@@ -872,13 +944,36 @@ for (const node of [mobileCommandsEl, mobileActionsEl, form, wireHintEl]) {
   if (node) new ResizeObserver(() => syncMobileChromeHeight()).observe(node);
 }
 
-for (const btn of document.querySelectorAll<HTMLElement>("[data-quick-cmd]")) {
-  btn.addEventListener("click", () => {
-    const cmd = btn.dataset.quickCmd?.trim();
-    if (!cmd) return;
-    pushCommandHistory({ wire: cmd, display: cmd });
-    lastSubmit = { wire: cmd, display: cmd };
-    submitLine(cmd, cmd);
+function runMobileButton(command: string): void {
+  const display = command.trim();
+  if (!display) return;
+  if (passwordMode()) {
+    errorLine("Finish signing in before using command buttons.");
+    return;
+  }
+  const client = isClientSlashAction(display);
+  const wire = client || !display.startsWith("/") ? display : display.slice(1);
+  const shown = client ? display : wire;
+  const entry = { wire, display: shown, expandClient: true as const };
+  pushCommandHistory(entry);
+  clearHistoryBrowse();
+  lastSubmit = entry;
+  submitLine(wire, shown, { expandClient: true });
+}
+
+const mobileAddBtn = document.getElementById("mobile-add");
+if (mobileCommandsEl && mobileAddBtn instanceof HTMLButtonElement) {
+  mountMobileCommandButtons({
+    commandsEl: mobileCommandsEl,
+    addButton: mobileAddBtn,
+    listAliases: () => aliases.list().map(([name, expansion]) => ({ name, expansion })),
+    listWaypoints: async () => {
+      if (!mapApiFn) throw new Error("Map not ready");
+      const res = await mapApiFn<{ waypoints: { name: string; label?: string }[] }>("/api/map/waypoints");
+      return res.waypoints ?? [];
+    },
+    onRun: runMobileButton,
+    onLayout: () => syncMobileChromeHeight(),
   });
 }
 document.getElementById("mobile-map")?.addEventListener("click", () => worldPanel?.toggleExpanded());

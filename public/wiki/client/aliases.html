@@ -41,6 +41,7 @@
       <h3>Expansion features</h3>
       <ul>
         <li><strong>Chains</strong> — separate commands with <code>;</code> (e.g. <code>look;score</code>).</li>
+        <li><strong>Delay</strong> — <code>@delay 2</code> in an alias or <code>/when</code> command waits 2 seconds before the rest of the action (the number is seconds).</li>
         <li><strong>Trailing args</strong> — a one-word alias can take the rest of the line (<code>/alias bs backstab</code> → <code>bs orc</code> sends <code>backstab orc</code>).</li>
         <li><strong>Prefix args</strong> — name the alias <code>NAME $1$</code> and use <code>$1$</code> in the body for the words after the command (e.g. <code>/alias ca $1$ cast stoneskin on $1$</code>).</li>
         <li><strong>Nesting</strong> — aliases can call other aliases; cycles return an error instead of looping.</li>

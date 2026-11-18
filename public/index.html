@@ -40,12 +40,18 @@
             aria-haspopup="menu"
             aria-expanded="false"
             aria-controls="app-menu-panel"
-            title="Client options (hotkeys, …)"
+            title="Client options (aliases, when rules, hotkeys, …)"
           >
             <span class="app-menu-icon" aria-hidden="true"></span>
             <span class="app-menu-label">Menu</span>
           </button>
           <div id="app-menu-panel" class="app-menu-panel" hidden role="menu" aria-labelledby="app-menu-btn">
+            <button type="button" id="alias-menu-open" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              Aliases…
+            </button>
+            <button type="button" id="when-menu-open" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              When commands…
+            </button>
             <button type="button" id="hotkey-menu-open" class="app-menu-action" role="menuitem" data-keep-app-menu>
               Hotkeys…
             </button>
@@ -68,6 +74,7 @@
     <nav id="mobile-actions" class="mobile-actions" aria-label="Quick actions" hidden>
       <button type="button" class="mobile-action" id="mobile-map" title="World map (Option+M)">Map</button>
       <button type="button" class="mobile-action" id="mobile-comms" title="Comms (Option+C)">Comms</button>
+      <button type="button" class="mobile-action mobile-action-add" id="mobile-add" title="Add a command button" aria-label="Add command button">+</button>
     </nav>
     <form id="form">
       <div class="command-wrap">

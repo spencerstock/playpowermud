@@ -27,6 +27,15 @@ export function defaultRelayUrl(loc: Location, built: string): string {
   return `${loc.protocol === "https:" ? "wss:" : "ws:"}//${loc.host}/api/ws`;
 }
 
+/** Powermud's native WebSocket (port 2001) speaks telnet bytes only — no relay status JSON. */
+export function isDirectMudWebSocket(url: string): boolean {
+  try {
+    return new URL(url).port === "2001";
+  } catch {
+    return false;
+  }
+}
+
 export class MudConnection {
   private ws: WebSocket | null = null;
   private telnet = new TelnetFilter();
@@ -67,12 +76,17 @@ export class MudConnection {
     const ws = new WebSocket(this.url);
     ws.binaryType = "arraybuffer";
     this.ws = ws;
+    ws.addEventListener("open", () => {
+      if (this.ws !== ws) return;
+      if (isDirectMudWebSocket(this.url)) this.setStatus("connected");
+    });
     ws.addEventListener("message", (ev) => {
       if (this.ws !== ws) return;
       if (typeof ev.data === "string") {
         this.onControl(ev.data);
         return;
       }
+      if (this._status === "connecting") this.setStatus("connected");
       const chunk = this.telnet.feed(new Uint8Array(ev.data as ArrayBuffer));
       if (chunk.serverEcho !== undefined) this.emit("echo", chunk.serverEcho);
       const text = this.decoder.decode(chunk.data, { stream: true });

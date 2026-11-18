@@ -1,3 +1,4 @@
+import { parseDelayCommand, splitDelayTokens } from "../scripting/actionDelay.js";
 import { parseSmartAliasMarker } from "../smartAliases/markers.js";
 import { expandZScriptBody } from "./zscript.js";
 
@@ -28,8 +29,16 @@ function expandVariables(
     if (Object.hasOwn(positional, name)) return positional[name] ?? "";
     return variables[name] ?? "";
   });
-  out = out.replace(/@(\w+)/g, (_, name: string) => variables[name] ?? "");
+  // `@delay` is a pause (`@delay 2`), not a variable named delay. `$delay$` still expands.
+  out = out.replace(/@(\w+)/g, (full: string, name: string) => {
+    if (/^delay$/i.test(name)) return full;
+    return variables[name] ?? "";
+  });
   return out;
+}
+
+function withTrailingArg(parts: string[], arg: string): string[] {
+  return parts.map((cmd) => (parseDelayCommand(cmd) ? cmd : cmd ? `${cmd} ${arg}` : arg));
 }
 
 /** `ca $1$` bodies use `$1$` for the arg; exact stems also accept suffix args (`bs orc` → `backstab orc`). */
@@ -95,6 +104,21 @@ export class AliasEngine {
     }
   }
 
+  /** Alias body → command parts, with `@delay N` kept as its own part. */
+  private bodyParts(
+    body: string,
+    positional?: Record<string, string>,
+  ): { ok: true; parts: string[] } | { ok: false; reason: string } {
+    const expanded = expandVariables(body, this.options.variables, positional);
+    const parts: string[] = [];
+    for (const part of splitCommands(expanded, this.options.commandSeparator)) {
+      const bits = splitDelayTokens(part);
+      if (!bits.ok) return bits;
+      parts.push(...bits.parts);
+    }
+    return { ok: true, parts };
+  }
+
   /** Expand alias bodies that reference other aliases (`dcore` → `cmi` → cast …). */
   private flattenAliasParts(parts: string[], depth = 0): AliasResolveResult {
     if (depth > MAX_ALIAS_EXPAND_DEPTH) {
@@ -131,6 +155,9 @@ export class AliasEngine {
    * alias bodies already expanded, so `a → b → a` stops at the guard instead of recursing forever.
    */
   private resolveSegment(trimmed: string, depth = 0): AliasResolveResult {
+    if (parseDelayCommand(trimmed)) {
+      return { kind: "command", commands: [trimmed.trim()] };
+    }
     const key = trimmed.toLowerCase();
     const z = this.zscript.get(key);
     if (z) {
@@ -145,9 +172,18 @@ export class AliasEngine {
       for (const [name, value] of Object.entries(expanded.variableUpdates)) {
         this.options.variables[name] = value;
       }
-      const withVars = expanded.commands.map((cmd) =>
-        expandVariables(cmd, this.options.variables),
-      );
+      const withVars: string[] = [];
+      for (const cmd of expanded.commands) {
+        const bits = splitDelayTokens(expandVariables(cmd, this.options.variables));
+        if (!bits.ok) {
+          return {
+            kind: "blocked",
+            commands: [],
+            note: `Alias "${trimmed}": ${bits.reason}`,
+          };
+        }
+        withVars.push(...bits.parts);
+      }
       return {
         kind: "alias",
         commands: withVars,
@@ -161,11 +197,11 @@ export class AliasEngine {
       if (smartId) {
         return { kind: "smart_alias", commands: [], smartAliasId: smartId };
       }
-      const expanded = expandVariables(body, this.options.variables);
-      return this.flattenAliasParts(
-        splitCommands(expanded, this.options.commandSeparator),
-        depth + 1,
-      );
+      const expanded = this.bodyParts(body);
+      if (!expanded.ok) {
+        return { kind: "blocked", commands: [], note: `Alias "${trimmed}": ${expanded.reason}` };
+      }
+      return this.flattenAliasParts(expanded.parts, depth + 1);
     }
 
     const withArg = trimmed.match(/^(\S+)\s+(.+)$/);
@@ -183,11 +219,11 @@ export class AliasEngine {
             smartAliasArgs: arg,
           };
         }
-        const expanded = expandVariables(prefixBody, this.options.variables, { "1": arg });
-        return this.flattenAliasParts(
-          splitCommands(expanded, this.options.commandSeparator),
-          depth + 1,
-        );
+        const expanded = this.bodyParts(prefixBody, { "1": arg });
+        if (!expanded.ok) {
+          return { kind: "blocked", commands: [], note: `Alias "${trimmed}": ${expanded.reason}` };
+        }
+        return this.flattenAliasParts(expanded.parts, depth + 1);
       }
 
       const exactBody = this.exact.get(stem);
@@ -201,15 +237,18 @@ export class AliasEngine {
             smartAliasArgs: arg,
           };
         }
-        const expanded = expandVariables(exactBody, this.options.variables);
-        const suffixed = splitCommands(expanded, this.options.commandSeparator).map((cmd) =>
-          cmd ? `${cmd} ${arg}` : arg,
-        );
-        return this.flattenAliasParts(suffixed, depth + 1);
+        const expanded = this.bodyParts(exactBody);
+        if (!expanded.ok) {
+          return { kind: "blocked", commands: [], note: `Alias "${trimmed}": ${expanded.reason}` };
+        }
+        return this.flattenAliasParts(withTrailingArg(expanded.parts, arg), depth + 1);
       }
     }
 
-    return { kind: "command", commands: [expandVariables(trimmed, this.options.variables)] };
+    const expanded = expandVariables(trimmed, this.options.variables);
+    const bits = splitDelayTokens(expanded);
+    if (!bits.ok) return { kind: "blocked", commands: [], note: bits.reason };
+    return { kind: "command", commands: bits.parts.length ? bits.parts : [expanded] };
   }
 
   resolveInput(line: string): AliasResolveResult {

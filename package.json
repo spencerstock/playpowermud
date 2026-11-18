@@ -14,7 +14,8 @@
     "build:wiki": "node scripts/build-guild-pages.mjs && node scripts/build-wiki-items.mjs && node scripts/build-wiki-search.mjs",
     "build:app": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test 'src/**/*.test.ts' 'server/**/*.test.ts' 'scripts/**/*.test.mjs'"
+    "test": "node --import tsx --test 'src/**/*.test.ts' 'server/**/*.test.ts' 'scripts/**/*.test.mjs'",
+    "test:mud-ws": "node --import tsx scripts/test-mud-ws.ts"
   },
   "dependencies": {
     "ws": "^8.18.3"

@@ -8,7 +8,8 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
 - **Terminal** — xterm.js with full ANSI, so `eset` colors show exactly as the MUD sends them.
   Command history (↑/↓), empty Enter repeats the last command, the password prompt is masked.
 - **Aliases** — `/alias NAME EXPANSION`, `/unalias NAME`, `/aliases [filter]`. `;` chains, nested
-  aliases, `$1$` args. Type `/` for autocomplete. Stored in this browser (localStorage).
+  aliases, `$1$` args, and `@delay 2` (pause 2 seconds before the next command, also in `/when`).
+  Type `/` for autocomplete. Stored in this browser (localStorage).
 - **Config** — **Export config** / **Import config** in the header backs up aliases, comms, skin,
   panel prefs, and the learned map (JSON file).
 - **Comms** — tells, says, and shouts in the side panel (Option+C), kept per character.
@@ -58,6 +59,12 @@ Environment variables (all optional):
 character goes link-dead and the client shows the login prompt again on reconnect. For
 uninterrupted play, run `yarn relay` on an always-on host and build with
 `RELAY_URL=wss://<host>/api/ws`. `?relay=wss://…` on the page URL overrides it for testing.
+
+**Powermud native WebSocket (`:2001`):** the game server can expose telnet over WebSocket at
+`ws://powermud.com:2001` (plain `ws` only for now — `wss` on that port is not up yet). Smoke-test
+from the terminal with `yarn test:mud-ws` (optional URL and commands:
+`yarn test:mud-ws ws://powermud.com:2001 guest quit`). On **local** `yarn dev` (HTTP), point the
+browser at it with `?relay=ws://powermud.com:2001` — HTTPS pages cannot use `ws://` (mixed content).
 
 ## Updating equipment wiki stats
 

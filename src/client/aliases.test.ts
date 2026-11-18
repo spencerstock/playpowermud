@@ -32,6 +32,14 @@ test("redefine and remove are case-insensitive", () => {
   assert.deepEqual(s.resolve("foo").commands, ["foo"]);
 });
 
+test("@delay in an alias or a raw chain is preserved", () => {
+  const s = new AliasStore(memoryStorage());
+  s.set("buff", "cast mirror; @delay 2; cast skin");
+  assert.deepEqual(s.resolve("buff").commands, ["cast mirror", "@delay 2", "cast skin"]);
+  assert.deepEqual(s.resolve("flee; @delay 1; stand").commands, ["flee", "@delay 1", "stand"]);
+  assert.match(s.resolve("flee; @delay").error ?? "", /@delay/);
+});
+
 test("cycles report an error instead of sending", () => {
   const s = new AliasStore(memoryStorage());
   s.set("a", "b");
