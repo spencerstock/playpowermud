@@ -15,6 +15,7 @@ import { createMudConnection } from "../client/relayClient.js";
 import { createMapApi } from "../client/mapApi.js";
 import { BrowserMapStore } from "../client/mapStore.js";
 import { ClientRuntime } from "../client/runtime.js";
+import { EsetLoginSync } from "../game/esetSync.js";
 import { setAnsiSkin, type AnsiSkin } from "./ansiHtml.js";
 import {
   createAliasAutocomplete,
@@ -295,6 +296,17 @@ function renderStatus(status: RelayStatus): void {
   }
 }
 
+const esetSync = new EsetLoginSync();
+
+function sendQuiet(line: string): void {
+  if (!connection.connected) return;
+  try {
+    connection.sendLine(line);
+  } catch {
+    /* closed between the check and the write */
+  }
+}
+
 connection.on("status", (status, reason) => {
   if (status === "connected") mudSessionEstablished = true;
   renderStatus(status);
@@ -304,15 +316,31 @@ connection.on("status", (status, reason) => {
   } else if (status === "closed") {
     serverEcho = false;
     syncPasswordMode();
+    esetSync.leaveGame();
     meta(`Disconnected${reason ? ` (${reason})` : ""}. Press Enter or Reconnect to reconnect.`);
     runtime?.onDisconnected();
   }
 });
 connection.on("data", (text) => {
-  mudTerm.write(text);
-  runtime?.onMudData(text);
-  if (!passwordMode() && runtime?.state.phase === "in-game") {
-    for (const wire of whenRules.commandsForOutput(text)) sendAutomationLine(wire);
+  if (!runtime) {
+    mudTerm.write(text);
+    return;
+  }
+  const phaseBefore = runtime.state.phase;
+  const { visible, send } = esetSync.consume(text);
+  if (visible) {
+    mudTerm.write(visible);
+    runtime.onMudData(visible);
+  }
+  if (phaseBefore !== "in-game" && runtime.state.phase === "in-game") {
+    const query = esetSync.onEnteredGame();
+    if (query) sendQuiet(query);
+  } else if (runtime.state.phase !== "in-game") {
+    esetSync.leaveGame();
+  }
+  for (const line of send) sendQuiet(line);
+  if (visible && !passwordMode() && runtime.state.phase === "in-game") {
+    for (const wire of whenRules.commandsForOutput(visible)) sendAutomationLine(wire);
   }
 });
 connection.on("echo", (on) => {
