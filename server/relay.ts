@@ -3,7 +3,7 @@ import net from "node:net";
 import { WebSocketServer, type WebSocket } from "ws";
 
 /**
- * WebSocket ↔ telnet relay. Each WebSocket gets its own TCP connection to the MUD; binary
+ * Legacy WebSocket ↔ telnet relay (self-host or rollback). Each WebSocket gets its own TCP connection to the MUD; binary
  * frames are raw bytes both ways, text frames are status JSON. The target is fixed by the
  * server (MUD_HOST / MUD_PORT) — clients can never choose where the relay connects.
  */

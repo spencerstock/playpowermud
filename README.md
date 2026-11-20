@@ -22,49 +22,63 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
 
 ```bash
 yarn install
-yarn dev            # http://localhost:3000 — static site + relay at /api/ws
+yarn dev            # http://localhost:3000 — site; client opens wss://powermud.com:2000
 yarn test
 yarn typecheck
 ```
 
+`yarn dev` still listens with the legacy TCP relay at `ws://localhost:3000/api/ws`. The page does
+not use it unless you add `?relay=ws://localhost:3000/api/ws`.
+
 ## How it works
 
-Everything runs in the browser (`src/client`, `src/web`, plus the copied `src/game`, `src/mapper`,
-`src/aliases`). The only server piece is a relay (`server/relay.ts`) that pipes WebSocket frames to
-a TCP connection to `powermud.com:2000`. The target is fixed server-side; clients cannot choose it.
+The game UI runs in the browser (`src/client`, `src/web`, plus `src/game`, `src/mapper`,
+`src/aliases`). **Connect** opens a WebSocket straight to Powermud production:
+
+`wss://powermud.com:2000`
+
+Port **2000** is prod. Port **2001** is their dev instance — do not point the public client there.
+A path on 443 such as `wss://powermud.com/ws2000` is recognized as a direct socket if they publish
+one; it is not the default.
+
+A SharedWorker keeps that one socket alive across the game page and wiki views in the same browser.
+It multiplexes tabs. It is not a TCP relay and it does not cap session length.
 
 | Entry | Use |
 |-------|-----|
-| `api/ws.ts` | Vercel Function (WebSockets on Fluid compute) |
-| `server/dev.ts` | Local dev: serves `public/` and the relay |
-| `server/standalone.ts` | Relay alone, for an always-on host (`yarn relay`, `PORT`, `/health`) |
+| `src/client/connection.ts` | WebSocket URL, telnet filter, direct-vs-relay detection |
+| `server/dev.ts` | Local static site, plus the legacy relay at `/api/ws` |
+| `server/relay.ts`, `server/standalone.ts`, `api/ws.ts` | Legacy TCP bridge (`yarn relay`). Kept for rollback and for MUDs with no WebSocket |
 
-See [PLAN.md](./PLAN.md) for what was copied, trimmed and rewritten from mudwithme.
+See [PLAN.md](./PLAN.md) for what was copied from mudwithme.
 
 ## Deploy on Vercel
 
-`vercel.json` builds the client (`yarn build` → `public/build/`), serves `public/`, and deploys
-`api/ws.ts` as the relay function.
+`vercel.json` builds the client (`yarn build` → `public/build/`) and serves `public/`. A normal
+build bakes `wss://powermud.com:2000`, so the dashboard does not need `MUD_WS_URL` for production.
 
-Environment variables (all optional):
+`api/ws.ts` is still deployed as a **rollback** relay. Open
+`?relay=wss://<this-site>/api/ws` to use it. That function still dies at Vercel's max duration
+(1800 s in `vercel.json`). The direct socket does not. Remove the function in a later release
+once prod has been stable on `:2000`.
 
 | Var | Default | Meaning |
 |-----|---------|---------|
-| `MUD_HOST` / `MUD_PORT` | `powermud.com` / `2000` | Relay target |
-| `ALLOWED_ORIGINS` | *(any)* | Comma-separated `Origin`s allowed to open the relay, e.g. `https://playpowermud.vercel.app` |
-| `RELAY_URL` | *(this site's `/api/ws`)* | Build-time: point the client at an external relay |
+| `MUD_WS_URL` | `wss://powermud.com:2000` | Build-time WebSocket URL |
+| `RELAY_URL` | *(used only if `MUD_WS_URL` is unset)* | Old name for `MUD_WS_URL` |
+| `MUD_HOST` / `MUD_PORT` | `powermud.com` / `2000` | Legacy relay TCP target only |
+| `ALLOWED_ORIGINS` | *(any)* | Legacy relay only |
 
-**Session length:** a Vercel WebSocket closes when the function reaches its max duration —
-1800 s (30 min) on Pro/Enterprise with extended duration (set in `vercel.json`; 300 s on Hobby). When it closes the
-character goes link-dead and the client shows the login prompt again on reconnect. For
-uninterrupted play, run `yarn relay` on an always-on host and build with
-`RELAY_URL=wss://<host>/api/ws`. `?relay=wss://…` on the page URL overrides it for testing.
+`?relay=wss://…` on the page URL overrides the baked URL (support and local testing).
 
-**Powermud native WebSocket (`:2001`):** the game server can expose telnet over WebSocket at
-`ws://powermud.com:2001` (plain `ws` only for now — `wss` on that port is not up yet). Smoke-test
-from the terminal with `yarn test:mud-ws` (optional URL and commands:
-`yarn test:mud-ws ws://powermud.com:2001 guest quit`). On **local** `yarn dev` (HTTP), point the
-browser at it with `?relay=ws://powermud.com:2001` — HTTPS pages cannot use `ws://` (mixed content).
+Smoke-test the production socket from the terminal:
+
+```bash
+yarn test:mud-ws
+yarn test:mud-wss-hosted
+```
+
+Pass another URL when you mean to hit dev, for example `yarn test:mud-ws wss://powermud.com:2001`.
 
 ## Updating equipment wiki stats
 

@@ -1,18 +1,16 @@
 /**
- * Smoke-test Powermud's native WebSocket (default ws://powermud.com:2001).
- *
- * The MUD devs expose telnet over WebSocket on port 2001 (plain ws today — wss fails
- * until TLS is enabled on that port). Our Vercel relay still targets TCP :2000.
+ * Smoke-test Powermud's native WebSocket.
+ * Default is production: wss://powermud.com:2000. Port 2001 is their dev instance.
  *
  * Usage:
  *   yarn test:mud-ws
- *   yarn test:mud-ws ws://powermud.com:2001 guest quit
- *   MUD_WS_URL=ws://powermud.com:2001 yarn test:mud-ws
+ *   yarn test:mud-ws wss://powermud.com:2000 guest quit
+ *   MUD_WS_URL=wss://powermud.com:2000 yarn test:mud-ws
  */
 import { TelnetFilter } from "../src/client/telnet.js";
 import WebSocket from "ws";
 
-const DEFAULT_URL = "ws://powermud.com:2001";
+const DEFAULT_URL = "wss://powermud.com:2000";
 const url = process.argv[2]?.startsWith("ws") ? process.argv[2] : process.env.MUD_WS_URL?.trim() || DEFAULT_URL;
 const commands = process.argv[2]?.startsWith("ws") ? process.argv.slice(3) : process.argv.slice(2);
 const idleMs = Number(process.env.MUD_WS_IDLE_MS) || 8_000;

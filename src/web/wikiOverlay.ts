@@ -13,7 +13,7 @@ function normalizeWikiPath(path: string): string {
   return `${url.pathname}${url.search}`;
 }
 
-/** Full-screen wiki reader over the game UI; keeps the MUD page (and relay) alive. */
+/** Full-screen wiki reader over the game UI; keeps the MUD page (and its socket) alive. */
 export function createWikiOverlay(opts?: { defaultPath?: string; onClose?: () => void }): WikiOverlay {
   const root = document.createElement("div");
   root.className = "wiki-overlay";

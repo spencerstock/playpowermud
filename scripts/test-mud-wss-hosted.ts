@@ -1,11 +1,12 @@
 /**
  * Simulate a browser-hosted client: WSS + Origin header, binary telnet frames, login flow.
- * Default: wss://powermud.com/ws2001 with Origin https://playpowermud.com
+ * Default: wss://powermud.com:2000 (prod) with Origin https://playpowermud.com.
+ * Port 2001 and /ws2001 are their dev instance; /ws2000 on 443 is not the canonical URL.
  */
 import { TelnetFilter, encodeLine } from "../src/client/telnet.js";
 import WebSocket from "ws";
 
-const url = process.env.MUD_WSS_URL?.trim() || "wss://powermud.com/ws2001";
+const url = process.env.MUD_WSS_URL?.trim() || "wss://powermud.com:2000";
 const origin = process.env.MUD_WSS_ORIGIN?.trim() || "https://playpowermud.com";
 const name = process.argv[2]?.trim() || "guest";
 

@@ -15,7 +15,8 @@
     "build:app": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test 'src/**/*.test.ts' 'server/**/*.test.ts' 'scripts/**/*.test.mjs'",
-    "test:mud-ws": "node --import tsx scripts/test-mud-ws.ts"
+    "test:mud-ws": "node --import tsx scripts/test-mud-ws.ts",
+    "test:mud-wss-hosted": "node --import tsx scripts/test-mud-wss-hosted.ts"
   },
   "dependencies": {
     "ws": "^8.18.3"

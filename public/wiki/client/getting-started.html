@@ -22,14 +22,14 @@
 
     <main class="wiki-main" id="wiki-main">
       <h2>Getting started</h2>
-      <p class="wiki-lede">Connect from the home page, play in one tab, reconnect when the relay drops.</p>
+      <p class="wiki-lede">Connect from the home page and play. The client talks straight to Powermud.</p>
 
       <h3>What this client is</h3>
       <p>
         Play Powermud is a browser client for Powermud: a terminal, personal aliases, a comms log,
-        and a world map in one tab. Everything except the network relay runs in your browser; aliases
-        and comms preferences use <code>localStorage</code>, and map discoveries use
-        <code>IndexedDB</code> on this device.
+        and a world map in one tab. The page opens a WebSocket to the game. Aliases and comms
+        preferences use <code>localStorage</code>, and map discoveries use <code>IndexedDB</code>
+        on this device.
       </p>
 
       <h3>Keyboard shortcuts</h3>
@@ -57,9 +57,16 @@
         <li>Use the command line at the bottom; ↑/↓ recall history. Empty Enter repeats the last command.</li>
       </ol>
       <p>
-        The site talks to Powermud through a <strong>relay</strong> at <code>/api/ws</code> — a dumb
-        pipe to <code>powermud.com:2000</code>. You cannot point the public relay at another host from
-        the browser; only the server config chooses the target.
+        Connect opens <code>wss://powermud.com:2000</code> — Powermud production. Port
+        <code>2001</code> is their dev game, not this client. A dropped socket shows as disconnected
+        from Powermud; click <strong>Reconnect</strong> (or press Enter) to log in again. Session
+        length is the game and your network, not a timer on this site.
+      </p>
+      <p>
+        <code>?relay=wss://…</code> on the page URL overrides that socket (support and local testing).
+        A self-hosted TCP bridge (<code>yarn relay</code>) is only for a MUD that has no WebSocket.
+        Build that client with <code>MUD_WS_URL=wss://your-host/api/ws</code>.
+        <code>RELAY_URL</code> is the old name for the same build setting.
       </p>
 
       <h3>Wiki while you play</h3>
@@ -70,23 +77,14 @@
         while reading is not replayed).
       </p>
 
-      <h3>Session length (Vercel)</h3>
-      <p>
-        On Vercel, the WebSocket closes when the function hits its max duration (about
-        <strong>5 minutes</strong> on Hobby, longer on Pro). When the relay drops, your character goes
-        link-dead and you will see the login prompt again after reconnect.
-      </p>
-      <p>For long uninterrupted sessions, run your own relay:</p>
-      <pre>yarn relay   # standalone relay; set PORT, MUD_HOST, MUD_PORT</pre>
-      <p>
-        Build or load the client with <code>RELAY_URL=wss://your-host/api/ws</code>, or add
-        <code>?relay=wss://…</code> to the page URL for a quick test.
-      </p>
-
       <h3>Run locally</h3>
       <pre>yarn install
-yarn dev    # http://localhost:3000 — static site + relay at /api/ws</pre>
-      <p>Run <code>yarn build</code> before deploy; Vercel serves <code>public/</code> and deploys the relay function.</p>
+yarn dev    # http://localhost:3000 — client still uses wss://powermud.com:2000</pre>
+      <p>
+        The dev server also keeps a local pipe at <code>ws://localhost:3000/api/ws</code>. Use it
+        with <code>?relay=ws://localhost:3000/api/ws</code>. Run <code>yarn build</code> before
+        deploy; Vercel serves <code>public/</code>.
+      </p>
 
       <h3>Optional environment (hosting)</h3>
       <table>
@@ -94,9 +92,10 @@ yarn dev    # http://localhost:3000 — static site + relay at /api/ws</pre>
           <tr><th>Variable</th><th>Default</th><th>Meaning</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>MUD_HOST</code> / <code>MUD_PORT</code></td><td>powermud.com / 2000</td><td>Relay target</td></tr>
-          <tr><td><code>ALLOWED_ORIGINS</code></td><td>(any)</td><td>Comma-separated origins allowed to open the relay</td></tr>
-          <tr><td><code>RELAY_URL</code></td><td>this site’s <code>/api/ws</code></td><td>Build-time: external relay URL for the client</td></tr>
+          <tr><td><code>MUD_WS_URL</code></td><td><code>wss://powermud.com:2000</code></td><td>Build-time WebSocket URL</td></tr>
+          <tr><td><code>RELAY_URL</code></td><td>(only if <code>MUD_WS_URL</code> is unset)</td><td>Old name for <code>MUD_WS_URL</code></td></tr>
+          <tr><td><code>MUD_HOST</code> / <code>MUD_PORT</code></td><td>powermud.com / 2000</td><td>Legacy TCP relay target only</td></tr>
+          <tr><td><code>ALLOWED_ORIGINS</code></td><td>(any)</td><td>Legacy relay only</td></tr>
         </tbody>
       </table>
 

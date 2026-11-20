@@ -4,7 +4,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { attachRelay, relayOptionsFromEnv } from "./relay.js";
 
-/** Local dev: serve public/ and the relay at /api/ws on one port (run `yarn build` first). */
+/**
+ * Local dev: serve public/ and keep the legacy relay at /api/ws (run `yarn build` first).
+ * The built client opens wss://powermud.com:2000 unless the page has ?relay=… .
+ */
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../public");
 const port = Number(process.env.PORT) || 3000;
 const TYPES: Record<string, string> = {
@@ -59,4 +62,8 @@ const server = http.createServer((req, res) => {
 });
 const opts = relayOptionsFromEnv();
 attachRelay(server, opts);
-server.listen(port, () => console.log(`playpowermud dev → http://localhost:${port}  (relay → ${opts.host}:${opts.port})`));
+server.listen(port, () =>
+  console.log(
+    `playpowermud dev → http://localhost:${port}  (client default wss://powermud.com:2000; local relay ws://localhost:${port}/api/ws → ${opts.host}:${opts.port})`,
+  ),
+);

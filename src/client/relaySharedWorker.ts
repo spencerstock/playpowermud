@@ -47,7 +47,7 @@ function wireSession(conn: MudConnection): void {
 
 function ensureSession(url: string): MudConnection {
   if (session && sessionUrl === url) return session;
-  session?.close("relay URL changed");
+  session?.close("connection URL changed");
   sessionUrl = url;
   session = new MudConnection(url);
   wireSession(session);

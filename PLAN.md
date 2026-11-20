@@ -13,39 +13,44 @@ A standalone, browser-based Powermud client deployed on Vercel. Forked from the 
 ## Architecture
 
 The old project ran a Node **hub** that owned the MUD socket and did all parsing; browsers were thin
-viewers. Here the **browser does everything** and the server is a dumb byte pipe:
+viewers. Here the **browser does everything** and talks to Powermud's own WebSocket:
 
 ```
-Browser (one tab = one MUD session)
+Browser
   src/web/app.ts            terminal, input line, history, alias autocomplete
-  src/client/connection.ts  WebSocket to the relay; telnet IAC filter; UTF-8 decode
-  src/client/runtime.ts     GameStream → GameStateTracker → Mapper  (copied from hub GameRuntime)
+  src/client/connection.ts  WebSocket to the MUD; telnet IAC filter; UTF-8 decode
+  src/client/relayClient.ts SharedWorker: one socket across game + wiki views (not a TCP relay)
+  src/client/runtime.ts     GameStream → GameStateTracker → Mapper
   src/client/aliases.ts     AliasEngine + localStorage alias table
   src/client/comms.ts       commsLogIngest → side panel, localStorage
-  src/client/mapApi.ts      in-process stand-in for the hub's /api/map/* routes (worldPanel uses it)
+  src/client/mapApi.ts      in-process stand-in for the hub's /api/map/* routes
   src/client/mapStore.ts    this browser's learned graph in IndexedDB (starts empty)
-        │  wss://…/api/ws   (binary frames, raw MUD bytes both ways)
-Relay  server/relay.ts      ws ↔ net.Socket to powermud.com:2000 — target is fixed, never client-chosen
-  api/ws.ts                 Vercel Function entry (WebSocket on Fluid compute)
-  server/dev.ts             local dev: static public/ + the same relay at /api/ws
-  server/standalone.ts      relay only, for a long-lived host (see "Session length")
+        │  wss://powermud.com:2000   (prod; binary telnet frames)
+        │  ?relay=… or MUD_WS_URL    override
+Legacy relay (rollback / non-WSS MUDs only)
+  server/relay.ts           ws ↔ net.Socket; target fixed server-side
+  api/ws.ts                 still on Vercel so ?relay=wss://<site>/api/ws rolls back
+  server/dev.ts             local static site + that relay at /api/ws
+  server/standalone.ts      yarn relay
 ```
+
+Production default is `wss://powermud.com:2000`. Port 2001 is Powermud's dev instance.
+Empty `MUD_WS_URL` / `RELAY_URL` at build time bakes the production URL. Direct mode is "not
+`/api/ws`": ports 2000 and 2001 and paths `/ws2000` / `/ws2001` all count, and the first binary
+frame still marks the socket connected if the guess is wrong. A direct close says "connection
+lost", not "relay connection lost".
+
+## Session length
+
+The direct socket is limited by Powermud and the network, not by a Vercel function timeout.
+`api/ws.ts` remains deployed for one release as rollback. That path still dies at `maxDuration`
+in `vercel.json`. Do not document it as the way to play.
 
 Copied verbatim (with tests): `src/game/*` stream/state/profile parsing, `src/mapper/*` graph + live
 mapper, `src/aliases/{engine,zscript,slashDefine}`, `src/web/{mudTerminal,ansiHtml,telnetLineEditor,chatPanel}`.
 Trimmed: `game/players.ts` (known-player registry only, no fs), `session/scrollback.ts` (stripAnsi
 only), `web/sidePanel.ts` (comms only), `web/worldPanel.ts` (no bots/logins/walk/link editing),
 `web/aliasAutocomplete.ts` (no `/to`, `/for`, profile aliases). Rewritten: `web/app.ts`, `index.html`.
-
-## Session length on Vercel
-
-Vercel Functions serve WebSockets, but a connection closes when the function hits its max
-duration: **5 min on Hobby**, up to **1800 s (30 min)** on Pro/Enterprise with extended duration
-(configured in `vercel.json`). When the relay closes, the MUD socket
-closes and the character goes link-dead; the client reconnects to the login prompt.
-
-For uninterrupted play, run `server/standalone.ts` on any always-on host (Fly.io, Railway, a VPS)
-and build with `RELAY_URL=wss://that-host/api/ws`. The client is otherwise unchanged.
 
 ## Steps
 

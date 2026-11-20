@@ -69,7 +69,7 @@ Hand-curated equipment rows: `scripts/items-hand-data.mjs`. After copying `data/
 
 | Wiki page | Topic |
 |-----------|--------|
-| [Getting started](../public/wiki/client/getting-started.html) | Connect, shortcuts, relay |
+| [Getting started](../public/wiki/client/getting-started.html) | Connect, shortcuts |
 | [Terminal and colors](../public/wiki/client/terminal.html) | Input and ANSI |
 | [Colors (eset)](../public/wiki/reference/help/eset.html) | In-game `eset` |
 | [Aliases](../public/wiki/client/aliases.html) | Browser aliases |

@@ -2,8 +2,8 @@ import { MudConnection, type ConnectionEvents, type RelayStatus } from "./connec
 import { RELAY_SHARED_WORKER_URL, type RelayWorkerIn, type RelayWorkerOut } from "./relayProtocol.js";
 
 /**
- * Browser-side proxy to the shared relay worker. Keeps one WebSocket (and MUD TCP session) while
- * you move between the game page and the wiki in the same tab.
+ * Browser-side proxy to the shared worker. Keeps one WebSocket (direct MUD or legacy relay) while
+ * you move between the game page and the wiki in the same tab. The worker is not a TCP relay.
  */
 export class RelayClient {
   private readonly port: MessagePort;

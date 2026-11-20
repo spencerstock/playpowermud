@@ -2,8 +2,9 @@ import http from "node:http";
 import { attachRelay, relayOptionsFromEnv } from "./relay.js";
 
 /**
- * Relay only, for an always-on host (Fly.io, Railway, a VPS) so MUD sessions are not cut at
- * Vercel's function max duration. Build the client with RELAY_URL=wss://<this host>/api/ws.
+ * Legacy self-hosted TCP bridge for a MUD that has no WebSocket of its own.
+ * Powermud production does: the client defaults to wss://powermud.com:2000.
+ * Point a build at this process with MUD_WS_URL=wss://<this host>/api/ws (RELAY_URL still works).
  */
 const port = Number(process.env.PORT) || 8787;
 const opts = relayOptionsFromEnv();

@@ -1,5 +1,5 @@
 /**
- * Minimal telnet layer for the browser. The relay forwards raw MUD bytes; this strips IAC
+ * Minimal telnet layer for the browser. The socket carries raw MUD bytes; this strips IAC
  * negotiation and subnegotiation from the stream and reports server ECHO (Powermud sends
  * `IAC WILL ECHO` while it asks for a password). Like the old hub, it never answers
  * negotiation — Powermud does not need replies.

@@ -10,7 +10,7 @@ import {
   configExportFilename,
   parseClientConfig,
 } from "../client/clientConfig.js";
-import { defaultRelayUrl, type RelayStatus } from "../client/connection.js";
+import { defaultMudWebSocketUrl, type RelayStatus } from "../client/connection.js";
 import { createMudConnection } from "../client/relayClient.js";
 import { createMapApi } from "../client/mapApi.js";
 import { BrowserMapStore } from "../client/mapStore.js";
@@ -55,8 +55,8 @@ import { createWhenMenu } from "./whenMenu.js";
 import { createWikiOverlay } from "./wikiOverlay.js";
 import { mountMobileCommandButtons } from "./mobileButtons.js";
 
-/** Replaced at build time (scripts/build.mjs); empty = this site's own /api/ws. */
-declare const __RELAY_URL__: string;
+/** Replaced at build time (scripts/build.mjs). Unset build → wss://powermud.com:2000. */
+declare const __MUD_WS_URL__: string;
 
 function byId<T extends HTMLElement = HTMLElement>(id: string): T {
   const node = document.getElementById(id);
@@ -89,7 +89,7 @@ const mudTerm = createMudTerminal(logEl, 10_000);
 const aliases = new AliasStore();
 const whenRules = new WhenRulesStore();
 const hotkeyRules = new HotkeyRulesStore();
-const connection = createMudConnection(defaultRelayUrl(location, __RELAY_URL__));
+const connection = createMudConnection(defaultMudWebSocketUrl(location, __MUD_WS_URL__));
 
 const META_ANSI = "\x1b[90m";
 const ECHO_ANSI = "\x1b[33m";

@@ -1,9 +1,13 @@
 import { encodeLine, TelnetFilter } from "./telnet.js";
 
 /**
- * Browser side of the relay: one WebSocket = one MUD TCP session. Binary frames carry raw MUD
- * bytes both ways; text frames are relay status JSON (`{ type: "status", state, reason? }`).
+ * Browser side of the MUD socket: one WebSocket = one session. Binary frames carry raw MUD
+ * bytes both ways. Our legacy TCP relay (`/api/ws`) also sends text frames of status JSON
+ * (`{ type: "status", state, reason? }`). Powermud's own WebSocket does not.
  */
+
+/** Production Powermud. Port 2000 is prod; port 2001 is their dev instance. */
+export const PRODUCTION_MUD_WS_URL = "wss://powermud.com:2000";
 
 export type RelayStatus = "idle" | "connecting" | "connected" | "closed";
 
@@ -19,21 +23,45 @@ export type ConnectionEvents = {
 
 type Listeners = { [K in keyof ConnectionEvents]: Set<ConnectionEvents[K]> };
 
-/** `RELAY_URL` baked in at build time, else this site's own `/api/ws`. `?relay=` overrides for testing. */
-export function defaultRelayUrl(loc: Location, built: string): string {
+/**
+ * WebSocket the browser opens.
+ * `?relay=` overrides (debug, self-hosted pipe, alt host).
+ * `built` is compile-time `MUD_WS_URL` (`RELAY_URL` is the old name).
+ * An empty build value means {@link PRODUCTION_MUD_WS_URL}, not this site's `/api/ws`.
+ */
+export function defaultMudWebSocketUrl(loc: Pick<Location, "search">, built: string): string {
   const fromQuery = new URLSearchParams(loc.search).get("relay")?.trim();
   if (fromQuery) return fromQuery;
-  if (built) return built;
-  return `${loc.protocol === "https:" ? "wss:" : "ws:"}//${loc.host}/api/ws`;
+  const baked = built.trim();
+  if (baked) return baked;
+  return PRODUCTION_MUD_WS_URL;
 }
 
-/** Powermud's native WebSocket (port 2001) speaks telnet bytes only — no relay status JSON. */
-export function isDirectMudWebSocket(url: string): boolean {
+/** Same as {@link defaultMudWebSocketUrl}. Kept so older call sites keep compiling. */
+export const defaultRelayUrl = defaultMudWebSocketUrl;
+
+/** True when `url` is our TCP relay (`/api/ws`), which speaks status JSON on text frames. */
+export function isRelayWebSocket(url: string): boolean {
   try {
-    return new URL(url).port === "2001";
+    const path = new URL(url).pathname.replace(/\/+$/, "") || "/";
+    return path === "/api/ws" || path.startsWith("/api/ws/");
   } catch {
     return false;
   }
+}
+
+/**
+ * Powermud's native socket (prod `:2000`, dev `:2001`, or `/ws2000` / `/ws2001` on 443)
+ * speaks telnet bytes only. Anything that is not our `/api/ws` relay is treated as direct.
+ * The first binary frame still promotes `connecting` → `connected` if this guess is wrong.
+ */
+export function isDirectMudWebSocket(url: string): boolean {
+  try {
+    new URL(url);
+  } catch {
+    return false;
+  }
+  return !isRelayWebSocket(url);
 }
 
 export class MudConnection {
@@ -95,7 +123,8 @@ export class MudConnection {
     ws.addEventListener("close", (ev) => {
       if (this.ws !== ws) return;
       this.ws = null;
-      this.setStatus("closed", ev.reason || (ev.code === 1006 ? "relay connection lost" : undefined));
+      const lost = isDirectMudWebSocket(this.url) ? "connection lost" : "relay connection lost";
+      this.setStatus("closed", ev.reason || (ev.code === 1006 ? lost : undefined));
     });
     ws.addEventListener("error", () => {
       // `close` follows with the details.
