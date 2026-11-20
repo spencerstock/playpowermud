@@ -10,12 +10,13 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
 - **Aliases** — `/alias NAME EXPANSION`, `/alias NAME` (show one), `/unalias NAME`, `/aliases [filter]`. `;` chains, nested
   aliases, `$1$` args, and `@delay 2` (pause 2 seconds before the next command, also in `/when`).
   Type `/` for autocomplete. Stored in this browser (localStorage).
-- **Config** — **Export config** / **Import config** in the header backs up aliases, comms, skin,
-  panel prefs, and the learned map (JSON file).
+- **Config** — **Export config** / **Import config** saves or adds a session (aliases, comms,
+  skin, panel prefs, and that session's map). The menu switches sessions. Each session has its own
+  map. **Export map** / **Import map** move a map without the rest of the session.
 - **Comms** — tells, says, and shouts in the side panel (Option+C), kept per character.
-- **Map** — starts empty in each browser. As you walk, rooms and exits are learned, with live
+- **Map** — starts empty for each session. As you walk, rooms and exits are learned, with live
   position tracking, level/plane view, search, and a room inspector (Option+M). The map is saved
-  in this browser (IndexedDB) and restored next time.
+  with that session in this browser (IndexedDB). The game does not ship a world map.
 - **Wiki** — [/wiki](/wiki): **Using the client** and **Powermud game wiki** (characters, items, quests, professions).
 
 ## Run locally

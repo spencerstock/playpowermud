@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import test from "node:test";
 import { WorldMap } from "./WorldMap.js";
 import { botPathOptions, isTeleportOnlyCommand, linkNeverPathed, resolvePathOptions, setGlobalPreferAvoid } from "./pathPolicy.js";
@@ -8,11 +7,26 @@ test("resolvePathOptions clears empty avoid lists", () => {
   assert.deepEqual(resolvePathOptions({ avoid: [] }), {});
 });
 
-test("botPathOptions matches mud_goto defaults (topology only)", () => {
-  const map = new WorldMap(JSON.parse(fs.readFileSync("data/world/powermud.graph.json", "utf8")));
-  const opts = botPathOptions(1);
-  const path = map.findPath("r102", (r) => r.id === "r7", opts);
-  assert.ok(path?.length === 7, "gate approach should reach tavern on shared graph policy");
+test("botPathOptions walks a plain chain", () => {
+  const map = WorldMap.empty("t");
+  let prev: string | null = null;
+  let start = "";
+  let goal = "";
+  for (let i = 0; i < 8; i++) {
+    const r = map.createRoom({ plane: "p1", x: i, y: 0, z: 0 });
+    map.applyObservation(r, {
+      mode: "brief",
+      title: `r${i}`,
+      exits: i === 0 ? ["e"] : i === 7 ? ["w"] : ["w", "e"],
+      contents: [],
+    });
+    if (prev) map.link(prev, "e", r.id, { kind: "dir", confirmed: true });
+    if (i === 0) start = r.id;
+    if (i === 7) goal = r.id;
+    prev = r.id;
+  }
+  const path = map.findPath(start, (r) => r.id === goal, botPathOptions(1));
+  assert.equal(path?.length, 7);
 });
 
 test("preferAvoid chooses a longer route when one exists", () => {
@@ -85,14 +99,6 @@ test("isTeleportOnlyCommand matches homeland and red stone only", () => {
   assert.equal(isTeleportOnlyCommand("homeland"), true);
   assert.equal(isTeleportOnlyCommand("touch red stone"), true);
   assert.equal(isTeleportOnlyCommand("e"), false);
-});
-
-test("shared graph: no path out of Kalinport uses the red stone", () => {
-  const map = new WorldMap(JSON.parse(fs.readFileSync("data/world/powermud.graph.json", "utf8")));
-  for (const to of ["r1749", "r1751", "r1968"]) {
-    const path = map.findPath("r1544", (r) => r.id === to, resolvePathOptions({}));
-    assert.ok(!path?.some((s) => /red stone|homeland/.test(s.cmd)), `r1544 → ${to} must not touch the red stone`);
-  }
 });
 
 test("a guessed link into a room that does not list the way back loses to the real trail (Merevia /to barb)", () => {

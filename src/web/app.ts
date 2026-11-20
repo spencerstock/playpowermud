@@ -4,12 +4,23 @@ import { AliasStore } from "../client/aliases.js";
 import { HotkeyRulesStore } from "../client/hotkeyRules.js";
 import { WhenRulesStore } from "../client/whenRules.js";
 import {
-  applyClientConfigToLocalStorage,
   buildClientConfig,
+  buildMapFile,
   collectPlaypowermudLocalStorage,
   configExportFilename,
+  mapExportFilename,
   parseClientConfig,
+  parseMapImport,
 } from "../client/clientConfig.js";
+import {
+  activateSession,
+  createSession,
+  deleteSession,
+  ensureSessions,
+  importSession,
+  renameSession,
+  type SessionIndex,
+} from "../client/sessions.js";
 import { defaultMudWebSocketUrl, type RelayStatus } from "../client/connection.js";
 import { createMudConnection } from "../client/relayClient.js";
 import { createMapApi } from "../client/mapApi.js";
@@ -73,6 +84,13 @@ const skinCycleBtn = byId<HTMLButtonElement>("skin-cycle");
 const configExportBtn = byId<HTMLButtonElement>("config-export");
 const configImportBtn = byId<HTMLButtonElement>("config-import-btn");
 const configImportInput = byId<HTMLInputElement>("config-import");
+const sessionSelect = byId<HTMLSelectElement>("session-select");
+const sessionNewBtn = byId<HTMLButtonElement>("session-new");
+const sessionRenameBtn = byId<HTMLButtonElement>("session-rename");
+const sessionDeleteBtn = byId<HTMLButtonElement>("session-delete");
+const mapExportBtn = byId<HTMLButtonElement>("map-export");
+const mapImportBtn = byId<HTMLButtonElement>("map-import-btn");
+const mapImportInput = byId<HTMLInputElement>("map-import");
 const form = byId<HTMLFormElement>("form");
 const input = byId<HTMLInputElement>("input");
 const aliasAcEl = byId("alias-ac");
@@ -125,26 +143,55 @@ skinCycleBtn.addEventListener("click", () => {
   applySkin(SKINS[(SKINS.indexOf(cur) + 1) % SKINS.length]!);
 });
 
-// ---- config export / import -------------------------------------------------------------
+// ---- sessions, config, and map files ----------------------------------------------------
+
+let sessions: SessionIndex | null = null;
+
+function activeSessionName(): string {
+  return sessions?.sessions.find((s) => s.id === sessions!.activeId)?.name ?? "Session";
+}
+
+function renderSessionSelect(): void {
+  const current = sessions?.activeId ?? "";
+  sessionSelect.replaceChildren();
+  for (const s of sessions?.sessions ?? []) {
+    const opt = document.createElement("option");
+    opt.value = s.id;
+    opt.textContent = s.name;
+    sessionSelect.appendChild(opt);
+  }
+  if (current) sessionSelect.value = current;
+}
+
+function downloadJson(filename: string, value: unknown): void {
+  const blob = new Blob([JSON.stringify(value, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function reloadAfter(message: string, fn: () => Promise<void>): Promise<void> {
+  await runtime?.mapStore.flush();
+  await fn();
+  meta(message);
+  window.location.reload();
+}
 
 async function exportClientConfig(): Promise<void> {
   try {
+    const name = activeSessionName();
     const map = runtime ? await runtime.mapStore.exportSnapshot() : undefined;
     const doc = buildClientConfig({
+      name,
       localStorage: collectPlaypowermudLocalStorage(localStorage),
       map,
     });
-    const json = JSON.stringify(doc, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = configExportFilename(doc.exportedAt);
-    a.click();
-    URL.revokeObjectURL(url);
-    meta(
-      `Config exported (${Object.keys(doc.localStorage).length} localStorage keys${map ? ", map included" : ""}).`,
-    );
+    downloadJson(configExportFilename(doc.exportedAt, name), doc);
+    const rooms = map ? Object.keys(map.doc.rooms).length : 0;
+    meta(`Exported session “${name}” (${Object.keys(doc.localStorage).length} settings, ${rooms} rooms).`);
   } catch (err) {
     errorLine(`Export failed: ${err instanceof Error ? err.message : String(err)}`);
   }
@@ -153,14 +200,45 @@ async function exportClientConfig(): Promise<void> {
 async function importClientConfigFile(file: File): Promise<void> {
   try {
     const doc = parseClientConfig(JSON.parse(await file.text()) as unknown);
-    applyClientConfigToLocalStorage(doc, localStorage);
-    if (doc.map) await BrowserMapStore.importSaved(doc.map);
-    meta("Config imported — reloading…");
-    window.location.reload();
+    const name = doc.name?.trim() || file.name.replace(/\.json$/i, "") || "Imported";
+    await reloadAfter(
+      doc.map
+        ? `Imported session “${name}” with its map — reloading…`
+        : `Imported session “${name}” with an empty map — reloading…`,
+      () => importSession(name, doc.localStorage, doc.map).then(() => undefined),
+    );
   } catch (err) {
     errorLine(`Import failed: ${err instanceof Error ? err.message : String(err)}`);
   } finally {
     configImportInput.value = "";
+  }
+}
+
+async function exportMapFile(): Promise<void> {
+  try {
+    if (!runtime) throw new Error("Map not ready");
+    const name = activeSessionName();
+    const map = await runtime.mapStore.exportSnapshot();
+    const file = buildMapFile(map);
+    downloadJson(mapExportFilename(file.exportedAt, name), file);
+    meta(`Map exported for “${name}” (${Object.keys(map.doc.rooms).length} rooms).`);
+  } catch (err) {
+    errorLine(`Map export failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+async function importMapFile(file: File): Promise<void> {
+  try {
+    if (!sessions) throw new Error("Session not ready");
+    const map = parseMapImport(JSON.parse(await file.text()) as unknown);
+    const rooms = Object.keys(map.doc.rooms).length;
+    await reloadAfter(`Imported map (${rooms} rooms) into “${activeSessionName()}” — reloading…`, () =>
+      BrowserMapStore.importSaved(sessions!.activeId, map),
+    );
+  } catch (err) {
+    errorLine(`Map import failed: ${err instanceof Error ? err.message : String(err)}`);
+  } finally {
+    mapImportInput.value = "";
   }
 }
 
@@ -169,6 +247,59 @@ configImportBtn.addEventListener("click", () => configImportInput.click());
 configImportInput.addEventListener("change", () => {
   const file = configImportInput.files?.[0];
   if (file) void importClientConfigFile(file);
+});
+mapExportBtn.addEventListener("click", () => void exportMapFile());
+mapImportBtn.addEventListener("click", () => mapImportInput.click());
+mapImportInput.addEventListener("change", () => {
+  const file = mapImportInput.files?.[0];
+  if (file) void importMapFile(file);
+});
+
+sessionSelect.addEventListener("change", () => {
+  const id = sessionSelect.value;
+  if (!sessions || id === sessions.activeId) return;
+  const name = sessions.sessions.find((s) => s.id === id)?.name ?? "session";
+  void reloadAfter(`Switching to “${name}”…`, () => activateSession(id).then(() => undefined)).catch((err) => {
+    errorLine(`Could not switch session: ${err instanceof Error ? err.message : String(err)}`);
+    renderSessionSelect();
+  });
+});
+
+sessionNewBtn.addEventListener("click", () => {
+  const name = window.prompt("Name for the new session");
+  if (!name?.trim()) return;
+  void reloadAfter(`Starting “${name.trim()}”…`, () => createSession(name).then(() => undefined)).catch((err) =>
+    errorLine(`Could not start session: ${err instanceof Error ? err.message : String(err)}`),
+  );
+});
+
+sessionRenameBtn.addEventListener("click", () => {
+  if (!sessions) return;
+  const current = activeSessionName();
+  const name = window.prompt("Rename session", current);
+  if (!name?.trim() || name.trim() === current) return;
+  void renameSession(sessions.activeId, name)
+    .then((index) => {
+      sessions = index;
+      renderSessionSelect();
+      meta(`Session renamed to “${activeSessionName()}”.`);
+    })
+    .catch((err) => errorLine(`Rename failed: ${err instanceof Error ? err.message : String(err)}`));
+});
+
+sessionDeleteBtn.addEventListener("click", () => {
+  if (!sessions) return;
+  const name = activeSessionName();
+  const only = sessions.sessions.length === 1;
+  const ok = window.confirm(
+    only
+      ? `Clear the map and settings for “${name}”? This session stays, empty.`
+      : `Delete “${name}”? Its map and settings are removed.`,
+  );
+  if (!ok) return;
+  void reloadAfter(only ? `Cleared “${name}”…` : `Deleted “${name}”…`, () =>
+    deleteSession(sessions!.activeId).then(() => undefined),
+  ).catch((err) => errorLine(`Could not delete session: ${err instanceof Error ? err.message : String(err)}`));
 });
 
 // ---- panels -----------------------------------------------------------------------------
@@ -1015,8 +1146,10 @@ document.getElementById("mobile-comms")?.addEventListener("click", () => sidePan
 
 async function boot(): Promise<void> {
   renderStatus("idle");
-  meta("Loading world map…");
-  const { store, source } = await BrowserMapStore.open((err) =>
+  meta("Loading sessions…");
+  sessions = await ensureSessions();
+  renderSessionSelect();
+  const { store, source } = await BrowserMapStore.open(sessions.activeId, (err) =>
     console.warn("[playpowermud] map storage:", err),
   );
   runtime = new ClientRuntime(store);
@@ -1030,8 +1163,10 @@ async function boot(): Promise<void> {
   sidePanel.syncComms(runtime.commsSnapshot());
   mapApiFn = createMapApi(runtime);
   worldPanel = createWorldPanel({ mount: mapPanelMount, api: mapApiFn });
+  const rooms = store.map.roomCount();
+  const name = activeSessionName();
   meta(
-    `Map ready: ${store.map.roomCount()} rooms (${source === "saved" ? "saved in this browser" : "empty until you explore"}). ` +
+    `Session “${name}”: ${rooms === 0 || source === "empty" ? "empty map until you explore" : `${rooms} rooms`}. ` +
       `Aliases: ${aliases.names().length}. Type /alias NAME EXPANSION to add one.`,
   );
   window.addEventListener("pagehide", () => void store.flush());

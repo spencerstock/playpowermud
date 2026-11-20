@@ -141,13 +141,22 @@ export function enrichRow(name, knowledge, values, npcs) {
   return extra;
 }
 
-/** @param {object | undefined} kItem @param {Record<string, { name?: string }>} npcs */
+/** @param {object | undefined} kItem @param {Record<string, { key?: string, name?: string, seenLoot?: Record<string, string> }>} npcs */
 function droppedByNames(kItem, npcs) {
-  if (!kItem?.droppedBy) return "";
-  return Object.keys(kItem.droppedBy)
-    .map((nk) => npcs[nk]?.name || titleCaseNpc(nk))
-    .filter(Boolean)
-    .join(", ");
+  if (!kItem) return "";
+  const by = new Map();
+  for (const [nk, count] of Object.entries(kItem.droppedBy ?? {})) {
+    const label = npcs[nk]?.name || titleCaseNpc(nk);
+    if (label) by.set(nk, count > 1 ? `${label}×${count}` : label);
+  }
+  const itemKey = kItem.key;
+  if (itemKey) {
+    for (const n of Object.values(npcs)) {
+      if (!n?.key || by.has(n.key) || !n.seenLoot?.[itemKey]) continue;
+      by.set(n.key, n.name || titleCaseNpc(n.key));
+    }
+  }
+  return [...by.values()].join(", ");
 }
 
 /** @param {string} nk */

@@ -24,7 +24,7 @@ Browser
   src/client/aliases.ts     AliasEngine + localStorage alias table
   src/client/comms.ts       commsLogIngest → side panel, localStorage
   src/client/mapApi.ts      in-process stand-in for the hub's /api/map/* routes
-  src/client/mapStore.ts    this browser's learned graph in IndexedDB (starts empty)
+  src/client/mapStore.ts    one session's learned graph in IndexedDB (starts empty)
         │  wss://powermud.com:2000   (prod; binary telnet frames)
         │  ?relay=… or MUD_WS_URL    override
 Legacy relay (rollback / non-WSS MUDs only)

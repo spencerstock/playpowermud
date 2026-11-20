@@ -28,8 +28,8 @@
           title="Client and wiki source (MIT license)"
           rel="noopener noreferrer"
         >Source</a>
-        <button type="button" id="config-export" title="Download aliases, comms, skin, and map data as JSON">Export config</button>
-        <button type="button" id="config-import-btn" title="Restore a config file from this browser or another device">Import config</button>
+        <button type="button" id="config-export" title="Download this session: aliases, comms, skin, and its map">Export config</button>
+        <button type="button" id="config-import-btn" title="Add a session from a config file. It keeps its own map.">Import config</button>
         <input type="file" id="config-import" accept="application/json,.json" hidden />
         <button type="button" id="skin-cycle" title="Switch color theme (dark / light)">Skin: Dark</button>
         <div class="header-menu-wrap">
@@ -46,6 +46,28 @@
             <span class="app-menu-label">Menu</span>
           </button>
           <div id="app-menu-panel" class="app-menu-panel" hidden role="menu" aria-labelledby="app-menu-btn">
+            <label class="app-menu-field" data-keep-app-menu>
+              Session
+              <select id="session-select" data-keep-app-menu aria-label="Session"></select>
+            </label>
+            <button type="button" id="session-new" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              New session
+            </button>
+            <button type="button" id="session-rename" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              Rename session
+            </button>
+            <button type="button" id="session-delete" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              Delete session
+            </button>
+            <div class="app-menu-sep" role="separator"></div>
+            <button type="button" id="map-export" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              Export map
+            </button>
+            <button type="button" id="map-import-btn" class="app-menu-action" role="menuitem" data-keep-app-menu>
+              Import map
+            </button>
+            <input type="file" id="map-import" accept="application/json,.json" hidden />
+            <div class="app-menu-sep" role="separator"></div>
             <button type="button" id="alias-menu-open" class="app-menu-action" role="menuitem" data-keep-app-menu>
               Aliases…
             </button>

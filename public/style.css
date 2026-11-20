@@ -198,12 +198,40 @@ header.app-menu-open {
   right: 0;
   top: calc(100% + 0.35rem);
   z-index: 50;
-  min-width: 11rem;
+  min-width: 12.5rem;
+  max-height: min(70vh, 28rem);
+  overflow: auto;
   padding: 0.35rem;
   border: 1px solid var(--ui-border-strong);
   border-radius: 6px;
   background: var(--ui-surface);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.app-menu-sep {
+  height: 1px;
+  margin: 0.3rem 0.4rem;
+  background: var(--ui-border);
+}
+
+.app-menu-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.35rem 0.55rem 0.45rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ui-hint);
+}
+
+.app-menu-field select {
+  font: inherit;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: inherit;
+  width: 100%;
 }
 
 .app-menu-action {

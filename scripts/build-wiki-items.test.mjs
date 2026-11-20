@@ -103,7 +103,7 @@ test("enrichRow fills judge sell and dropped by", () => {
   );
   assert.equal(extra.judge, "good");
   assert.equal(extra.sell, "12–15");
-  assert.equal(extra.droppedBy, "Test NPC");
+  assert.equal(extra.droppedBy, "Test NPC×3");
 });
 
 test("buildPages with stats adds columns and appended rows", () => {

@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-11-20T08:50:51.556Z",
+ "updatedAt": "2026-11-20T18:30:41.267Z",
  "npcs": {
   "bartender": {
    "key": "bartender",
@@ -231,7 +231,7 @@
     "Quartermaster"
    ],
    "firstSeenAt": "2026-10-27T22:28:51.952Z",
-   "lastSeenAt": "2026-11-11T14:55:27.459Z",
+   "lastSeenAt": "2026-11-20T10:03:53.943Z",
    "rooms": {
     "r108": {
      "area": "melee-magthere",
@@ -250,7 +250,9 @@
     "text": "Quartermaster is perfect in unarmed.",
     "rank": 10,
     "at": "2026-10-27T22:28:51.952Z"
-   }
+   },
+   "drakaanMin": 196,
+   "drakaanMax": 196
   },
   "orc slave": {
    "key": "orc slave",
@@ -260,7 +262,7 @@
     "Orc Slave"
    ],
    "firstSeenAt": "2026-10-27T22:29:02.731Z",
-   "lastSeenAt": "2026-11-16T10:26:35.999Z",
+   "lastSeenAt": "2026-11-20T09:06:12.840Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -276,7 +278,9 @@
    },
    "refusals": 1,
    "seenLoot": {
-    "broom": "Broom"
+    "broom": "Broom",
+    "rothe-prod": "Rothe-prod",
+    "rothe-leather boots": "Rothe-leather boots"
    },
    "drakaanMin": 1,
    "drakaanMax": 20
@@ -593,7 +597,7 @@
     "Goblin Slave"
    ],
    "firstSeenAt": "2026-10-27T23:20:10.688Z",
-   "lastSeenAt": "2026-10-27T23:20:10.688Z",
+   "lastSeenAt": "2026-11-20T09:06:17.507Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -606,6 +610,10 @@
     "text": "Goblin slave is perfect in blunt.\nGoblin slave is non-existent in unarmed.",
     "rank": 10,
     "at": "2026-10-27T23:20:10.688Z"
+   },
+   "seenLoot": {
+    "rothe-prod": "Rothe-prod",
+    "rothe-leather jerkin": "Rothe-leather jerkin"
    }
   },
   "human slave": {
@@ -615,7 +623,7 @@
     "Human Slave"
    ],
    "firstSeenAt": "2026-10-28T00:58:51.403Z",
-   "lastSeenAt": "2026-11-20T08:05:30.966Z",
+   "lastSeenAt": "2026-11-20T09:06:14.788Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -630,7 +638,8 @@
     "at": "2026-10-28T00:58:51.403Z"
    },
    "seenLoot": {
-    "rothe-leather boots": "Rothe-leather boots"
+    "rothe-leather boots": "Rothe-leather boots",
+    "rothe-prod": "Rothe-prod"
    }
   },
   "shopkeeper": {
@@ -640,7 +649,7 @@
     "Shopkeeper"
    ],
    "firstSeenAt": "2026-10-27T23:23:35.265Z",
-   "lastSeenAt": "2026-11-20T07:12:17.286Z",
+   "lastSeenAt": "2026-11-20T09:40:32.241Z",
    "rooms": {
     "r9": {
      "area": "nal-shaddar",
@@ -660,7 +669,7 @@
     "rank": 0,
     "at": "2026-10-27T23:23:35.265Z"
    },
-   "drakaanMin": 22,
+   "drakaanMin": 21,
    "drakaanMax": 74
   },
   "female drow": {
@@ -692,7 +701,7 @@
     "Umber Hulk"
    ],
    "firstSeenAt": "2026-10-27T23:58:05.549Z",
-   "lastSeenAt": "2026-11-11T14:55:45.246Z",
+   "lastSeenAt": "2026-11-20T17:42:30.447Z",
    "rooms": {
     "r102": {
      "area": "nal-shaddar",
@@ -721,6 +730,9 @@
    "unattackable": {
     "reason": "There is no 'umber hulk' here.",
     "at": "2026-11-11T06:59:42.630Z"
+   },
+   "seenLoot": {
+    "barbed arrows": "Barbed Arrows"
    }
   },
   "cave faerny miner": {
@@ -858,7 +870,7 @@
     "Duergar"
    ],
    "firstSeenAt": "2026-10-28T01:46:39.149Z",
-   "lastSeenAt": "2026-11-18T04:48:58.530Z",
+   "lastSeenAt": "2026-11-20T09:40:29.737Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -873,7 +885,7 @@
     "at": "2026-10-28T01:46:39.149Z"
    },
    "drakaanMin": 8,
-   "drakaanMax": 117,
+   "drakaanMax": 118,
    "seenLoot": {
     "gold chain": "Gold Chain"
    }
@@ -2798,7 +2810,7 @@
     "Large kobold"
    ],
    "firstSeenAt": "2026-10-30T23:59:37.205Z",
-   "lastSeenAt": "2026-11-17T19:14:52.713Z",
+   "lastSeenAt": "2026-11-20T16:49:59.376Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -2813,7 +2825,11 @@
     "at": "2026-10-30T23:59:37.205Z"
    },
    "drakaanMin": 5,
-   "drakaanMax": 14
+   "drakaanMax": 14,
+   "seenLoot": {
+    "spear": "Spear",
+    "filthy cloak": "Filthy cloak"
+   }
   },
   "kobold villager": {
    "key": "kobold villager",
@@ -3923,7 +3939,7 @@
     "Drow"
    ],
    "firstSeenAt": "2026-11-11T14:52:53.537Z",
-   "lastSeenAt": "2026-11-19T04:36:14.800Z",
+   "lastSeenAt": "2026-11-20T17:54:46.054Z",
    "rooms": {
     "r36": {
      "area": "nal-shaddar",
@@ -3992,7 +4008,8 @@
     "spider ring": "Spider ring",
     "lead club": "Lead Club",
     "dark boots": "Dark Boots",
-    "ceremonial robes": "Ceremonial Robes"
+    "ceremonial robes": "Ceremonial Robes",
+    "barbed arrows": "Barbed Arrows"
    }
   },
   "nalfene": {
@@ -8864,7 +8881,7 @@
     "Telen"
    ],
    "firstSeenAt": "2026-11-13T20:21:10.977Z",
-   "lastSeenAt": "2026-11-18T10:59:06.524Z",
+   "lastSeenAt": "2026-11-20T08:58:41.163Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -8874,10 +8891,11 @@
    "dropNames": {},
    "expSamples": [],
    "seenLoot": {
-    "broadsword": "Broadsword"
+    "broadsword": "Broadsword",
+    "silver ring of lat": "Silver Ring of Lat"
    },
    "drakaanMin": 31,
-   "drakaanMax": 476
+   "drakaanMax": 487
   },
   "commoner": {
    "key": "commoner",
@@ -10047,7 +10065,7 @@
     "Male"
    ],
    "firstSeenAt": "2026-11-17T03:40:00.992Z",
-   "lastSeenAt": "2026-11-17T03:40:00.992Z",
+   "lastSeenAt": "2026-11-20T17:04:55.354Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -10059,7 +10077,10 @@
    "seenLoot": {
     "spear": "Spear",
     "bone knife": "Bone knife",
-    "rat-skin cloak": "Rat-skin cloak"
+    "rat-skin cloak": "Rat-skin cloak",
+    "filthy cloak": "Filthy cloak",
+    "knife": "Knife",
+    "dirty shirt": "Dirty shirt"
    }
   },
   "nameht": {
@@ -10198,7 +10219,7 @@
     "Child villager"
    ],
    "firstSeenAt": "2026-11-17T17:10:11.710Z",
-   "lastSeenAt": "2026-11-18T05:12:40.817Z",
+   "lastSeenAt": "2026-11-20T16:46:02.624Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -10208,7 +10229,11 @@
    "dropNames": {},
    "expSamples": [],
    "drakaanMin": 1,
-   "drakaanMax": 14
+   "drakaanMax": 14,
+   "seenLoot": {
+    "stick": "Stick",
+    "dirty shirt": "Dirty shirt"
+   }
   },
   "male villager": {
    "key": "male villager",
@@ -10217,7 +10242,7 @@
     "Male villager"
    ],
    "firstSeenAt": "2026-11-17T17:10:11.710Z",
-   "lastSeenAt": "2026-11-18T04:37:22.447Z",
+   "lastSeenAt": "2026-11-20T17:28:01.303Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -10227,7 +10252,12 @@
    "dropNames": {},
    "expSamples": [],
    "drakaanMin": 1,
-   "drakaanMax": 14
+   "drakaanMax": 14,
+   "seenLoot": {
+    "knife": "Knife",
+    "filthy cloak": "Filthy cloak",
+    "dirty shirt": "Dirty shirt"
+   }
   },
   "chief": {
    "key": "chief",
@@ -10258,7 +10288,7 @@
     "Female villager"
    ],
    "firstSeenAt": "2026-11-17T17:11:13.661Z",
-   "lastSeenAt": "2026-11-18T18:57:17.763Z",
+   "lastSeenAt": "2026-11-20T16:46:37.060Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -10268,7 +10298,11 @@
    "dropNames": {},
    "expSamples": [],
    "drakaanMin": 1,
-   "drakaanMax": 14
+   "drakaanMax": 14,
+   "seenLoot": {
+    "dirty shirt": "Dirty shirt",
+    "knife": "Knife"
+   }
   },
   "skeleton": {
    "key": "skeleton",
@@ -10297,7 +10331,7 @@
     "Thom"
    ],
    "firstSeenAt": "2026-11-17T17:59:15.987Z",
-   "lastSeenAt": "2026-11-19T18:31:44.850Z",
+   "lastSeenAt": "2026-11-20T18:21:31.418Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -10306,7 +10340,7 @@
    "drops": {},
    "dropNames": {},
    "expSamples": [],
-   "drakaanMin": 107,
+   "drakaanMin": 105,
    "drakaanMax": 294,
    "seenLoot": {
     "purple armbands": "Purple Armbands"
@@ -11232,7 +11266,7 @@
     "Goblin"
    ],
    "firstSeenAt": "2026-11-18T18:50:02.552Z",
-   "lastSeenAt": "2026-11-18T18:50:11.682Z",
+   "lastSeenAt": "2026-11-20T09:44:43.486Z",
    "rooms": {},
    "moves": [],
    "route": {},
@@ -11242,7 +11276,11 @@
    "dropNames": {},
    "expSamples": [],
    "drakaanMin": 5,
-   "drakaanMax": 14
+   "drakaanMax": 14,
+   "seenLoot": {
+    "rothe-hide pants": "Rothe-hide pants",
+    "rothe-leather jerkin": "Rothe-leather jerkin"
+   }
   },
   "bellwarden toma": {
    "key": "bellwarden toma",
@@ -13022,6 +13060,56 @@
    "name": "Sentinel's pot helm",
    "firstSeenAt": "2026-11-20T08:23:05.570Z",
    "droppedBy": {}
+  },
+  "rothe-hide pants": {
+   "key": "rothe-hide pants",
+   "name": "Rothe-hide pants",
+   "firstSeenAt": "2026-11-20T09:44:43.486Z",
+   "droppedBy": {}
+  },
+  "stick": {
+   "key": "stick",
+   "name": "Stick",
+   "firstSeenAt": "2026-11-20T16:46:02.624Z",
+   "droppedBy": {}
+  },
+  "dirty shirt": {
+   "key": "dirty shirt",
+   "name": "Dirty shirt",
+   "firstSeenAt": "2026-11-20T16:46:02.624Z",
+   "droppedBy": {}
+  },
+  "knife": {
+   "key": "knife",
+   "name": "Knife",
+   "firstSeenAt": "2026-11-20T16:46:37.060Z",
+   "droppedBy": {}
+  },
+  "filthy cloak": {
+   "key": "filthy cloak",
+   "name": "Filthy cloak",
+   "firstSeenAt": "2026-11-20T16:49:59.376Z",
+   "droppedBy": {}
+  },
+  "barbed arrows": {
+   "key": "barbed arrows",
+   "name": "Barbed Arrows",
+   "firstSeenAt": "2026-11-20T17:42:30.447Z",
+   "droppedBy": {}
+  },
+  "silver ring of lat": {
+   "key": "silver ring of lat",
+   "name": "Silver Ring of Lat",
+   "firstSeenAt": "2026-11-20T18:30:41.267Z",
+   "droppedBy": {
+    "telen": 1
+   },
+   "judge": {
+    "text": "You find that Silver Ring of Lat is a poor piece of armor.",
+    "verdict": "poor",
+    "kind": "armor",
+    "at": "2026-11-20T18:30:41.267Z"
+   }
   }
  },
  "dragons": {},

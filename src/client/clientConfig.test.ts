@@ -1,11 +1,15 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  ACTIVE_SESSION_LS,
   applyClientConfigToLocalStorage,
   buildClientConfig,
+  buildMapFile,
   collectPlaypowermudLocalStorage,
   parseClientConfig,
+  parseMapImport,
 } from "./clientConfig.js";
+import { emptyWorldGraph } from "../mapper/WorldMap.js";
 
 function memoryStorage(seed: Record<string, string> = {}): Storage {
   const data = new Map(Object.entries(seed));
@@ -25,6 +29,8 @@ test("collectPlaypowermudLocalStorage keeps only playpowermud keys", () => {
   const s = memoryStorage({
     "playpowermud-skin": "dark",
     "playpowermud-aliases": "{}",
+    "playpowermud-active-session": "abc",
+    "playpowermud-world-graph": "{}",
     other: "x",
   });
   assert.deepEqual(collectPlaypowermudLocalStorage(s), {
@@ -69,4 +75,36 @@ test("applyClientConfigToLocalStorage replaces playpowermud keys by default", ()
   assert.equal(s.getItem("playpowermud-aliases"), null);
   assert.equal(s.getItem("playpowermud-comms:Zim"), "[]");
   assert.equal(s.getItem("keep"), "yes");
+});
+
+test("applyClientConfigToLocalStorage leaves the active session pointer alone", () => {
+  const s = memoryStorage({
+    [ACTIVE_SESSION_LS]: "session-1",
+    "playpowermud-skin": "light",
+  });
+  applyClientConfigToLocalStorage(
+    buildClientConfig({
+      exportedAt: "2026-11-02T00:00:00.000Z",
+      localStorage: { "playpowermud-skin": "dark" },
+    }),
+    s,
+  );
+  assert.equal(s.getItem(ACTIVE_SESSION_LS), "session-1");
+  assert.equal(s.getItem("playpowermud-skin"), "dark");
+});
+
+test("parseMapImport reads a map file, a raw graph, or a config's map", () => {
+  const doc = emptyWorldGraph("powermud");
+  const block = { baseUpdatedAt: doc.updatedAt, doc };
+  assert.equal(parseMapImport(buildMapFile(block, "2026-11-02T00:00:00.000Z")).doc.mud, "powermud");
+  assert.equal(parseMapImport(doc).doc.mud, "powermud");
+  const config = buildClientConfig({
+    exportedAt: "2026-11-02T00:00:00.000Z",
+    name: "Alt",
+    localStorage: {},
+    map: block,
+  });
+  assert.equal(parseClientConfig(config).name, "Alt");
+  assert.equal(parseMapImport(config).baseUpdatedAt, doc.updatedAt);
+  assert.throws(() => parseMapImport(buildClientConfig({ exportedAt: "2026-11-02T00:00:00.000Z", localStorage: {} })), /no map/);
 });

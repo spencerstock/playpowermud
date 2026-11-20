@@ -1,8 +1,5 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
 import { analyzeIntegrity, repairIntegrity } from "./integrity.js";
 import type { MapLink, MapRoom, WorldGraphDocument } from "./types.js";
 import { emptyWorldGraph, WorldMap } from "./WorldMap.js";
@@ -111,15 +108,4 @@ test("repeating prose (a road cycling a few texts) needs the same cell to prove 
   ]);
   const report = analyzeIntegrity(d);
   assert.ok(report.duplicates.every((g) => g.confidence !== "certain"));
-});
-
-// Guard for the committed map: a sync that brings leaked lines or proven duplicates back fails here.
-const LIVE = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../data/world/powermud.graph.json");
-test("committed world graph has no leaked description lines and no proven duplicate rooms", { skip: !fs.existsSync(LIVE) }, () => {
-  const graph = JSON.parse(fs.readFileSync(LIVE, "utf8")) as WorldGraphDocument;
-  const report = analyzeIntegrity(graph);
-  const leaked = report.contaminated.map((c) => `${c.room}: ${c.removed.map((r) => r.text.slice(0, 50)).join(" | ")}`);
-  assert.deepEqual(leaked.slice(0, 10), [], `${leaked.length} rooms; run: node --import tsx scripts/map-integrity.ts --fix`);
-  const proven = report.duplicates.filter((g) => g.confidence === "certain").map((g) => g.rooms.join("="));
-  assert.deepEqual(proven, []);
 });

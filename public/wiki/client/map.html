@@ -51,10 +51,11 @@
 
       <h3>Your map</h3>
       <p>
-        The map starts empty. Rooms and exits are added only as you walk them. That graph is saved
-        in <strong>IndexedDB</strong> (<code>playpowermud</code> database, key <code>player-map</code>)
-        on this browser and loaded again next visit. Export config if you want a copy you can import
-        on another browser.
+        Each session starts with an empty map. Rooms and exits are added only as you walk them.
+        That graph belongs to the session and is saved in <strong>IndexedDB</strong> on this browser.
+        The game does not include a world map. <strong>Export map</strong> / <strong>Import map</strong>
+        in the menu move a map on its own. <strong>Export config</strong> / <strong>Import config</strong>
+        save or add a whole session, including its map.
       </p>
 
       <h3>How mapping works (short)</h3>

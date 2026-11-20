@@ -1,57 +1,40 @@
 import { propagateAreas } from "../mapper/areaInfer.js";
 import { emptyWorldGraph, WorldMap } from "../mapper/WorldMap.js";
 import type { WorldGraphDocument } from "../mapper/types.js";
+import { idbDelete, idbGet, idbPut } from "./idbKv.js";
 
 /**
- * This browser's world graph. Starts empty. Rooms and links are learned while you play
- * and saved in IndexedDB (localStorage is only a fallback for a small graph).
- * Nothing is seeded from a shared map file.
+ * One session's world graph. Starts empty. Rooms and links are learned while you play
+ * and saved in IndexedDB under that session. Nothing is seeded from a shared map file.
  */
 
-const DB_NAME = "playpowermud";
-const STORE = "kv";
-/** Not `world-graph`: that key held a copy of the old shipped baseline. */
-const KEY = "player-map";
+/** Old single-browser key. Held a copy of the shipped baseline, then one shared learned map. */
+const LEGACY_IDB_KEY = "player-map";
 const LEGACY_LOCAL_GRAPH_KEY = "playpowermud-world-graph";
 const SAVE_DEBOUNCE_MS = 1500;
 
 export type SavedWorldGraph = { baseUpdatedAt: string; doc: WorldGraphDocument };
-type Saved = SavedWorldGraph;
 
-function openDb(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(STORE);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+export function mapStorageKey(sessionId: string): string {
+  if (!/^[-a-zA-Z0-9]{1,80}$/.test(sessionId)) throw new Error("Bad session id");
+  return `session-map:${sessionId}`;
 }
 
-function idbOnce<T>(db: IDBDatabase, mode: IDBTransactionMode, fn: (s: IDBObjectStore) => IDBRequest<T>): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
-    const req = fn(db.transaction(STORE, mode).objectStore(STORE));
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+export function emptySavedMap(): SavedWorldGraph {
+  return { baseUpdatedAt: "", doc: emptyWorldGraph("powermud") };
 }
 
-async function idbTransient<T>(mode: IDBTransactionMode, fn: (s: IDBObjectStore) => IDBRequest<T>): Promise<T> {
-  const db = await openDb();
-  try {
-    return await idbOnce(db, mode, fn);
-  } finally {
-    db.close();
-  }
+function isSaved(saved: SavedWorldGraph | undefined): saved is SavedWorldGraph {
+  return saved?.doc?.version === 1 && !!saved.doc.rooms;
 }
 
-function readLegacyLocalGraph(): Saved | undefined {
+function readLegacyLocalGraph(): SavedWorldGraph | undefined {
   if (typeof localStorage === "undefined") return undefined;
   try {
     const raw = localStorage.getItem(LEGACY_LOCAL_GRAPH_KEY);
     if (!raw) return undefined;
-    const parsed = JSON.parse(raw) as Saved;
-    if (typeof parsed?.baseUpdatedAt !== "string" || parsed?.doc?.version !== 1) return undefined;
-    return parsed;
+    const parsed = JSON.parse(raw) as SavedWorldGraph;
+    return isSaved(parsed) ? parsed : undefined;
   } catch {
     return undefined;
   }
@@ -65,52 +48,54 @@ function clearLegacyLocalGraph(): void {
   }
 }
 
-/** Best-effort mirror for small learned graphs; full baseline is too large for localStorage quota. */
-function mirrorLocalGraph(record: Saved): void {
-  if (typeof localStorage === "undefined") return;
+/** Pre-session map: IndexedDB `player-map`, or the localStorage mirror. Does not delete it. */
+export async function readLegacyMap(): Promise<SavedWorldGraph | undefined> {
+  let saved: SavedWorldGraph | undefined;
   try {
-    localStorage.setItem(LEGACY_LOCAL_GRAPH_KEY, JSON.stringify(record));
+    saved = await idbGet<SavedWorldGraph>(LEGACY_IDB_KEY);
   } catch {
-    localStorage.removeItem(LEGACY_LOCAL_GRAPH_KEY);
+    saved = undefined;
+  }
+  if (!isSaved(saved)) saved = readLegacyLocalGraph();
+  return isSaved(saved) ? saved : undefined;
+}
+
+/** Drop the pre-session map after it has been copied onto the first session. */
+export async function discardLegacyMap(): Promise<void> {
+  clearLegacyLocalGraph();
+  try {
+    await idbDelete(LEGACY_IDB_KEY);
+  } catch {
+    /* session copy is the one that counts */
   }
 }
 
 export class BrowserMapStore {
   private timer: ReturnType<typeof setTimeout> | null = null;
-  private db: IDBDatabase | null = null;
 
   private constructor(
     readonly map: WorldMap,
     private baseUpdatedAt: string,
+    readonly sessionId: string,
     private readonly onError: (err: unknown) => void,
   ) {}
 
-  private async ensureDb(): Promise<IDBDatabase> {
-    if (this.db) return this.db;
-    this.db = await openDb();
-    return this.db;
-  }
-
-  /** This browser's map, or an empty graph. Survives reloads; never seeded from a shared file. */
-  static async open(onError: (err: unknown) => void): Promise<{ store: BrowserMapStore; source: "saved" | "empty" }> {
-    let saved: Saved | undefined;
-    let fromLegacyLocalStorage = false;
+  /** This session's map, or an empty graph when the session has none yet. */
+  static async open(
+    sessionId: string,
+    onError: (err: unknown) => void,
+  ): Promise<{ store: BrowserMapStore; source: "saved" | "empty" }> {
+    const key = mapStorageKey(sessionId);
+    let saved: SavedWorldGraph | undefined;
     try {
-      saved = await idbTransient<Saved | undefined>("readonly", (s) => s.get(KEY) as IDBRequest<Saved | undefined>);
+      saved = await idbGet<SavedWorldGraph>(key);
     } catch (err) {
       onError(err);
-    }
-    if (!saved) {
-      saved = readLegacyLocalGraph();
-      if (saved) {
-        fromLegacyLocalStorage = true;
-        clearLegacyLocalGraph();
-      }
     }
     let doc: WorldGraphDocument;
     let source: "saved" | "empty";
     let baseUpdatedAt = "";
-    if (saved?.doc?.version === 1 && saved.doc.rooms) {
+    if (isSaved(saved)) {
       doc = saved.doc;
       source = "saved";
       baseUpdatedAt = saved.baseUpdatedAt;
@@ -120,14 +105,8 @@ export class BrowserMapStore {
     }
     const map = new WorldMap(doc);
     propagateAreas(map);
-    const store = new BrowserMapStore(map, baseUpdatedAt, onError);
-    await store.ensureDb();
-    if (fromLegacyLocalStorage) {
-      map.touch();
-      void store.flush();
-    } else {
-      map.markClean();
-    }
+    const store = new BrowserMapStore(map, baseUpdatedAt, sessionId, onError);
+    map.markClean();
     return { store, source };
   }
 
@@ -146,26 +125,18 @@ export class BrowserMapStore {
       this.timer = null;
     }
     if (!this.map.isDirty) return;
-    const record: Saved = { baseUpdatedAt: this.baseUpdatedAt, doc: this.map.doc };
+    const record: SavedWorldGraph = { baseUpdatedAt: this.baseUpdatedAt, doc: this.map.doc };
     try {
-      const db = await this.ensureDb();
-      await idbOnce(db, "readwrite", (s) => s.put(record, KEY));
+      await idbPut(mapStorageKey(this.sessionId), record);
       this.map.markClean();
-      mirrorLocalGraph(record);
     } catch (err) {
-      try {
-        mirrorLocalGraph(record);
-        this.map.markClean();
-      } catch {
-        this.onError(err);
-      }
+      this.onError(err);
     }
   }
 
-  /** Forget this browser's map. The next load starts empty. */
-  static async clearSaved(): Promise<void> {
-    clearLegacyLocalGraph();
-    await idbTransient("readwrite", (s) => s.delete(KEY));
+  /** Forget this session's map. The next load starts empty. */
+  static async clearSaved(sessionId: string): Promise<void> {
+    await idbDelete(mapStorageKey(sessionId));
   }
 
   /** Current graph for export (flushes pending saves first). */
@@ -174,9 +145,8 @@ export class BrowserMapStore {
     return { baseUpdatedAt: this.baseUpdatedAt, doc: this.map.doc };
   }
 
-  /** Replace the saved learned map (used after config import). */
-  static async importSaved(record: SavedWorldGraph): Promise<void> {
-    clearLegacyLocalGraph();
-    await idbTransient("readwrite", (s) => s.put(record, KEY));
+  /** Replace this session's saved map. The page reloads so the mapper picks it up. */
+  static async importSaved(sessionId: string, record: SavedWorldGraph): Promise<void> {
+    await idbPut(mapStorageKey(sessionId), record);
   }
 }

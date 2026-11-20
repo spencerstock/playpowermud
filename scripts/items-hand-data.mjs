@@ -1772,6 +1772,12 @@ export const MAGIC_SECTIONS = [
         "effects": "+50 hp,+50sp,+40 regen"
       },
       {
+        "item": "Silver Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, biting aversion ext poor",
+        "quality": "Poor piece of armor."
+      },
+      {
         "item": "Yellow Ring of Lat",
         "plus": "",
         "effects": "+20 hp, +20 sp, unarmed aversion ext poor",
