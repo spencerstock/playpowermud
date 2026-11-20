@@ -8,6 +8,9 @@ import {
   displayMagicJudge,
   formatJudge,
   itemKey,
+  mergeDroppedByColumns,
+  parseMagicalDropsHtml,
+  witnessDroppedBy,
 } from "./build-wiki-items.mjs";
 
 const FIXTURE_KNOWLEDGE = {
@@ -92,6 +95,33 @@ test("formatJudge omits non-judgeable item reply", () => {
     "",
   );
   assert.equal(formatJudge({ verdict: "good", text: "ok" }), "good");
+});
+
+test("parseMagicalDropsHtml groups items and NPC witnesses", () => {
+  const map = parseMagicalDropsHtml(`
+      <h3 id="red">Red Dragon</h3>
+      <ul><li>Test Blade</li><li>Scroll &amp; Parchment Case [Medium]</li></ul>
+      <h3 id="blue">Blue Dragon</h3>
+      <ul><li>Test Blade</li></ul>
+    `);
+  assert.equal(map.get("test blade")?.npcs.join(", "), "Blue Dragon, Red Dragon");
+  assert.equal(map.get("scroll parchment case medium")?.displayName, "Scroll & Parchment Case [Medium]");
+});
+
+test("mergeDroppedByColumns unions hub and witness drop lists", () => {
+  assert.equal(mergeDroppedByColumns("Red Dragon", "Blue Dragon"), "Blue Dragon, Red Dragon");
+  assert.equal(mergeDroppedByColumns("Red Dragon×2", "Red Dragon"), "Red Dragon, Red Dragon×2");
+});
+
+test("buildPages merges witnessed drops into magic items", () => {
+  const witness = parseMagicalDropsHtml(
+    `<h3 id="x">Red Dragon</h3><ul><li>Only In Drops</li><li>Fine Piwafwi</li></ul>`,
+  );
+  const { magicHtml } = buildPages(HAND_NORMAL, HAND_MAGIC, null, null, witness);
+  assert.match(magicHtml, /Only In Drops/);
+  assert.match(magicHtml, /Red Dragon/);
+  const piwafwi = magicHtml.match(/Fine Piwafwi[\s\S]*?<\/tr>/);
+  assert.ok(piwafwi?.[0].includes("Red Dragon"), "existing row should gain witness NPC");
 });
 
 test("enrichRow fills judge sell and dropped by", () => {

@@ -10,6 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const STATS_DIR = path.join(ROOT, "data", "stats");
 const ITEMS_DIR = path.join(ROOT, "public", "wiki", "items");
+const WITNESS_DROPS_HTML = path.join(ROOT, "public", "wiki", "npcs", "drops.html");
 
 /** @param {string} s */
 export function escapeHtml(s) {
@@ -40,6 +41,66 @@ export function itemKey(name) {
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .replace(/\s+/g, " ");
+}
+
+/** @param {string} s */
+function decodeWikiText(s) {
+  return String(s)
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+/**
+ * Player-reported magic drops from public/wiki/npcs/drops.html (NPC → item lists).
+ * @param {string} html
+ * @returns {Map<string, { displayName: string, npcs: string[] }>}
+ */
+export function parseMagicalDropsHtml(html) {
+  /** @type {Map<string, { displayName: string, npcs: string[] }>} */
+  const byKey = new Map();
+  for (const block of html.matchAll(
+    /<h3[^>]*>([^<]+)<\/h3>\s*<ul>([\s\S]*?)<\/ul>/g,
+  )) {
+    const npc = decodeWikiText(block[1].trim());
+    for (const li of block[2].matchAll(/<li>([^<]+)<\/li>/g)) {
+      const displayName = decodeWikiText(li[1].trim());
+      const key = itemKey(displayName);
+      if (!key) continue;
+      let entry = byKey.get(key);
+      if (!entry) {
+        entry = { displayName, npcs: [] };
+        byKey.set(key, entry);
+      }
+      if (!entry.npcs.includes(npc)) entry.npcs.push(npc);
+    }
+  }
+  for (const entry of byKey.values()) {
+    entry.npcs.sort((a, b) => a.localeCompare(b));
+  }
+  return byKey;
+}
+
+/** @param {Map<string, { displayName: string, npcs: string[] }>} witnessMap @param {string} key */
+export function witnessDroppedBy(witnessMap, key) {
+  const entry = witnessMap.get(key);
+  if (!entry?.npcs.length) return "";
+  return entry.npcs.join(", ");
+}
+
+/** @param {string | undefined} a @param {string | undefined} b */
+export function mergeDroppedByColumns(a, b) {
+  const parts = new Set();
+  for (const col of [a, b]) {
+    if (!col?.trim()) continue;
+    for (const piece of col.split(/,\s*/)) {
+      const t = piece.trim();
+      if (t) parts.add(t);
+    }
+  }
+  return [...parts].sort((x, y) => x.localeCompare(y)).join(", ");
 }
 
 /** @param {string} title @param {string} description */
@@ -102,13 +163,16 @@ function renderNormalRow(row, withStats) {
   return `${cells}</tr>\n`;
 }
 
-/** @param {import("./items-hand-data.mjs").MAGIC_SECTIONS[0]["rows"][0] & { judge?: string, sell?: string, droppedBy?: string }} row @param {string} slot @param {boolean} withStats */
-function renderMagicRow(row, slot, withStats) {
+/**
+ * @param {import("./items-hand-data.mjs").MAGIC_SECTIONS[0]["rows"][0] & { judge?: string, sell?: string, droppedBy?: string }} row
+ * @param {string} slot
+ * @param {{ withStats: boolean, withDropColumn: boolean }} cols
+ */
+function renderMagicRow(row, slot, cols) {
   const judge = displayMagicJudge(row);
   let cells = `<tr><td>${escapeHtml(slot)}</td><td>${escapeHtml(row.item)}</td><td>${escapeHtml(row.plus)}</td><td>${escapeHtml(row.effects)}</td><td>${escapeHtml(judge)}</td>`;
-  if (withStats) {
-    cells += `<td>${escapeHtml(row.sell ?? "")}</td><td>${escapeHtml(row.droppedBy ?? "")}</td>`;
-  }
+  if (cols.withStats) cells += `<td>${escapeHtml(row.sell ?? "")}</td>`;
+  if (cols.withDropColumn) cells += `<td>${escapeHtml(row.droppedBy ?? "")}</td>`;
   return `${cells}</tr>\n`;
 }
 
@@ -246,13 +310,63 @@ function appendStatRows(sections, page, knowledge, values, chanceByKey, npcs, al
   }
 }
 
+/** @param {typeof MAGIC_SECTIONS} magicSections */
+function magicItemKeys(magicSections) {
+  const keys = new Set();
+  for (const sec of magicSections) {
+    for (const row of sec.rows) keys.add(itemKey(row.item));
+  }
+  return keys;
+}
+
+/**
+ * @param {typeof MAGIC_SECTIONS} magicSections
+ * @param {Map<string, { displayName: string, npcs: string[] }>} witnessMap
+ */
+function applyWitnessDropsToMagicSections(magicSections, witnessMap) {
+  if (!witnessMap.size) return;
+  for (const sec of magicSections) {
+    for (const row of sec.rows) {
+      const witness = witnessDroppedBy(witnessMap, itemKey(row.item));
+      if (witness) row.droppedBy = mergeDroppedByColumns(row.droppedBy, witness);
+    }
+  }
+}
+
+/**
+ * @param {typeof MAGIC_SECTIONS} magicSections
+ * @param {Map<string, { displayName: string, npcs: string[] }>} witnessMap
+ * @param {Set<string>} keysOnPage
+ */
+function appendWitnessDropRows(magicSections, witnessMap, keysOnPage) {
+  if (!witnessMap.size) return;
+  let section = magicSections.find((s) => s.id === "mi");
+  if (!section) {
+    section = { id: "mi", title: "Misc (MI)", rows: [] };
+    magicSections.push(section);
+  }
+  const pending = [...witnessMap.entries()]
+    .filter(([key]) => !keysOnPage.has(key))
+    .sort((a, b) => a[1].displayName.localeCompare(b[1].displayName));
+  for (const [key, entry] of pending) {
+    keysOnPage.add(key);
+    section.rows.push({
+      item: entry.displayName,
+      plus: "",
+      effects: "",
+      droppedBy: witnessDroppedBy(witnessMap, key),
+    });
+  }
+}
+
 /**
  * @param {typeof NORMAL_SECTIONS} normalHand
  * @param {typeof MAGIC_SECTIONS} magicHand
  * @param {object | null} knowledge
  * @param {object | null} values
+ * @param {Map<string, { displayName: string, npcs: string[] }>} [witnessDrops]
  */
-export function buildPages(normalHand, magicHand, knowledge, values) {
+export function buildPages(normalHand, magicHand, knowledge, values, witnessDrops = new Map()) {
   const withStats = !!(knowledge && values);
   const npcs = knowledge?.npcs ?? {};
   const chanceByKey = knowledge ? buildChanceMap(knowledge) : new Map();
@@ -290,6 +404,13 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
     appendStatRows(magicSections, "magic", knowledge, values, chanceByKey, npcs, allHandKeys);
   }
 
+  const keysOnMagicPage = magicItemKeys(magicSections);
+  appendWitnessDropRows(magicSections, witnessDrops, keysOnMagicPage);
+  applyWitnessDropsToMagicSections(magicSections, witnessDrops);
+
+  const withDropColumn = withStats || witnessDrops.size > 0;
+  const magicCols = { withStats, withDropColumn };
+
   let statsUpdated = "";
   if (knowledge?.updatedAt || values?.updatedAt) {
     const dates = [knowledge?.updatedAt, values?.updatedAt].filter(Boolean).sort();
@@ -302,7 +423,9 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
 
   const magicHead = withStats
     ? "<thead><tr><th>Slot</th><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th><th>Sell</th><th>Dropped by</th></tr></thead>"
-    : "<thead><tr><th>Slot</th><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th></tr></thead>";
+    : withDropColumn
+      ? "<thead><tr><th>Slot</th><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th><th>Dropped by</th></tr></thead>"
+      : "<thead><tr><th>Slot</th><th>Name</th><th>Plus</th><th>Effects</th><th>Judge</th></tr></thead>";
 
   let normalBody = `<h2>Normal equipment</h2>
       <p class="wiki-lede">Mundane weapons and armor, with judge verdicts and where each one was seen. The original list was unfinished. Areas it names: Threshold, Cerene, Kobold Village, Kal-Thax, Sheep Ledge, Dwarven Mines, Lowhill, Cutland's Pass, Mining Tunnel, Orc Camp, Deep Forest, Threshold Swamps, Cannibal Village, Reptiloid Village, Nymph Forest, Bandit Camp, Goblin Tunnels, Dulaj Road, Fire Grotto, Elinost (outside the gate), Zeraf Pit.${
@@ -322,9 +445,9 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
 
   const magicCount = magicSections.reduce((n, s) => n + s.rows.length, 0);
   let magicBody = `<h2>Magic items</h2>
-      <p class="wiki-lede">A player catalog of magic items that were in the game when the list was kept. ${magicCount} entries in one table; slot codes are the list's own abbreviations. If an item is missing, that only means it was not on this list.${
+      <p class="wiki-lede">A player catalog of magic items that were in the game when the list was kept. ${magicCount} entries in one table; slot codes are the list's own abbreviations. If an item is missing, that only means it was not on this list. The <strong>Dropped by</strong> column merges hub kill data with witnessed drops from <a href="/wiki/npcs/drops.html">Magical drops</a>.${
         withStats
-          ? " Judge, sell, and drop columns refresh when hub stats are copied into <code>data/stats/</code> and the site is rebuilt."
+          ? " Judge and sell refresh when hub stats are copied into <code>data/stats/</code> and the site is rebuilt."
           : ""
       }</p>
       <p>Plus is magical power. See <a href="/wiki/items/index.html">how plus adds up</a>.</p>\n\n`;
@@ -332,7 +455,7 @@ export function buildPages(normalHand, magicHand, knowledge, values) {
   magicBody += `      <table>\n        ${magicHead}\n        <tbody>\n`;
   for (const sec of magicSections) {
     for (const row of sec.rows) {
-      magicBody += renderMagicRow(row, sec.title, withStats);
+      magicBody += renderMagicRow(row, sec.title, magicCols);
     }
   }
   magicBody += `        </tbody>\n      </table>\n\n`;
@@ -373,11 +496,22 @@ async function main() {
     );
   }
 
+  let witnessDrops = new Map();
+  try {
+    const dropsHtml = await readFile(WITNESS_DROPS_HTML, "utf8");
+    witnessDrops = parseMagicalDropsHtml(dropsHtml);
+  } catch {
+    console.warn(
+      `build-wiki-items: missing ${path.relative(ROOT, WITNESS_DROPS_HTML)} — magical drops not merged`,
+    );
+  }
+
   const { normalHtml, magicHtml, withStats } = buildPages(
     NORMAL_SECTIONS,
     MAGIC_SECTIONS,
     knowledge,
     values,
+    witnessDrops,
   );
 
   await writeFile(path.join(ITEMS_DIR, "normal-equipment.html"), normalHtml, "utf8");
