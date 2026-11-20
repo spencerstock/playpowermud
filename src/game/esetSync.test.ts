@@ -134,6 +134,30 @@ follow                         off
   assert.match(shown, /Lorax tells you: hi/);
 });
 
+test("Setting variable replies are hidden only for the automatic writes", () => {
+  const sync = new EsetLoginSync();
+  sync.onEnteredGame();
+  const listing = `Variable                       Setting
+=-=-=-=-=-=-=-=-=-=
+ansi                           on
+`;
+  const first = sync.consume(`${listing}\n[HP:10 SP:10]> `);
+  assert.ok(first.send.length > 0);
+  const body = first.send
+    .map((cmd) => {
+      const parts = cmd.split(/\s+/);
+      const name = parts[1];
+      const value = parts.slice(2).join(" ");
+      return `>Setting variable '${name}' to '${value}'.\r\n`;
+    })
+    .join("");
+  const step = sync.consume(`${body}[HP:10 SP:10]> `);
+  assert.equal(step.visible.includes("Setting variable"), false);
+  assert.match(step.visible, /\[HP:10 SP:10\]> $/);
+  const later = sync.consume(">Setting variable 'tell' to 'bold red'.\r\n");
+  assert.match(later.visible, /Setting variable 'tell' to 'bold red'/);
+});
+
 test("a non-listing reply is shown and does not loop", () => {
   const sync = new EsetLoginSync();
   sync.onEnteredGame();

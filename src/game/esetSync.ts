@@ -212,6 +212,17 @@ export class EsetLoginSync {
         }
         return stop(consumed, true);
       }
+      const setting = settingVariableName(t);
+      if (setting && this.ackNames.includes(setting)) {
+        this.ackNames = this.ackNames.filter((n) => n !== setting);
+        this.gagPrompt = true;
+        if (this.ackNames.length === 0) {
+          consumed += 1;
+          this.gagPrompt = false;
+          return stop(consumed, true);
+        }
+        continue;
+      }
       if (GAME_LINE.test(t)) return stop(consumed, true);
       if (isAckLine(t, this.ackNames)) {
         this.gagPrompt = true;
@@ -237,6 +248,13 @@ export class EsetLoginSync {
     this.buf = rest;
     return { visible, send: [] };
   }
+}
+
+/** Powermud prints `Setting variable 'tell' to 'bold green'.`, sometimes glued to a `>` prompt. */
+function settingVariableName(trimmed: string): string | null {
+  const t = trimmed.replace(/^>\s?/, "");
+  const m = /^Setting variable '([^']+)' to '/i.exec(t);
+  return m ? m[1]!.toLowerCase() : null;
 }
 
 function isEsetRow(trimmed: string): boolean {
