@@ -4,6 +4,7 @@ import { createChatPanel } from "./chatPanel.js";
 export type SidePanel = {
   syncComms: (entries: CommsEntry[]) => void;
   appendCommsEntry: (entry: CommsEntry, notify?: boolean) => void;
+  updateCommsEntry: (entry: CommsEntry) => void;
   setExpanded: (on: boolean) => void;
   toggleExpanded: () => void;
 };
@@ -96,6 +97,9 @@ export function createSidePanel(opts: { mount: HTMLElement; onCommsClear?: () =>
     },
     appendCommsEntry(entry, notify = true) {
       chat.appendEntry(entry, notify);
+    },
+    updateCommsEntry(entry) {
+      chat.updateEntry(entry);
     },
     setExpanded,
     toggleExpanded() {

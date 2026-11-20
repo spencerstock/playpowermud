@@ -103,7 +103,9 @@ export const POWERMUD_PROFILE: GameProfile = {
   // Dojo guards (r4918 n into the samurai sect) and similar mobs refuse the exit until they
   // are killed. That is not a bad map link: charging it as `did not move` 20 times marks the
   // exit blocked and every path to r5335 dies (Merevia 2026-11-15 12:36 PM MST).
-  moveHindered: [/^The small boy trips you!/i, /\bblocks your way\b/i],
+  // Dulaj Road bandits stop you to rob you: "The Bandit demands money from you!" eats the move
+  // (map-repair read it as a listed exit that does not work, 2026-11-18).
+  moveHindered: [/^The small boy trips you!/i, /\bblocks your way\b/i, /\bdemands money from you\b/i],
   // Deepwater docks / Waterside Road: `Your eyes sting from the blinding light, leaving you not
   // able to see for a` / `brief moment.` (live 2026-11-04). Threshold goat pen / outdoor cave:
   // `Your eyes sting from the bright light, and you are blinded for a moment!` (live 2026-11-05

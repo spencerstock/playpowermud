@@ -38,7 +38,7 @@ const COST = { walked: 1, inferred: 1.6, aside: 2.2, incoming: 2.6 } as const;
 export function layoutAround(
   map: WorldMap,
   centerId: string,
-  opts: { radius?: number; zMin?: number; zMax?: number; maxRooms?: number } = {},
+  opts: { radius?: number; zMin?: number; zMax?: number; maxRooms?: number; wholePlane?: boolean } = {},
 ): ViewLayout {
   const cells = new Map<string, ViewPos>();
   const aside = new Set<string>();
@@ -47,9 +47,10 @@ export function layoutAround(
   const radius = opts.radius ?? 6;
   const zMin = opts.zMin ?? center.pos.z - 1;
   const zMax = opts.zMax ?? center.pos.z + 1;
-  const maxRooms = opts.maxRooms ?? 1500;
+  const maxRooms = opts.maxRooms ?? (opts.wholePlane ? 20000 : 1500);
   const origin: ViewPos = { x: center.pos.x, y: center.pos.y, z: center.pos.z };
   const inBounds = (p: ViewPos) =>
+    opts.wholePlane ||
     Math.abs(p.x - origin.x) <= radius && Math.abs(p.y - origin.y) <= radius && p.z >= zMin && p.z <= zMax;
 
   const taken = new Map<string, string>();
@@ -127,18 +128,38 @@ export function layoutAround(
     }
   };
 
+  const drain = () => {
+    for (let c = pop(); c && cells.size < maxRooms; c = pop()) {
+      if (cells.has(c.id)) continue;
+      const room = map.room(c.id);
+      if (!room || room.tags.includes("vessel")) continue;
+      let p: ViewPos | undefined = c.pos;
+      if (c.aside && c.from) p = asideCell(c.from, c.pos, room);
+      if (!p || !inBounds(p) || taken.has(cellKey(p))) continue;
+      cells.set(room.id, p);
+      taken.set(cellKey(p), room.id);
+      if (c.aside) aside.add(room.id);
+      expand(room, p, c.cost);
+    }
+    heap.length = 0;
+  };
   push({ cost: 0, id: center.id, pos: origin, from: null, aside: false });
-  for (let c = pop(); c && cells.size < maxRooms; c = pop()) {
-    if (cells.has(c.id)) continue;
-    const room = map.room(c.id);
-    if (!room || room.tags.includes("vessel")) continue;
-    let p: ViewPos | undefined = c.pos;
-    if (c.aside && c.from) p = asideCell(c.from, c.pos, room);
-    if (!p || !inBounds(p) || taken.has(cellKey(p))) continue;
-    cells.set(room.id, p);
-    taken.set(cellKey(p), room.id);
-    if (c.aside) aside.add(room.id);
-    expand(room, p, c.cost);
+  drain();
+  if (opts.wholePlane) {
+    // Pockets the center's links never reach (one-way doors, teleports, unexplored gaps) still
+    // belong on the plane: seed each from its stored cell — the center keeps its stored cell, so
+    // that is the same frame — nearest first, and lay its neighbours out from there.
+    const rest = map
+      .rooms()
+      .filter((r) => r.pos.plane === center.pos.plane && !cells.has(r.id) && !r.tags.includes("vessel"))
+      .map((r) => ({ r, d: Math.abs(r.pos.x - origin.x) + Math.abs(r.pos.y - origin.y) + Math.abs(r.pos.z - origin.z) * 4 }))
+      .sort((a, b) => a.d - b.d);
+    for (const { r } of rest) {
+      if (cells.size >= maxRooms) break;
+      if (cells.has(r.id)) continue;
+      push({ cost: 0, id: r.id, pos: { x: r.pos.x, y: r.pos.y, z: r.pos.z }, from: null, aside: false });
+      drain();
+    }
   }
   return { cells, aside };
 }

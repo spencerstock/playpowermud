@@ -802,7 +802,11 @@ function handleSlashCommand(line: string): boolean {
   const def = parseSlashAliasDefineLine(line);
   if (def) {
     if (!def.ok) errorLine(def.reason);
-    else {
+    else if (def.kind === "lookup") {
+      const body = aliases.expansion(def.name);
+      if (body == null) errorLine(`No alias named "${def.name}".`);
+      else meta(`Alias "${def.name}" → ${body}`);
+    } else {
       aliases.set(def.name, def.expansion);
       meta(`Alias "${def.name}" → ${def.expansion}`);
     }
@@ -989,8 +993,9 @@ async function boot(): Promise<void> {
   );
   runtime = new ClientRuntime(store);
   runtime.on((msg) => worldPanel?.onMessage(msg));
-  runtime.onComms((entry, all) => {
-    if (entry) sidePanel.appendCommsEntry(entry);
+  runtime.onComms((entry, all, updated) => {
+    if (updated && entry) sidePanel.updateCommsEntry(entry);
+    else if (entry) sidePanel.appendCommsEntry(entry);
     else sidePanel.syncComms(all);
   });
   runtime.state.on(() => syncPasswordMode());

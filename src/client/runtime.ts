@@ -81,7 +81,7 @@ export class ClientRuntime {
   private readonly comms = createCommsLogIngest(() => this.players);
   private commsKey: string | null = null;
   private commsEntries: CommsEntry[] = [];
-  private commsListeners = new Set<(entry: CommsEntry | null, all: CommsEntry[]) => void>();
+  private commsListeners = new Set<(entry: CommsEntry | null, all: CommsEntry[], updated?: boolean) => void>();
 
   constructor(readonly mapStore: BrowserMapStore) {
     this.mapper = new Mapper(mapStore.map);
@@ -220,7 +220,7 @@ export class ClientRuntime {
 
   // ---- comms -----------------------------------------------------------------------------
 
-  onComms(fn: (entry: CommsEntry | null, all: CommsEntry[]) => void): () => void {
+  onComms(fn: (entry: CommsEntry | null, all: CommsEntry[], updated?: boolean) => void): () => void {
     this.commsListeners.add(fn);
     return () => this.commsListeners.delete(fn);
   }
@@ -270,12 +270,15 @@ export class ClientRuntime {
     }
     this.commsPartial = text.slice(nl + 1);
     const fresh = this.comms.ingestLogText(text.slice(0, nl + 1));
-    if (!fresh.length) return;
+    if (!fresh.added.length && !fresh.updated.length) return;
     this.loadComms();
-    for (const entry of fresh) {
+    for (const entry of fresh.added) {
       this.commsEntries.push(entry);
       if (this.commsEntries.length > COMMS_CAP) this.commsEntries.splice(0, this.commsEntries.length - COMMS_CAP);
       for (const fn of this.commsListeners) fn(entry, this.commsEntries);
+    }
+    for (const entry of fresh.updated) {
+      for (const fn of this.commsListeners) fn(entry, this.commsEntries, true);
     }
     this.saveComms();
   }

@@ -14,20 +14,23 @@ test("parseSlashAliasDefineLine", () => {
 
   assert.deepEqual(parseSlashAliasDefineLine("/alias"), {
     ok: false,
-    reason: "usage: /alias NAME EXPANSION",
+    reason: "usage: /alias NAME [EXPANSION]",
   });
   assert.deepEqual(parseSlashAliasDefineLine("/alias cma"), {
-    ok: false,
-    reason: "usage: /alias NAME EXPANSION",
+    ok: true,
+    kind: "lookup",
+    name: "cma",
   });
 
   assert.deepEqual(parseSlashAliasDefineLine("/alias cma cast magic invulnerability"), {
     ok: true,
+    kind: "define",
     name: "cma",
     expansion: "cast magic invulnerability",
   });
   assert.deepEqual(parseSlashAliasDefineLine("  /ALIAS wt weave tap  "), {
     ok: true,
+    kind: "define",
     name: "wt",
     expansion: "weave tap",
   });

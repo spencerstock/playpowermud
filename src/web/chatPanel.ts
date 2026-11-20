@@ -5,6 +5,8 @@ export type ChatEntry = CommsEntry;
 export type ChatPanel = {
   replaceEntries: (entries: CommsEntry[]) => void;
   appendEntry: (entry: CommsEntry, notify?: boolean) => void;
+  /** Replace a live row when a wrap continuation extends the same comms entry. */
+  updateEntry: (entry: CommsEntry) => void;
   clear: () => void;
 };
 
@@ -53,8 +55,27 @@ export function createChatPanel(opts: {
 
   const entries: CommsEntry[] = [];
 
+  /** Follow new lines until the user scrolls up. */
+  let followTail = true;
+
   function isPinnedToBottom(): boolean {
     return list.scrollHeight - list.clientHeight - list.scrollTop <= 48;
+  }
+
+  function scrollToTail(): void {
+    list.scrollTop = list.scrollHeight;
+  }
+
+  list.addEventListener(
+    "scroll",
+    () => {
+      followTail = isPinnedToBottom();
+    },
+    { passive: true },
+  );
+
+  function sameEntry(a: CommsEntry, b: CommsEntry): boolean {
+    return a.at === b.at && a.kind === b.kind && a.speaker === b.speaker && (a.target ?? "") === (b.target ?? "");
   }
 
   function speakerLabel(entry: CommsEntry): string {
@@ -75,20 +96,22 @@ export function createChatPanel(opts: {
   }
 
   function renderList(): void {
-    const pinned = isPinnedToBottom();
     list.replaceChildren();
     for (const entry of entries) {
       list.append(renderEntry(entry));
     }
-    if (pinned) list.scrollTop = list.scrollHeight;
+    if (followTail) {
+      scrollToTail();
+      requestAnimationFrame(scrollToTail);
+    }
   }
 
   function appendEntry(entry: CommsEntry, notify = true): void {
     entries.push(entry);
     if (entries.length > CAP) entries.splice(0, entries.length - CAP);
-    const pinned = isPinnedToBottom();
     list.append(renderEntry(entry));
-    if (pinned) list.scrollTop = list.scrollHeight;
+    while (list.childElementCount > CAP) list.firstElementChild?.remove();
+    if (followTail) scrollToTail();
     if (notify) opts.onNewEntry?.();
   }
 
@@ -99,9 +122,27 @@ export function createChatPanel(opts: {
       renderList();
     },
     appendEntry,
+    updateEntry(entry) {
+      let i = -1;
+      for (let n = entries.length - 1; n >= 0; n--) {
+        if (sameEntry(entries[n]!, entry)) {
+          i = n;
+          break;
+        }
+      }
+      if (i < 0) {
+        appendEntry(entry, false);
+        return;
+      }
+      entries[i] = entry;
+      const row = list.children[i];
+      if (row) row.replaceWith(renderEntry(entry));
+      if (followTail) scrollToTail();
+    },
     clear() {
       entries.length = 0;
       list.replaceChildren();
+      followTail = true;
     },
   };
 }

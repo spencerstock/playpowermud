@@ -179,6 +179,11 @@ export function createAliasMenu(
       else expInput.focus();
       return;
     }
+    if (parsed.kind !== "define") {
+      showNotice("Add an expansion.");
+      expInput.focus();
+      return;
+    }
     store.set(parsed.name, parsed.expansion);
     showNotice(`Saved: ${parsed.name} → ${parsed.expansion}`, false);
     nameInput.value = "";

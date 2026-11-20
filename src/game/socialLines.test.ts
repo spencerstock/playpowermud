@@ -48,6 +48,10 @@ test("parsePowermudChatLine includes outgoing say, tell, and shout", () => {
     'he said "wait!"',
   );
   assert.equal(extractChatMessage("tell", "Weaver tells you don't stop."), "don't stop.");
+  assert.equal(
+    extractChatMessage("tell", 'Weaver tells you : He said "wait..." ok!'),
+    'He said "wait..." ok!',
+  );
 });
 
 test("parsePowermudSideChatLine is room say only", () => {

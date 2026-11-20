@@ -261,6 +261,12 @@ export type HealReport = {
  * exits open "aside" planes. Disconnected discoveries start new surface planes and are
  * merged (translated) when a compass link between them is found.
  */
+/**
+ * Per-room cost of entering an avoided room when no avoid-free path exists: high enough that the
+ * fallback always prefers fewer avoided rooms over any realistic detour length.
+ */
+export const AVOID_FALLBACK_ROOM_COST = 10_000;
+
 export class WorldMap {
   private byPos = new Map<string, Set<string>>();
   private byTitle = new Map<string, Set<string>>();
@@ -2097,8 +2103,32 @@ export class WorldMap {
     return !Object.values(dest.links).some((l) => l.to === fromId);
   }
 
-  /** Dijkstra over known links. Returns null when unreachable. */
+  /**
+   * Dijkstra over known links. Returns null when unreachable.
+   *
+   * Room avoids (`avoid` ids/tags, `maxDanger`) only route AROUND rooms: when no path exists that
+   * honors them, the search runs again with avoided rooms allowed at a large per-room cost, so the
+   * walk takes the route through the fewest avoided rooms instead of failing (Spencer 2026-11-19:
+   * "we should never block navigation because of an avoid" — a character sat for hours in a room
+   * whose only exit was avoided). `strictAvoid: true` keeps the old hard behavior for callers that
+   * ask "is it reachable without them". Link-level `avoidLinks` (phantom / failed exits) stay hard.
+   */
   findPath(fromId: string, goal: (room: MapRoom) => boolean, opts: PathOptions = {}): PathStep[] | null {
+    const strict = this.searchPath(fromId, goal, opts, false);
+    if (strict || opts.strictAvoid || !this.hasRoomAvoid(opts)) return strict;
+    return this.searchPath(fromId, goal, opts, true);
+  }
+
+  private hasRoomAvoid(opts: PathOptions): boolean {
+    return opts.maxDanger !== undefined || !!opts.avoid?.length;
+  }
+
+  private searchPath(
+    fromId: string,
+    goal: (room: MapRoom) => boolean,
+    opts: PathOptions,
+    relaxAvoid: boolean,
+  ): PathStep[] | null {
     const start = this.doc.rooms[fromId];
     if (!start) return null;
     if (goal(start)) return [];
@@ -2131,8 +2161,11 @@ export class WorldMap {
         if (opts.avoidLinks?.includes(`${room.id}:${cmd}`)) continue;
         const next = this.doc.rooms[link.to!];
         if (!next || done.has(next.id)) continue;
-        if (!goal(next) && this.roomAvoided(next, opts)) continue;
         let w = (link.weight ?? 1) + (link.kind === "special" ? 0.5 : 0) + (link.confirmed ? 0 : 0.25);
+        if (!goal(next) && this.roomAvoided(next, opts)) {
+          if (!relaxAvoid) continue;
+          w += AVOID_FALLBACK_ROOM_COST;
+        }
         if (this.guessContradicted(room.id, cmd, link, next)) w += CONTRADICTED_GUESS_COST;
         if (opts.preferAvoid?.length) {
           if (opts.preferAvoid.includes(next.id) || next.tags.some((t) => opts.preferAvoid!.includes(t))) {

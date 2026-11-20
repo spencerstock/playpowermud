@@ -9,6 +9,8 @@ import {
 const HUB_ECHO_LINE = /^>>>\s*\[([^\]]+)\]\s*(.*)$/;
 const BOT_SOCIAL_VERBS = new Set(["say", "tell", "shout", "gt", "reply", "whisper"]);
 const BOT_META_LINE = /^\[mudwithme\]\s*\[bot\]\s*(.+)$/i;
+/** Wrapped tell/say/shout text arrives as indented lines right after the first. */
+export const COMMS_CONTINUATION_MS = 1500;
 
 /** Hub input attribution for progression bots (`bot`, `bot:…`). */
 export function isBotWho(who: string): boolean {
@@ -51,14 +53,35 @@ function parseBotMetaLine(plain: string): string | null {
   return text || null;
 }
 
+export type CommsIngestResult = {
+  added: CommsEntry[];
+  /** Same objects previously returned in `added`, with wrap tails appended. */
+  updated: CommsEntry[];
+};
+
+/** Powermud wraps long speech onto lines indented by five spaces. */
+export function isChatContinuationLine(line: string): boolean {
+  if (!/^\s{2,}\S/.test(line)) return false;
+  const t = line.trim();
+  if (!t || !/[a-z]/i.test(t)) return false;
+  // ASCII map remnants (`#--#`, `|`), not speech.
+  if (/^[#|\\/<>=+*_~-]+$/.test(t)) return false;
+  return true;
+}
+
+function joinChatText(base: string, more: string): string {
+  return `${base.trimEnd()} ${more.trim()}`;
+}
+
 export type CommsLogIngest = {
-  ingestLogText: (text: string, at?: number) => CommsEntry[];
+  ingestLogText: (text: string, at?: number) => CommsIngestResult;
   reset: () => void;
 };
 
 export function createCommsLogIngest(getKnownPlayers: () => ReadonlySet<string>): CommsLogIngest {
   let skippingReplayLog = false;
   let suppressYouSocialFromBot = 0;
+  let pending: { entry: CommsEntry; at: number; emitted: boolean } | null = null;
 
   function feedEchoLine(plain: string): void {
     const m = HUB_ECHO_LINE.exec(plain);
@@ -83,6 +106,15 @@ export function createCommsLogIngest(getKnownPlayers: () => ReadonlySet<string>)
     if (consumeBotYouSocial(entry)) return;
     if (!chatEntryAllowed(entry)) return;
     out.push(entry);
+    pending = { entry, at: entry.at, emitted: false };
+  }
+
+  function tryAttachContinuation(raw: string, at: number, updated: Set<CommsEntry>): boolean {
+    if (!pending || at - pending.at > COMMS_CONTINUATION_MS || !isChatContinuationLine(raw)) return false;
+    pending.entry.message = joinChatText(pending.entry.message, raw.trim());
+    pending.at = at;
+    if (pending.emitted) updated.add(pending.entry);
+    return true;
   }
 
   function feedGameLine(plain: string, at: number, out: CommsEntry[]): void {
@@ -111,28 +143,37 @@ export function createCommsLogIngest(getKnownPlayers: () => ReadonlySet<string>)
     );
   }
 
-  function ingestLogText(text: string, at = Date.now()): CommsEntry[] {
-    const out: CommsEntry[] = [];
-    if (!text) return out;
+  function ingestLogText(text: string, at = Date.now()): CommsIngestResult {
+    const added: CommsEntry[] = [];
+    const updated = new Set<CommsEntry>();
+    if (!text) {
+      if (pending) pending.emitted = true;
+      return { added, updated: [] };
+    }
     const searchable = text.includes("\x1b") ? stripAnsi(text) : text;
     const endsWithNl = searchable.endsWith("\n");
     const lines = searchable.split("\n");
     if (endsWithNl && lines.length > 0 && lines[lines.length - 1] === "") lines.pop();
     for (const line of lines) {
-      const plain = line.replace(/\r/g, "").trim();
-      if (!plain) continue;
+      const raw = line.replace(/\r/g, "");
+      if (!raw.trim()) continue;
+      if (tryAttachContinuation(raw, at, updated)) continue;
+      pending = null;
+      const plain = raw.trim();
       if (plain.startsWith(">>> [")) {
         feedEchoLine(plain);
         continue;
       }
-      feedGameLine(plain, at, out);
+      feedGameLine(plain, at, added);
     }
-    return out;
+    if (pending) pending.emitted = true;
+    return { added, updated: [...updated] };
   }
 
   function reset(): void {
     skippingReplayLog = false;
     suppressYouSocialFromBot = 0;
+    pending = null;
   }
 
   return { ingestLogText, reset };

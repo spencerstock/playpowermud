@@ -58,7 +58,20 @@ function normName(name: string): string {
   return name.trim().toLowerCase();
 }
 
-/** Pull spoken text after common Powermud say/tell/shout trailers (verbatim, no trimming punctuation). */
+/** Drop only a leading colon separator after say/tell/shout trailers; keep all message text. */
+function speakTail(rest: string): string {
+  let s = rest.trimStart();
+  if (s.startsWith(":")) s = s.slice(1).trimStart();
+  return s;
+}
+
+function sliceAfterMarker(line: string, marker: RegExp): string | null {
+  const m = marker.exec(line);
+  if (!m) return null;
+  return speakTail(line.slice(m.index + m[0].length));
+}
+
+/** Pull spoken text after common Powermud say/tell/shout trailers (full text, no punctuation stripping). */
 export function extractChatMessage(kind: ParsedChatLine["kind"], line: string): string {
   const t = line.trim();
   if (kind === "say") {
@@ -66,20 +79,20 @@ export function extractChatMessage(kind: ParsedChatLine["kind"], line: string): 
     if (youSay) return youSay[1]!;
     const inCommon = t.match(/\b(?:says|asks|exclaims) in common\s*:\s*(.*)$/is);
     if (inCommon) return inCommon[1]!;
-    const says = t.match(/\b(?:says|asks|exclaims)\s+(?:in\s+\S+\s*)?[:\s]+(.*)$/is);
-    if (says) return says[1]!;
+    const says = t.match(/\b(?:says|asks|exclaims)\s*(.*)$/is);
+    if (says) return speakTail(says[1]!);
   }
   if (kind === "tell") {
-    const incoming = t.match(/\btells you(?:\s*:\s*|\s+)(.*)$/is);
-    if (incoming) return incoming[1]!;
-    const outgoing = t.match(/^You tell \S+(?:\s*:\s*|\s+)(.*)$/is);
-    if (outgoing) return outgoing[1]!;
+    const incoming = sliceAfterMarker(t, /\btells you\b/i);
+    if (incoming !== null) return incoming;
+    const outgoing = sliceAfterMarker(t, /^You tell \S+\b/i);
+    if (outgoing !== null) return outgoing;
   }
   if (kind === "shout") {
-    const incoming = t.match(/\bshouts(?:\s*:\s*|\s+)(.*)$/is);
-    if (incoming) return incoming[1]!;
-    const outgoing = t.match(/^You shout(?:\s*:\s*|\s+)(.*)$/is);
-    if (outgoing) return outgoing[1]!;
+    const incoming = sliceAfterMarker(t, /\bshouts\b/i);
+    if (incoming !== null) return incoming;
+    const outgoing = sliceAfterMarker(t, /^You shout\b/i);
+    if (outgoing !== null) return outgoing;
   }
   return t;
 }

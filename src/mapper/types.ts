@@ -162,8 +162,14 @@ export type WorldGraphDocument = {
 export type PathOptions = {
   /** Skip rooms with danger above this (default: no limit). */
   maxDanger?: number;
-  /** Room ids or tags to never enter (except the destination). */
+  /**
+   * Room ids or tags to route around (the destination is always allowed). Also `maxDanger`. Soft
+   * when it matters: if no path exists without them, `findPath` takes the route through the fewest
+   * avoided rooms rather than failing (unless `strictAvoid`).
+   */
   avoid?: string[];
+  /** Treat `avoid` / `maxDanger` as hard: return null instead of routing through avoided rooms. */
+  strictAvoid?: boolean;
   /** Exits never to take on this request, as `roomId:cmd` (failed earlier in the same walk). */
   avoidLinks?: string[];
   /**

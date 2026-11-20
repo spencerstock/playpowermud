@@ -7,7 +7,7 @@ Play [Powermud](http://powermud.com) in the browser. A basic client built from t
 
 - **Terminal** — xterm.js with full ANSI, so `eset` colors show exactly as the MUD sends them.
   Command history (↑/↓), empty Enter repeats the last command, the password prompt is masked.
-- **Aliases** — `/alias NAME EXPANSION`, `/unalias NAME`, `/aliases [filter]`. `;` chains, nested
+- **Aliases** — `/alias NAME EXPANSION`, `/alias NAME` (show one), `/unalias NAME`, `/aliases [filter]`. `;` chains, nested
   aliases, `$1$` args, and `@delay 2` (pause 2 seconds before the next command, also in `/when`).
   Type `/` for autocomplete. Stored in this browser (localStorage).
 - **Config** — **Export config** / **Import config** in the header backs up aliases, comms, skin,

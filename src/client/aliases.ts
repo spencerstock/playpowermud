@@ -39,6 +39,12 @@ export class AliasStore {
     }
   }
 
+  /** Saved expansion for `name`, or null when this browser has no such alias. */
+  expansion(name: string): string | null {
+    for (const [k, v] of this.aliases) if (k.toLowerCase() === name.toLowerCase()) return v;
+    return null;
+  }
+
   /** Alias names are case-insensitive; a redefinition replaces the old body. */
   set(name: string, expansion: string): void {
     for (const k of this.aliases.keys()) if (k.toLowerCase() === name.toLowerCase()) this.aliases.delete(k);

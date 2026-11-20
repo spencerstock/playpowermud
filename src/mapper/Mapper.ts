@@ -4,6 +4,7 @@ import {
   isGeometricDirection,
   normalizeCommand,
   reverseDirection,
+  sameExitSet,
   subVec,
 } from "../game/directions.js";
 import { defaultGameProfile, type GameProfile, type TransitRule } from "../game/profile.js";
@@ -955,6 +956,41 @@ export class Mapper {
   }
 
   /**
+   * We surely left `fromId` by its listed `key` exit, whose link leads to a room `obs`
+   * contradicts, and the display is `target`. Counts the contradiction on the link
+   * (`contested`); true once the same `target` has shown up often enough to re-point it
+   * (twice, or four times for a verified link).
+   */
+  private miswiredStepRepeated(fromId: string | null, key: string, target: MapRoom, obs: RoomObservation): boolean {
+    if (!fromId || key === "?" || key === "=" || obs.mode === "dark") return false;
+    const prev = this.map.room(fromId);
+    const last = this.history.at(-1);
+    if (!prev || prev.id === target.id || !last || this.map.canonicalId(last.room) !== prev.id) return false;
+    // We must know the room we left: a sure step, or a display only that room matches.
+    if (!last.sure && !(last.obs.mode !== "dark" && this.candidatePool(last.obs).length === 1)) return false;
+    if (isGeometricDirection(key) && !prev.exits.includes(key)) return false;
+    const link = prev.links[key];
+    const oldTo = this.map.canonicalId(link?.to);
+    if (!link || !oldTo || oldTo === target.id) return false;
+    const old = this.map.room(oldTo);
+    if (old && this.map.compatibility(old, obs) >= 0) return false;
+    if (!this.map.sameContinent(prev, target)) return false;
+    const rev = reverseDirection(key);
+    const vertical = key === "u" || key === "d";
+    if (isGeometricDirection(key) && !vertical && rev && target.exits.length && !target.exits.includes(rev)) return false;
+    const again = link.contested && this.map.canonicalId(link.contested.to) === target.id ? link.contested.count + 1 : 1;
+    if (again < (link.verified ? 4 : 2)) {
+      link.contested = { to: target.id, count: again };
+      this.map.touch();
+      this.debug?.(`contested ${prev.id} ${key}: ${oldTo} vs ${target.id} #${again} (display contradicts the link)`);
+      return false;
+    }
+    delete link.contested;
+    this.debug?.(`re-pointing ${prev.id} ${key}: ${oldTo} → ${target.id} (seen ${again} times)`);
+    return true;
+  }
+
+  /**
    * The room we surely just left, when its `key` exit is listed but unmapped and leading into
    * `target` keeps the layout sane (and `target` lists the way back, for compass moves).
    */
@@ -1294,6 +1330,8 @@ export class Mapper {
     const target = hits[0]!;
     this.map.applyObservation(target, obs);
     this.setHere(target.id);
+    // Not a step we can vouch for, but the next move starts from this room.
+    this.record(null, obs, target.id, { sure: false });
     this.emit({ type: "moved", from: from.id, to: target.id, how: "relocate", created: false });
     return true;
   }
@@ -1316,6 +1354,7 @@ export class Mapper {
       this.relocate(obs, key);
       return;
     }
+    const origin = from;
     // Still unsure of our footing after a contradiction: let the trajectory speak first. When
     // the map itself explains this step (a link to a matching room), only a beacon overrides it.
     if (this.doubt > 0) {
@@ -1353,6 +1392,8 @@ export class Mapper {
     let suspect = geometric && from.exits.length > 0 && !from.exits.includes(key) && !from.tags.includes("dynamic-exits");
 
     const link = from.links[key];
+    // The link was re-pointed to the room this display proves (see miswiredStepRepeated).
+    let repointed = false;
     // Nothing to see (dark, or Deepwater's blinding glare) and the map only guesses where this
     // exit goes, a guess the far room's own exits deny (no way back): following it would confirm
     // it unseen, and the next refusals would be charged to a room we are not in (r2183 `n` →
@@ -1371,9 +1412,19 @@ export class Mapper {
         target = t;
         mapped = true;
       } else if (t) {
-        if (this.relocalize(obs, key, "contradiction")) return;
-        if (link.confirmed && this.resyncNear(from, obs)) return;
-        suspect = true;
+        // The display contradicts the link. When it is a room we know by its own prose and the
+        // same room showed up here before, the link is wrong: re-point it (Deepwater r2217 s →
+        // docks r2220, really Waterside Road r2195, relocated on every pass and never fixed).
+        const known = this.describedRoom(obs, from);
+        if (known && this.miswiredStepRepeated(from.id, key, known, obs)) {
+          target = known;
+          mapped = true;
+          repointed = true;
+        } else {
+          if (this.relocalize(obs, key, "contradiction")) return;
+          if (link.confirmed && this.resyncNear(from, obs)) return;
+          suspect = true;
+        }
       }
     }
 
@@ -1383,15 +1434,15 @@ export class Mapper {
     // already occupied by a different room — is a stale flee dir (auto-flee printed the
     // destination, then "You flee like the wind, south!", then a look reused the leftover
     // dir) or a lagged step, not a new look-alike beside us.
-    if (this.isSameSpot(from, obs)) {
-      const origin = from;
+    if (from && this.isSameSpot(from, obs)) {
       const dest = link?.to ? this.map.room(link.to) : undefined;
       const destMismatch = !!dest && this.map.compatibility(dest, obs) < 0;
-      const expected = geometric ? this.map.expectedPos(origin, key) : null;
+      const expected = geometric ? this.map.expectedPos(from, key) : null;
       const occupiedByOther =
         !!expected &&
         this.map.roomsAt(expected).some((r) => r.id !== origin.id && this.map.compatibility(r, obs) < 0);
       if (destMismatch || occupiedByOther || (!from.exits.includes(key) && !link?.to)) {
+        this.debug?.(`same spot ${from.id} after ${key} (destMismatch=${destMismatch} occupied=${occupiedByOther})`);
         this.map.applyObservation(from, obs);
         this.record("=", obs, from.id, { sure: this.history.at(-1)?.sure });
         this.emit({ type: "moved", from: from.id, to: from.id, how: "look", created: false });
@@ -1460,18 +1511,19 @@ export class Mapper {
       // matches and that sits here or one step away. Staying in `from` is only right when
       // the attempted landing is already occupied by a different room or the charted dest
       // does not match — otherwise identical corridors would never gain a second tile.
-      const origin = from;
-      const expected = geometric ? this.map.expectedPos(origin, key) : null;
+      const expected = geometric && from ? this.map.expectedPos(from, key) : null;
       const occupiedByOther =
         !!expected &&
+        !!from &&
         this.map.roomsAt(expected).some((r) => r.id !== origin.id && this.map.compatibility(r, obs) < 0);
-      const destRoom = origin.links[key]?.to ? this.map.room(origin.links[key]!.to) : undefined;
+      const destRoom = from?.links[key]?.to ? this.map.room(from.links[key]!.to) : undefined;
       const destMismatch = !!destRoom && this.map.compatibility(destRoom, obs) < 0;
-      const nearby = this.nearbyKnownByDescription(from, obs);
+      const nearby = this.nearbyKnownByDescription(from ?? origin, obs);
       // Only absorb a nearby look-alike when this step cannot be a genuine twin corridor
       // (Oasis Avenue north of Vedny is the same prose as the block south of it, on an empty tile).
       if (nearby && (occupiedByOther || destMismatch)) {
         if (nearby.id === from.id) {
+          this.debug?.(`nearby look-alike is ${from.id} itself after ${key} (destMismatch=${destMismatch} occupied=${occupiedByOther})`);
           this.map.applyObservation(from, obs);
           this.record("=", obs, from.id, { sure: this.history.at(-1)?.sure });
           this.emit({ type: "moved", from: from.id, to: from.id, how: "look", created: false });
@@ -1517,7 +1569,7 @@ export class Mapper {
     // only the same other room showing up again re-points the link.
     const old = from.links[key];
     const oldTo = this.map.canonicalId(old?.to);
-    if (old && oldTo && oldTo !== target.id && old.confirmed && (old.uses >= ESTABLISHED_USES || old.verified) && obs.mode !== "dark") {
+    if (!repointed && old && oldTo && oldTo !== target.id && old.confirmed && (old.uses >= ESTABLISHED_USES || old.verified) && obs.mode !== "dark") {
       const again = old.contested && this.map.canonicalId(old.contested.to) === target.id ? old.contested.count + 1 : 1;
       if (again < (old.verified ? 4 : 2)) {
         old.contested = { to: target.id, count: again };
@@ -1613,6 +1665,9 @@ export class Mapper {
       if (r.pos.plane !== from.pos.plane) continue;
       const dx = Math.abs(r.pos.x - from.pos.x) + Math.abs(r.pos.y - from.pos.y) + Math.abs(r.pos.z - from.pos.z);
       if (dx > 1) continue;
+      // Same prose but another exit list is the next room of a look-alike chain, not this one
+      // (the caravan route south of r2174: every room reads the same, only the exits differ).
+      if (r.exits.length && !sameExitSet(r.exits, obs.exits) && !r.tags.includes("dynamic-exits")) continue;
       if (this.isSameSpot(r, obs) || this.map.compatibility(r, obs) > 1) hits.push(r);
     }
     if (hits.length === 1) return hits[0];

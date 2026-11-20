@@ -24,6 +24,7 @@ function pathOpts(body: Record<string, unknown>): PathOptions {
   return resolvePathOptions({
     maxDanger: typeof body.maxDanger === "number" ? body.maxDanger : undefined,
     avoid: Array.isArray(body.avoid) ? body.avoid.map(String) : undefined,
+    strictAvoid: body.strictAvoid === true ? true : undefined,
     preferAvoid: Array.isArray(body.preferAvoid) ? body.preferAvoid.map(String) : undefined,
     allowSpecial: body.allowSpecial === false ? false : undefined,
     allowInferred: body.allowInferred === false ? false : undefined,

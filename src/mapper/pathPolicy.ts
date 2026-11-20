@@ -76,6 +76,7 @@ function pickPathFields(opts: PathOptions): PathOptions {
   const out: PathOptions = {};
   if (opts.maxDanger !== undefined) out.maxDanger = opts.maxDanger;
   if (opts.avoid?.length) out.avoid = opts.avoid;
+  if (opts.strictAvoid) out.strictAvoid = true;
   if (opts.avoidLinks?.length) out.avoidLinks = opts.avoidLinks;
   if (opts.allowLinks?.length) out.allowLinks = opts.allowLinks;
   const preferAvoid = mergeUnique(globalPreferAvoid, opts.preferAvoid);

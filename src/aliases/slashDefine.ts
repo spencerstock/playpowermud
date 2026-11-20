@@ -1,8 +1,9 @@
 export type SlashAliasDefineParse =
-  | { ok: true; name: string; expansion: string }
+  | { ok: true; kind: "define"; name: string; expansion: string }
+  | { ok: true; kind: "lookup"; name: string }
   | { ok: false; reason: string };
 
-/** `/alias cma cast magic invulnerability` → local alias `cma`. */
+/** `/alias cma cast magic invulnerability` → local alias `cma`. `/alias cma` → show expansion. */
 export function parseSlashAliasDefineLine(text: string): SlashAliasDefineParse | null {
   const trimmed = text.trim();
   if (!trimmed.toLowerCase().startsWith("/alias")) return null;
@@ -10,11 +11,15 @@ export function parseSlashAliasDefineLine(text: string): SlashAliasDefineParse |
   if (afterCmd.length > 0 && !/^\s/.test(afterCmd)) return null;
   const rest = afterCmd.trimStart();
   if (!rest) {
-    return { ok: false, reason: "usage: /alias NAME EXPANSION" };
+    return { ok: false, reason: "usage: /alias NAME [EXPANSION]" };
   }
   const space = rest.search(/\s/);
   if (space < 0) {
-    return { ok: false, reason: "usage: /alias NAME EXPANSION" };
+    const name = rest.trim();
+    if (!name) return { ok: false, reason: "missing alias name" };
+    if (/\s/.test(name)) return { ok: false, reason: "alias name must be one word" };
+    if (name.includes(";")) return { ok: false, reason: "alias name cannot contain ;" };
+    return { ok: true, kind: "lookup", name };
   }
   const name = rest.slice(0, space).trim();
   const expansion = rest.slice(space + 1).trim();
@@ -22,7 +27,7 @@ export function parseSlashAliasDefineLine(text: string): SlashAliasDefineParse |
   if (!expansion) return { ok: false, reason: "missing alias expansion" };
   if (/\s/.test(name)) return { ok: false, reason: "alias name must be one word" };
   if (name.includes(";")) return { ok: false, reason: "alias name cannot contain ;" };
-  return { ok: true, name, expansion };
+  return { ok: true, kind: "define", name, expansion };
 }
 
 /** True while typing a `/alias …` define line (not plain `/cmi` autocomplete). */

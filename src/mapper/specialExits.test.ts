@@ -152,6 +152,17 @@ test("view layout: stacked rooms get their own cells and aside rooms sit beside 
   assert.equal(new Set([...lay.cells.values()].map((p) => `${p.x},${p.y},${p.z}`)).size, lay.cells.size, "one room per cell");
 });
 
+test("view layout: wholePlane reaches far rooms and pockets the center's links never reach", () => {
+  const { h, a } = corridor();
+  // A room far outside any radius, connected to nothing, on the same plane and a different level.
+  const far = h.map.createRoom({ plane: a.pos.plane, x: a.pos.x + 80, y: a.pos.y - 60, z: a.pos.z + 3 });
+  const elsewhere = h.map.createRoom({ plane: h.map.newPlane("aside").id, x: 0, y: 0, z: 0 });
+  assert.equal(layoutAround(h.map, a.id, { radius: 5 }).cells.has(far.id), false);
+  const lay = layoutAround(h.map, a.id, { wholePlane: true });
+  assert.deepEqual(lay.cells.get(far.id), { x: far.pos.x, y: far.pos.y, z: far.pos.z }, "pocket seeded at its stored cell");
+  assert.equal(lay.cells.has(elsewhere.id), false, "other planes stay out");
+});
+
 test("alias round trips: clean routes verify links, a stray secret exit is exposed and removed", () => {
   // A (e) — B (w, n), C (s) north of B.
   const h = harness();
