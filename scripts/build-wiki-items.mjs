@@ -64,7 +64,7 @@ export function parseMagicalDropsHtml(html) {
   for (const block of html.matchAll(
     /<h3[^>]*>([^<]+)<\/h3>\s*<ul>([\s\S]*?)<\/ul>/g,
   )) {
-    const npc = decodeWikiText(block[1].trim());
+    const npc = formatDropNpcLabel(decodeWikiText(block[1].trim()));
     for (const li of block[2].matchAll(/<li>([^<]+)<\/li>/g)) {
       const displayName = decodeWikiText(li[1].trim());
       const key = itemKey(displayName);
@@ -83,24 +83,80 @@ export function parseMagicalDropsHtml(html) {
   return byKey;
 }
 
-/** @param {Map<string, { displayName: string, npcs: string[] }>} witnessMap @param {string} key */
-export function witnessDroppedBy(witnessMap, key) {
-  const entry = witnessMap.get(key);
-  if (!entry?.npcs.length) return "";
-  return entry.npcs.join(", ");
+const LEGACY_DROP_NPC_SUFFIX = / \(legacy 2008\)$/i;
+const DROP_COUNT_SUFFIX = /×\d+$/;
+
+/** NPC names in equipment drop columns (not full drops.html headings). */
+export function formatDropNpcLabel(name) {
+  let s = String(name).trim().replace(LEGACY_DROP_NPC_SUFFIX, "");
+  if (s === s.toLowerCase() && /[a-z]/.test(s)) s = titleCaseNpc(s);
+  return s;
+}
+
+/** @param {string} piece */
+function dropNpcDedupeKey(label) {
+  return formatDropNpcLabel(label.replace(DROP_COUNT_SUFFIX, "")).toLowerCase();
+}
+
+/** Provenance notes (not kill drops) stay out of equipment tables. */
+function isNpcDropLabel(piece) {
+  const base = formatDropNpcLabel(piece.replace(DROP_COUNT_SUFFIX, "")).toLowerCase();
+  if (base.includes("chest only")) return false;
+  if (/^staff\s+chest\b/.test(base)) return false;
+  return true;
+}
+
+/** @param {string} piece */
+function dropNpcPieceScore(piece) {
+  let score = 0;
+  if (!DROP_COUNT_SUFFIX.test(piece.trim())) score += 2;
+  if (!LEGACY_DROP_NPC_SUFFIX.test(piece)) score += 1;
+  return score;
 }
 
 /** @param {string | undefined} a @param {string | undefined} b */
 export function mergeDroppedByColumns(a, b) {
-  const parts = new Set();
+  /** @type {Map<string, { label: string, score: number }>} */
+  const byKey = new Map();
   for (const col of [a, b]) {
     if (!col?.trim()) continue;
     for (const piece of col.split(/,\s*/)) {
       const t = piece.trim();
-      if (t) parts.add(t);
+      if (!t || !isNpcDropLabel(t)) continue;
+      const key = dropNpcDedupeKey(t);
+      const count = DROP_COUNT_SUFFIX.exec(t)?.[0] ?? "";
+      const label = formatDropNpcLabel(t.replace(DROP_COUNT_SUFFIX, "")) + count;
+      const score = dropNpcPieceScore(t);
+      const prev = byKey.get(key);
+      if (!prev || score > prev.score) byKey.set(key, { label, score });
     }
   }
-  return [...parts].sort((x, y) => x.localeCompare(y)).join(", ");
+  // Drop kill-count suffix when the same NPC appears more than once in the merge input.
+  /** @type {Map<string, number>} */
+  const keyCounts = new Map();
+  for (const col of [a, b]) {
+    if (!col?.trim()) continue;
+    for (const piece of col.split(/,\s*/)) {
+      const t = piece.trim();
+      if (!t || !isNpcDropLabel(t)) continue;
+      const key = dropNpcDedupeKey(t);
+      keyCounts.set(key, (keyCounts.get(key) ?? 0) + 1);
+    }
+  }
+  const labels = [...byKey.entries()].map(([key, { label }]) => {
+    if ((keyCounts.get(key) ?? 0) > 1 && DROP_COUNT_SUFFIX.test(label)) {
+      return label.replace(DROP_COUNT_SUFFIX, "");
+    }
+    return label;
+  });
+  return labels.sort((x, y) => x.localeCompare(y)).join(", ");
+}
+
+/** @param {Map<string, { displayName: string, npcs: string[] }>} witnessMap @param {string} key */
+export function witnessDroppedBy(witnessMap, key) {
+  const entry = witnessMap.get(key);
+  if (!entry?.npcs.length) return "";
+  return mergeDroppedByColumns(entry.npcs.join(", "), "");
 }
 
 /** @param {string} title @param {string} description */
@@ -210,17 +266,19 @@ function droppedByNames(kItem, npcs) {
   if (!kItem) return "";
   const by = new Map();
   for (const [nk, count] of Object.entries(kItem.droppedBy ?? {})) {
-    const label = npcs[nk]?.name || titleCaseNpc(nk);
-    if (label) by.set(nk, count > 1 ? `${label}×${count}` : label);
+    const raw = npcs[nk]?.name || titleCaseNpc(nk);
+    if (!raw) continue;
+    const label = count > 1 ? `${formatDropNpcLabel(raw)}×${count}` : formatDropNpcLabel(raw);
+    by.set(nk, label);
   }
   const itemKey = kItem.key;
   if (itemKey) {
     for (const n of Object.values(npcs)) {
       if (!n?.key || by.has(n.key) || !n.seenLoot?.[itemKey]) continue;
-      by.set(n.key, n.name || titleCaseNpc(n.key));
+      by.set(n.key, formatDropNpcLabel(n.name || titleCaseNpc(n.key)));
     }
   }
-  return [...by.values()].join(", ");
+  return mergeDroppedByColumns([...by.values()].join(", "), "");
 }
 
 /** @param {string} nk */

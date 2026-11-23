@@ -83,7 +83,7 @@ const WIKI_NAV_SECTIONS = [
     title: "Misc",
     links: [
       ["Overview", "/wiki/misc/index.html"],
-      ["l at paper", "/wiki/misc/lat-paper.html"],
+      ["Finnyer's paper", "/wiki/misc/lat-paper.html"],
     ],
   },
 ];

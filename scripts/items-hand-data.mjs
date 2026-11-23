@@ -1786,7 +1786,7 @@ export const MAGIC_SECTIONS = [
       {
         "item": "Gray Ring of Lat",
         "plus": "",
-        "effects": "Effects unverified; staff chest only (Nov 2026 shout)",
+        "effects": "",
         "quality": "Poor piece of armor."
       },
       {

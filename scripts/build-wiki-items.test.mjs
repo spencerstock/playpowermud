@@ -8,6 +8,7 @@ import {
   displayMagicJudge,
   formatJudge,
   itemKey,
+  formatDropNpcLabel,
   mergeDroppedByColumns,
   parseMagicalDropsHtml,
   witnessDroppedBy,
@@ -110,7 +111,11 @@ test("parseMagicalDropsHtml groups items and NPC witnesses", () => {
 
 test("mergeDroppedByColumns unions hub and witness drop lists", () => {
   assert.equal(mergeDroppedByColumns("Red Dragon", "Blue Dragon"), "Blue Dragon, Red Dragon");
-  assert.equal(mergeDroppedByColumns("Red Dragon×2", "Red Dragon"), "Red Dragon, Red Dragon×2");
+  assert.equal(mergeDroppedByColumns("Red Dragon×2", "Red Dragon"), "Red Dragon");
+  assert.equal(mergeDroppedByColumns("Vampire", "vampire×2"), "Vampire");
+  assert.equal(formatDropNpcLabel("Genie (legacy 2008)"), "Genie");
+  assert.equal(mergeDroppedByColumns("Staff chest only", ""), "");
+  assert.equal(mergeDroppedByColumns("Red Dragon", "Staff chest only"), "Red Dragon");
 });
 
 test("buildPages merges witnessed drops into magic items", () => {
