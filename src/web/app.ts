@@ -634,6 +634,29 @@ function autocompleteAcceptSelected(): boolean {
   return aliasAc.acceptSelected();
 }
 
+/** While browsing history, arrow keys walk prior commands — not slash-command suggestions. */
+function commandHistoryArrowUp(): void {
+  if (historyBrowseIndex !== -1) {
+    browseCommandHistory(true);
+    return;
+  }
+  if (aliasAc.isOpen() && commandHistory.length > 0) {
+    browseCommandHistory(true);
+    return;
+  }
+  if (autocompleteIsOpen()) autocompleteMoveSelection(-1);
+  else browseCommandHistory(true);
+}
+
+function commandHistoryArrowDown(): void {
+  if (historyBrowseIndex !== -1) {
+    browseCommandHistory(false);
+    return;
+  }
+  if (autocompleteIsOpen() && roomAc.isOpen()) autocompleteMoveSelection(1);
+  else browseCommandHistory(false);
+}
+
 function syncInputFromEditor(): void {
   input.value = lineEditor.text;
   input.setSelectionRange(lineEditor.cursor, lineEditor.cursor);
@@ -744,12 +767,10 @@ function handleCommandLineKeydown(e: KeyboardEvent): void {
     else lineEditor.cursorRight();
   } else if (e.key === "ArrowUp") {
     if (isWireArrowKeydown(e)) lineEditor.insertWireCursorUp();
-    else if (autocompleteIsOpen()) autocompleteMoveSelection(-1);
-    else browseCommandHistory(true);
+    else commandHistoryArrowUp();
   } else if (e.key === "ArrowDown") {
     if (isWireArrowKeydown(e)) lineEditor.insertWireCursorDown();
-    else if (autocompleteIsOpen()) autocompleteMoveSelection(1);
-    else browseCommandHistory(false);
+    else commandHistoryArrowDown();
   } else if (e.key === "Backspace") {
     clearHistoryBrowse();
     if (selectionSpan) lineEditor.deleteRange(selectionSpan.from, selectionSpan.to);

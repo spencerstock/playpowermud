@@ -11,6 +11,7 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | Wiki page | Topic |
 |-----------|--------|
 | [Beginner's guide](../public/wiki/guide/beginners-guide.html) | First hour, races, healing, money, dangers |
+| [Daily tips](../public/wiki/guide/daily-tips.html) | Short player tips (Petrus, Frougus) |
 
 ## World
 
@@ -58,10 +59,12 @@ Hand-curated equipment rows: `scripts/items-hand-data.mjs`. After copying `data/
 | Wiki page | Topic |
 |-----------|--------|
 | [Combat](../public/wiki/mechanics/combat.html) | Hit words, stun, dragon notes |
-| [Stats and ranks](../public/wiki/mechanics/stats.html) | Abilities and dragon killer rank names |
+| [DKR levels](../public/wiki/mechanics/dkr-levels.html) | Dragon Killer Rating, rank ladder, huge kills, dragon list |
+| [Stats and ranks](../public/wiki/mechanics/stats.html) | Abilities; pointer to DKR levels |
 | [Professions](../public/wiki/mechanics/professions.html) | Lower and upper professions |
 | [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Profession NPCs, costs, stat reqs |
 | [Skill trainers](../public/wiki/mechanics/skill-trainers.html) | Standalone skill NPCs (riding, tailoring, etc.) |
+| [Armor resize](../public/wiki/mechanics/armor-resize.html) | Resize armor by race size; Harius in Kalinport |
 | [Doctor and herbs](../public/wiki/mechanics/doctor.html) | Doctor, harvest, intensify |
 | [PK areas](../public/wiki/mechanics/pk-areas.html) | `help pkareas` |
 

@@ -1772,6 +1772,42 @@ export const MAGIC_SECTIONS = [
         "effects": "+50 hp,+50sp,+40 regen"
       },
       {
+        "item": "Blue Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, blunt aversion ext poor",
+        "quality": "Poor piece of armor."
+      },
+      {
+        "item": "Cyan Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, ranged aversion ext poor",
+        "quality": "Poor piece of armor."
+      },
+      {
+        "item": "Gray Ring of Lat",
+        "plus": "",
+        "effects": "Effects unverified; staff chest only (Nov 2026 shout)",
+        "quality": "Poor piece of armor."
+      },
+      {
+        "item": "Green Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, pierce aversion ext poor",
+        "quality": "Poor piece of armor."
+      },
+      {
+        "item": "Purple Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, general aversion (all types) almost nonexistent",
+        "quality": "Poor piece of armor."
+      },
+      {
+        "item": "Red Ring of Lat",
+        "plus": "",
+        "effects": "+20 hp, +20 sp, slash aversion ext poor",
+        "quality": "Poor piece of armor."
+      },
+      {
         "item": "Silver Ring of Lat",
         "plus": "",
         "effects": "+20 hp, +20 sp, biting aversion ext poor",

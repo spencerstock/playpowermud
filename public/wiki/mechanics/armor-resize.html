@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Armor resizing on Powermud — sizes by race, commands, and where to find Harius in Kalinport."
+    />
+    <title>Armor resize — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>Armor resize</h2>
+      <p class="wiki-lede">
+        Some smiths resize <strong>armor</strong> so it fits a different body size (for another race or an alt). Only
+        pieces that have <strong>never</strong> been resized before are eligible — resizing twice weakens the material.
+        Use lower case for all commands.
+      </p>
+
+      <h3 id="commands">Commands</h3>
+      <ul>
+        <li><code>price &lt;armor&gt; to &lt;size&gt;</code> — quote before you pay (Harius in Kalinport).</li>
+        <li><code>resize &lt;armor&gt; to &lt;size&gt;</code> — perform the resize in the smith's room.</li>
+        <li>
+          <code>ask &lt;npc&gt; about resizing</code> — full rules from the NPC. Generic
+          <code>ask about resizing</code> may fail; name the smith (for example <code>ask harius about resizing</code>).
+        </li>
+      </ul>
+      <p>
+        The <a href="/wiki/guilds/drow.html#smith">House Bey-Sandrax smith</a> in Nal Shaddar uses
+        <code>rprice</code> instead of <code>price</code> for quotes.
+      </p>
+
+      <h3 id="sizes">Sizes and races</h3>
+      <p>From <strong>Harius</strong> in Kalinport (<code>ask harius about resizing</code>):</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Races</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tiny</td>
+            <td>Halfling, Gnome</td>
+          </tr>
+          <tr>
+            <td>Small</td>
+            <td>Dwarf, Duergar</td>
+          </tr>
+          <tr>
+            <td>Medium</td>
+            <td>Elf, Drow</td>
+          </tr>
+          <tr>
+            <td>Regular</td>
+            <td>Human, Half-Elf, Half-Orc</td>
+          </tr>
+          <tr>
+            <td>Large</td>
+            <td>Half-Ogre</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        The drow house smith's list adds <strong>Svirfneblin</strong> under Small and <strong>Minotaur</strong> under
+        Large — see <a href="/wiki/guilds/drow.html#smith">house smith</a>.
+      </p>
+
+      <h3 id="kalinport-harius">Kalinport — Harius</h3>
+      <p>
+        In the <strong>Merchant's Diamond</strong>: a travelling <strong>Smith</strong> has a forge shop (room text
+        mentions a forge, cooling trench, and a back <code>door</code>). The smith in the front room buys and repairs;
+        resizing is in the back room.
+      </p>
+      <ul>
+        <li>From the street: enter the smithy (east into the shop in recorded walks).</li>
+        <li><code>door</code> — open workroom with an anvil and material shelves; room text says armor can be resized here.</li>
+        <li><strong>Harius</strong> (common) — <code>l at harius</code> notes he resizes armor; ask him about resizing for the command list.</li>
+      </ul>
+      <p>
+        Exits: front room <code>west</code> (street) and <code>door</code> (back); back room <code>door</code> to the
+        main smithy. Collin Grokker's smithy elsewhere in Kalinport is for buying gear and repairs — see the
+        <a href="/wiki/guide/beginners-guide.html#money">beginner's guide</a>.
+      </p>
+
+      <h3 id="other">Other resizers</h3>
+      <ul>
+        <li>
+          <a href="/wiki/guilds/drow.html#smith">House Bey-Sandrax smith</a> — Nal Shaddar (house members; cheaper repair
+          per house board notes).
+        </li>
+      </ul>
+      <p>See also: <a href="/wiki/items/index.html">Items</a>, <a href="/wiki/items/magic-items.html">Magic items</a>.</p>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

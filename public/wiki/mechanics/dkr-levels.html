@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="wiki-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Dragon Killer Rating (DKR): titles, huge kills, leaderboards, and rank ladders." />
+    <title>DKR levels — Play Powermud wiki</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wiki/wiki.css" />
+  </head>
+  <body class="wiki-page">
+    <a class="wiki-skip" href="#wiki-main">Skip to content</a>
+    <header class="wiki-top">
+      <h1><a href="/wiki/">playpowermud wiki</a></h1>
+      <div class="wiki-top-actions">
+        <button type="button" id="wiki-skin">Skin: Dark</button>
+        <a href="/" class="primary">Play</a>
+      </div>
+    </header>
+
+    <div id="wiki-nav-root"></div>
+
+    <main class="wiki-main" id="wiki-main">
+      <h2>DKR levels</h2>
+      <p class="wiki-lede">
+        <strong>DKR</strong> (Dragon Killer Rating) is Powermud’s dragon-hunting prestige track. Only the character who lands the
+        <em>killing blow</em> on a dragon gets credit toward huge kills and DKR progress — assists do not count. In-game:
+        <code>help dragon_guide</code> (section 8), <code>help dkr</code>, <code>help dragonfear</code>.
+      </p>
+
+      <h3>What DKR does</h3>
+      <p>From <code>help dragon_guide</code> (paraphrased):</p>
+      <ul>
+        <li>DKR rises when you kill dragons yourself; stronger (higher-level) dragons raise DKR faster.</li>
+        <li>Higher DKR can mean less clerical/magical spell misfires and less susceptibility to <a href="/wiki/guilds/races.html">dragonfear</a> (gear and race resistances still apply separately; see <a href="/wiki/items/index.html">item resistances</a>).</li>
+        <li>Each dragon kill also adds one <strong>huge kill</strong> for that character (same killing-blow rule).</li>
+      </ul>
+
+      <h3>How to check your DKR</h3>
+      <table>
+        <thead><tr><th>Command</th><th>Shows</th></tr></thead>
+        <tbody>
+          <tr><td><code>character</code> (or alias <code>char</code>)</td><td>Current <strong>DKR</strong> title and <strong>Huge Kills</strong> count on the character sheet.</td></tr>
+          <tr><td><code>help dragonlist</code></td><td>Server-wide <strong>total DKR points</strong> leaderboard (not the title ladder).</td></tr>
+          <tr><td><code>help hugekillslist</code></td><td>Top players by <strong>huge kill</strong> count.</td></tr>
+          <tr><td><code>help dkr</code></td><td>Points you at <code>help dragon_guide</code>.</td></tr>
+        </tbody>
+      </table>
+      <p><code>score dkr</code> does not print DKR on Wybie’s sheet (Nov 2026); use <code>character</code> instead.</p>
+
+      <h3>Rank titles seen on live Powermud</h3>
+      <p>
+        The game prints a single title on <code>character</code> (e.g. <code>DKR : Journeyman</code>). These names come from the MUD,
+        not from player spreadsheets. The ladder below mixes <strong>confirmed live titles</strong> with an
+        <strong>imported rank list</strong> from older player notes — verify unknown steps in game.
+      </p>
+
+      <h4>Wybie — DKR titles recorded in local session logs</h4>
+      <p>Pulled from retained mudwithme session logs (<code>/tmp/mudwithme.log</code> and copies). No other characters had a logged <code>DKR :</code> line in those files.</p>
+      <table>
+        <thead><tr><th>DKR title (as printed)</th><th>Huge kills (same <code>character</code> dump)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>Journeyman</code></td>
+            <td>131</td>
+            <td>Last seen in log before the title changed.</td>
+          </tr>
+          <tr>
+            <td><code>Acomplished</code></td>
+            <td>134–135</td>
+            <td>Current live title on Wybie (Nov 2026). Game spells it <em>Acomplished</em>, not “Accomplished”.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Earlier ranks (e.g. neophyte) may have applied before logging started; they are not in the retained logs.</p>
+
+      <h4>Imported rank ladder (legacy player notes)</h4>
+      <p>
+        From the mudwithme corpus (<code>docs/powermud/characters-and-stats/dkrs-ranks.txt</code>, originally <code>PM/dkr's.txt</code>).
+        Order is preserved as imported; not every step has been confirmed on the live MUD yet.
+      </p>
+      <ol>
+        <li><code>neophyte</code></li>
+        <li><code>journeyman</code></li>
+        <li><code>expert</code></li>
+        <li><code>adept</code></li>
+        <li><code>master</code></li>
+        <li><code>grand master</code></li>
+        <li><code>virtuoso</code></li>
+        <li><code>virtuoso doa</code></li>
+        <li><code>virtuoso tre</code></li>
+        <li><code>virtuoso patru</code></li>
+        <li><code>virtuoso cinc</code></li>
+        <li><code>virtuoso sasi</code></li>
+        <li><code>virtuoso shapte</code></li>
+        <li><code>virtuoso opt</code></li>
+        <li><code>virtuoso noh</code></li>
+        <li><code>virtuoso zeche</code></li>
+      </ol>
+      <p>
+        Live Powermud has used at least <code>Journeyman</code> and <code>Acomplished</code>, which do not appear verbatim in that import
+        (except journeyman). Treat <code>Acomplished</code> as an observed live title between journeyman and the older list’s <code>expert</code>
+        until more ranks are confirmed.
+      </p>
+
+      <h3>Dragonfear tiers (related, not DKR titles)</h3>
+      <p><code>help dragonfear</code> refers to <strong>Dragon Hunter</strong> and <strong>Dragon Slayer</strong> when describing flee chance and fear resistance. Those are profession-related categories, not the <code>DKR :</code> line on <code>character</code>. Dragon Hunter / Dragon Slayer are learnable professions on many guilds.</p>
+
+      <h3>Dragon colors (strength order)</h3>
+      <p>From <code>help dragon_guide</code> — order is strength, not DKR points per kill. “Search?” means you may need <code>search</code> / <code>scavenge</code> after the kill before lair treasure appears.</p>
+      <table>
+        <thead><tr><th>Color</th><th>Align</th><th>Lair (general)</th><th>Search?</th></tr></thead>
+        <tbody>
+          <tr><td>White</td><td>Evil</td><td>West of Cerene</td><td>No</td></tr>
+          <tr><td>Brown</td><td>Good</td><td>East of Elinost</td><td>No</td></tr>
+          <tr><td>Yellow</td><td>Good</td><td>Near Toril</td><td>Yes</td></tr>
+          <tr><td>Lead</td><td>Good</td><td>Viluten Mountains</td><td>No</td></tr>
+          <tr><td>Copper</td><td>Good</td><td>East of Elinost</td><td>No</td></tr>
+          <tr><td>Brass</td><td>Good</td><td>Kalamshite Desert</td><td>No</td></tr>
+          <tr><td>Black</td><td>Evil</td><td>Threshold Swamps</td><td>No</td></tr>
+          <tr><td>Green</td><td>Evil</td><td>West of Threshold</td><td>No</td></tr>
+          <tr><td>Orange</td><td>Evil</td><td>Southeast of Carid</td><td>Yes</td></tr>
+          <tr><td>Blue</td><td>Evil</td><td>Kalamshite Desert</td><td>No</td></tr>
+          <tr><td>Silver</td><td>Good</td><td>Ashland Mountains</td><td>No</td></tr>
+          <tr><td>Crystal</td><td>Evil</td><td>Island of Merevia</td><td>Yes</td></tr>
+          <tr><td>Aqua</td><td>Neutral</td><td>Island of Merevia</td><td>Yes</td></tr>
+          <tr><td>Vampire</td><td>Neutral</td><td>Island of Merevia</td><td>Yes</td></tr>
+          <tr><td>Red</td><td>Evil</td><td>Kulajo Mine</td><td>No</td></tr>
+          <tr><td>Mottled</td><td>Evil</td><td>Gonnat Island</td><td>No</td></tr>
+          <tr><td>Gold</td><td>Good</td><td>Mt. Kulajo</td><td>No</td></tr>
+          <tr><td>Purple</td><td>Neutral</td><td>UnderDark</td><td>No</td></tr>
+          <tr><td>Shadow</td><td>Evil</td><td>UnderDark</td><td>No</td></tr>
+          <tr><td>Wyrmfather</td><td>Evil</td><td>Viluten Mountains</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+      <p>Player combat notes for a few dragons (Brass entangles, White routing, etc.) live on <a href="/wiki/mechanics/combat.html">Combat</a>.</p>
+
+      <h3>See also</h3>
+      <ul>
+        <li><a href="/wiki/mechanics/stats.html">Stats and ranks</a> — ability stats; brief DKR pointer.</li>
+        <li><a href="/wiki/mechanics/combat.html">Combat</a> — hit words, stun notes, short per-dragon tactics.</li>
+        <li><a href="/wiki/mechanics/professions.html">Professions</a> — Dragon Hunter / Dragon Slayer.</li>
+        <li><a href="/wiki/misc/lat-paper.html">L at paper</a> — in-game lore mentioning dragon killers.</li>
+      </ul>
+    </main>
+
+    <footer class="wiki-foot">
+      <p><a href="/wiki/">Wiki home</a> · <a href="/">Play Powermud</a></p>
+    </footer>
+    <script src="/wiki/wiki.js"></script>
+  </body>
+</html>

@@ -20,7 +20,10 @@ const WIKI_NAV_SECTIONS = [
   WIKI_CLIENT_SECTION,
   {
     title: "Getting started",
-    links: [["Beginner's guide", "/wiki/guide/beginners-guide.html"]],
+    links: [
+      ["Beginner's guide", "/wiki/guide/beginners-guide.html"],
+      ["Daily tips", "/wiki/guide/daily-tips.html"],
+    ],
   },
   {
     title: "World",
@@ -49,7 +52,10 @@ const WIKI_NAV_SECTIONS = [
   },
   {
     title: "NPCs & drops",
-    links: [["Magical drops", "/wiki/npcs/drops.html"]],
+    links: [
+      ["Magical drops", "/wiki/npcs/drops.html"],
+      ["Legacy drops (2008)", "/wiki/npcs/legacy-drops-2008.html"],
+    ],
   },
   {
     title: "Quests",
@@ -62,12 +68,14 @@ const WIKI_NAV_SECTIONS = [
     title: "Mechanics",
     links: [
       ["Combat", "/wiki/mechanics/combat.html"],
+      ["DKR levels", "/wiki/mechanics/dkr-levels.html"],
       ["Stats & ranks", "/wiki/mechanics/stats.html"],
       ["Professions", "/wiki/mechanics/professions.html"],
       ["Profession trainers", "/wiki/mechanics/profession-trainers.html"],
       ["Skill trainers", "/wiki/mechanics/skill-trainers.html"],
       ["Languages", "/wiki/mechanics/languages.html"],
       ["Doctor & herbs", "/wiki/mechanics/doctor.html"],
+      ["Armor resize", "/wiki/mechanics/armor-resize.html"],
       ["PK areas", "/wiki/mechanics/pk-areas.html"],
     ],
   },
