@@ -43,7 +43,7 @@ test("wiki copy is not tied to the Link client or to files the wiki does not con
 test("sidebar sections are even-handed and in reading order", async () => {
   const nav = await readFile(path.join(wiki, "wiki.js"), "utf8");
   const titles = [...nav.matchAll(/title: "([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(titles.slice(0, 8), [
+  assert.deepEqual(titles.slice(0, 9), [
     "Browser client",
     "Getting started",
     "World",
@@ -52,6 +52,7 @@ test("sidebar sections are even-handed and in reading order", async () => {
     "NPCs & drops",
     "Quests",
     "Mechanics",
+    "Misc",
   ]);
   assert.equal(nav.includes("Battlemages"), false);
   assert.match(nav, /\/wiki\/reference\/data-caches\.html/);

@@ -66,8 +66,16 @@ const WIKI_NAV_SECTIONS = [
       ["Professions", "/wiki/mechanics/professions.html"],
       ["Profession trainers", "/wiki/mechanics/profession-trainers.html"],
       ["Skill trainers", "/wiki/mechanics/skill-trainers.html"],
+      ["Languages", "/wiki/mechanics/languages.html"],
       ["Doctor & herbs", "/wiki/mechanics/doctor.html"],
       ["PK areas", "/wiki/mechanics/pk-areas.html"],
+    ],
+  },
+  {
+    title: "Misc",
+    links: [
+      ["Overview", "/wiki/misc/index.html"],
+      ["l at paper", "/wiki/misc/lat-paper.html"],
     ],
   },
 ];
@@ -82,6 +90,7 @@ const WIKI_NAV_PREFIX_SECTION = new Map([
   ["/wiki/npcs", "NPCs & drops"],
   ["/wiki/quests", "Quests"],
   ["/wiki/mechanics", "Mechanics"],
+  ["/wiki/misc", "Misc"],
 ]);
 
 function applySkin(name) {
