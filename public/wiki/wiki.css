@@ -514,12 +514,6 @@ body.wiki-directions .wiki-route-copy.is-done {
   color: var(--ui-agent-fg);
 }
 
-body.wiki-directions .wiki-route-hint {
-  font-size: 0.72rem;
-  color: var(--ui-meta);
-  flex: 1 1 8rem;
-}
-
 body.wiki-directions .wiki-route-input {
   display: block;
   width: 100%;

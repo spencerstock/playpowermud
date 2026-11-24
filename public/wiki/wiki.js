@@ -560,11 +560,7 @@ if (typeof SharedWorker !== "undefined") {
     copyBtn.className = "wiki-route-copy";
     copyBtn.textContent = "Copy";
 
-    const hint = document.createElement("span");
-    hint.className = "wiki-route-hint";
-    hint.textContent = "One line — paste into the game or an alias";
-
-    head.append(copyBtn, hint);
+    head.append(copyBtn);
 
     const ta = document.createElement("textarea");
     ta.className = "wiki-route-input";
