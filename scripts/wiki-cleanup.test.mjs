@@ -56,8 +56,10 @@ test("sidebar sections are even-handed and in reading order", async () => {
   ]);
   assert.equal(nav.includes("Battlemages"), false);
   assert.match(nav, /\/wiki\/reference\/data-caches\.html/);
-  assert.match(nav, /\/wiki\/reference\/help\/eset\.html/);
-  assert.match(nav, /\/wiki\/reference\/explored-world\.html/);
+  assert.equal(nav.includes("/wiki/reference/help/eset.html"), false);
+  assert.equal(nav.includes("/wiki/reference/explored-world.html"), false);
+  assert.equal(nav.includes("legacy-drops-2008"), false);
+  assert.equal(nav.includes("/wiki/mechanics/stats.html"), false);
 });
 
 test("old wiki URLs redirect at the new pages", async () => {
@@ -69,6 +71,10 @@ test("old wiki URLs redirect at the new pages", async () => {
     ["public/wiki/reference/content-notes.html", "/wiki/about"],
     ["public/wiki/reference/quests-corpus.html", "/wiki/quests/notes"],
     ["public/wiki/powermud/zones.html", "/wiki/world/directions"],
+    ["public/wiki/mechanics/stats.html", "/wiki/guilds/races#abilities"],
+    ["public/wiki/reference/help/eset.html", "/wiki/client/terminal#eset"],
+    ["public/wiki/reference/explored-world.html", "/wiki/client/map#your-map"],
+    ["public/wiki/npcs/legacy-drops-2008.html", "/wiki/npcs/drops"],
   ];
   for (const [rel, url] of cases) {
     const html = await readFile(path.join(root, rel), "utf8");

@@ -7,11 +7,9 @@ const WIKI_CLIENT_SECTION = {
   links: [
     ["Getting started", "/wiki/client/getting-started.html"],
     ["Terminal & colors", "/wiki/client/terminal.html"],
-    ["Colors (eset)", "/wiki/reference/help/eset.html"],
     ["Aliases", "/wiki/client/aliases.html"],
     ["Comms", "/wiki/client/comms.html"],
     ["World map", "/wiki/client/map.html"],
-    ["Map data", "/wiki/reference/explored-world.html"],
     ["Site data", "/wiki/reference/data-caches.html"],
   ],
 };
@@ -54,13 +52,13 @@ const WIKI_NAV_SECTIONS = [
     title: "NPCs & drops",
     links: [
       ["Magical drops", "/wiki/npcs/drops.html"],
-      ["Legacy drops (2008)", "/wiki/npcs/legacy-drops-2008.html"],
     ],
   },
   {
     title: "Quests",
     links: [
       ["Quest system", "/wiki/quests/index.html"],
+      ["Hollowmere siege", "/wiki/quests/hollowmere.html"],
       ["Quest notes", "/wiki/quests/notes.html"],
     ],
   },
@@ -69,7 +67,6 @@ const WIKI_NAV_SECTIONS = [
     links: [
       ["Combat", "/wiki/mechanics/combat.html"],
       ["DKR levels", "/wiki/mechanics/dkr-levels.html"],
-      ["Stats & ranks", "/wiki/mechanics/stats.html"],
       ["Professions", "/wiki/mechanics/professions.html"],
       ["Profession trainers", "/wiki/mechanics/profession-trainers.html"],
       ["Skill trainers", "/wiki/mechanics/skill-trainers.html"],

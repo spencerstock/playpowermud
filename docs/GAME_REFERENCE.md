@@ -26,7 +26,7 @@ The public wiki is the reference. Personal character sheets, client config, prox
 |-----------|--------|
 | [Guilds](../public/wiki/guilds/index.html) | Every guild: races, minimums, location |
 | [Guild pages](../public/wiki/guilds/) | One page per joinable guild (see index) |
-| [Races](../public/wiki/guilds/races.html) | `help races` |
+| [Races and abilities](../public/wiki/guilds/races.html) | Race chart, resistances, ability averages |
 | [Drow](../public/wiki/guilds/drow.html) | Noble houses in Nal Shaddar |
 | [Bastion of High Sorcery](../public/wiki/guilds/bastion.html) | Mage guild and joining quest |
 
@@ -60,7 +60,6 @@ Hand-curated equipment rows: `scripts/items-hand-data.mjs`. After copying `data/
 |-----------|--------|
 | [Combat](../public/wiki/mechanics/combat.html) | Hit words, stun, dragon notes |
 | [DKR levels](../public/wiki/mechanics/dkr-levels.html) | Dragon Killer Rating, rank ladder, huge kills, dragon list |
-| [Stats and ranks](../public/wiki/mechanics/stats.html) | Abilities; pointer to DKR levels |
 | [Professions](../public/wiki/mechanics/professions.html) | Lower and upper professions |
 | [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Profession NPCs, costs, stat reqs |
 | [Skill trainers](../public/wiki/mechanics/skill-trainers.html) | Standalone skill NPCs (riding, tailoring, etc.) |
@@ -73,10 +72,8 @@ Hand-curated equipment rows: `scripts/items-hand-data.mjs`. After copying `data/
 | Wiki page | Topic |
 |-----------|--------|
 | [Getting started](../public/wiki/client/getting-started.html) | Connect, shortcuts |
-| [Terminal and colors](../public/wiki/client/terminal.html) | Input and ANSI |
-| [Colors (eset)](../public/wiki/reference/help/eset.html) | In-game `eset` |
+| [Terminal and colors](../public/wiki/client/terminal.html) | Input, ANSI, and in-game `eset` |
 | [Aliases](../public/wiki/client/aliases.html) | Browser aliases |
 | [Comms](../public/wiki/client/comms.html) | Tells, says, shouts |
-| [World map](../public/wiki/client/map.html) | Live mapper |
-| [Map data](../public/wiki/reference/explored-world.html) | Shared graph |
+| [World map](../public/wiki/client/map.html) | Live mapper and the session map |
 | [Site data](../public/wiki/reference/data-caches.html) | JSON the client ships |

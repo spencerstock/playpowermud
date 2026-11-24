@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Races &amp; stats — Play Powermud wiki</title>
+    <meta name="description" content="Playable races, stat leans, resistances, and ability averages." />
+    <title>Races and abilities — Play Powermud wiki</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/wiki/wiki.css" />
   </head>
@@ -21,64 +22,61 @@
 
 
     <main class="wiki-main" id="wiki-main">
-      <h2>Player races &amp; abilities</h2>
-      <p class="wiki-lede">From in-game <code>help races</code> and selected race help (pulled 2026-10-30).</p>
+      <h2>Player races and abilities</h2>
+      <p class="wiki-lede">From in-game <code>help races</code> and race help (pulled 2026-10-30). 'Experienced' races are flagged by the game as for experienced players only. Which guilds a race can join: <a href="/wiki/guilds/index.html#race-guild">guilds</a>.</p>
 
       <h3>All playable races</h3>
-      <p><code>help races</code> lists:</p>
-      <p>
-        drow, duergar, dwarf, elf, half-elf, halfling, half-orc, half-ogre, human, gnome, minotaur,
-        svirfneblin
-      </p>
-<p>Exact per-race stat rolls are shown by <code>restat</code> in the Adventurer Guild, not in help files.</p>
-
-      <h3>Human</h3>
-      <ul>
-        <li>Advantages / disadvantages: none (baseline race).</li>
-        <li>Short-lived compared to other races; generalist adventurers.</li>
-      </ul>
-
-      <h3>Half-elf</h3>
-      <ul>
-        <li>Above average Wisdom; below average Charisma.</li>
-        <li>Resistances: Enchant (high), Illusion (low).</li>
-      </ul>
-
-      <h3>Half-orc</h3>
-      <ul>
-        <li>Above average Strength and Constitution; below average Intelligence and Charisma.</li>
-        <li>Resistance: Dragonfear (low).</li>
-      </ul>
-
-      <h3>Minotaur</h3>
-      <ul>
-        <li>Very high Strength, above average Constitution; very low Wisdom and Charisma.</li>
-        <li>Resistance: Dragonfear (high). Horned — special helmet types only.</li>
-        <li>Marked for experienced Powermud players in help.</li>
-      </ul>
-
-      <h3>Core abilities (<code>help abilities</code>)</h3>
       <table>
-        <thead>
-          <tr><th>Stat</th><th>Typical avg</th><th>Role</th></tr>
-        </thead>
+        <thead><tr><th>Race</th><th>Above average</th><th>Below average</th><th>Resistances</th></tr></thead>
         <tbody>
-          <tr><td>Intelligence</td><td>10</td><td>Memory, spell access; high Int may pierce illusions</td></tr>
-          <tr><td>Constitution</td><td>12</td><td>Hit points — “vitally important”</td></tr>
-          <tr><td>Wisdom</td><td>11</td><td>Magical resistance</td></tr>
-          <tr><td>Strength</td><td>11</td><td>Carry weight, melee damage, doors</td></tr>
-          <tr><td>Dexterity</td><td>11</td><td>Reaction, ranged accuracy, dodging</td></tr>
+          <tr><td>Human</td><td>Nothing</td><td>Nothing</td><td>None</td></tr>
+          <tr><td>Elf</td><td>Int, Dex</td><td>Str, Con</td><td>Enchant (extremely high), Illusion (medium), Dragonfear (low)</td></tr>
+          <tr><td>Half-Elf</td><td>Wis</td><td>Cha</td><td>Enchant (high), Illusion (low)</td></tr>
+          <tr><td>Drow (experienced)</td><td>Int, Dex</td><td>Str, Con</td><td>Enchant (extremely high), Illusion (low), Dragonfear (medium)</td></tr>
+          <tr><td>Gnome</td><td>Int</td><td>Str, Wis</td><td>Enchant (very high), Illusion (very high)</td></tr>
+          <tr><td>Svirfneblin (experienced)</td><td>Int</td><td>Cha</td><td>Enchant (very high), Illusion (very high)</td></tr>
+          <tr><td>Dwarf</td><td>Str, Con</td><td>Int, Cha</td><td>Enchant (high), Illusion (low), Poison (medium), Dragonfear (medium)</td></tr>
+          <tr><td>Duergar (experienced)</td><td>Str, Con</td><td>Int, Cha</td><td>Enchant (extremely high), Illusion (medium), Poison (medium), Dragonfear (medium)</td></tr>
+          <tr><td>Halfling</td><td>Dex, Cha</td><td>Str, Wis</td><td>None listed</td></tr>
+          <tr><td>Half-Orc</td><td>Str, Con</td><td>Int, Cha</td><td>Dragonfear (low)</td></tr>
+          <tr><td>Half-Ogre</td><td>Str, Con (exceptional)</td><td>Int, Wis, Cha (exceptionally low), Dex</td><td>Dragonfear (high)</td></tr>
+          <tr><td>Minotaur (experienced)</td><td>Str (exceptional), Con</td><td>Wis, Cha (very low)</td><td>Dragonfear (high)</td></tr>
         </tbody>
       </table>
-      <h3>Drow</h3>
-      <p>
-        Underdark elves of Nal Shaddar; noble houses and Bey-Sandrax walkthrough:
-        <a href="/wiki/guilds/drow.html">Drow</a>. Full race text: <code>help drow</code>.
-      </p>
-      <p>
-        Other Underdark player races: duergar, svirfneblin — see
-        <code>help duergar</code>, <code>help svirfneblin</code>, etc. for full text.
-      </p>
+      <ul>
+        <li><strong>Human</strong> — Average at everything and the widest guild choice of any race (13 guilds).</li>
+        <li><strong>Elf</strong> — Good and nature-loving; home city Elinost and the Great Forest. Natural infravision. Joins the Elite, Priests of Eli, Bastion and Rangers.</li>
+        <li><strong>Half-Elf</strong> — Mixes with both races; the second-widest guild list (10).</li>
+        <li><strong>Drow</strong> — Purely evil Underdark elves of Nal Shaddar who worship Loth and hate elves. They see in the dark without light. Noble houses and the Bey-Sandrax walkthrough: <a href="/wiki/guilds/drow.html">Drow</a>. Guilds split by gender: males Melee-Magthere, females Arach-Tillith. Full race text: <code>help drow</code>.</li>
+        <li><strong>Gnome</strong> — Tinkers and gem-cutters with very high illusion resistance; natural Illusionists.</li>
+        <li><strong>Svirfneblin</strong> — Deep gnomes of the Underdark, good miners, mostly with illusionist talent. Full text: <code>help svirfneblin</code>.</li>
+        <li><strong>Dwarf</strong> — Stout warriors who love gold and hate orcs and goblins. Natural Stronghold Honor Guard, also Church of Kertaine.</li>
+        <li><strong>Duergar</strong> — Evil, half-mad Underdark dwarves of Dunkrist, sometimes allied with drow. Homeguard or Dark Trinity. Full text: <code>help duergar</code>.</li>
+        <li><strong>Halfling</strong> — High Dex makes picking locks, pockets and hiding easy. Thief, Assassin, Merchant, Church or Rangers.</li>
+        <li><strong>Half-Orc</strong> — Strong outcasts. Militia, Battlemages, Cult or Assassin.</li>
+        <li><strong>Half-Ogre</strong> — The strongest and toughest race, with the weakest minds; tends toward evil. Militia, Cult, Disciples, Thief or Assassin.</li>
+        <li><strong>Minotaur</strong> — Sea-faring bull-men. Only special helmets fit over the horns. Mariner is their own guild; Battlemages also take them.</li>
+      </ul>
+      <ul>
+        <li>Infravision: elves have it naturally, and Underdark races (drow, duergar, svirfneblin) see better in the dark than an elf. The Alteration spell Infravision gives elf-level dark vision to anyone.</li>
+        <li>Alignment is Good, Neutral or Evil and shifts with what you kill: killing something of your own alignment pushes you toward the opposite. <code>score</code> shows it. Monks are strongest when neutral.</li>
+        <li>Some cities' NPCs attack certain races on sight, so check how a city treats your race before walking in.</li>
+      </ul>
+
+      <h3 id="abilities">Abilities (<code>help abilities</code>)</h3>
+      <p>Exact per-race rolls come from <code>restat</code> in the Adventurer's Guild, not from a published sheet. <code>restat</code> only works there, with at least 1 exp, before you join a guild, at 900 exp or less, and at most 3 times. It shows your race's stat ranges. Set it to beat your target guild's minimums.</p>
+      <table>
+        <thead><tr><th>Stat</th><th>Average</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>Constitution</td><td>12</td><td>HP, and how fast HP grows. 'Vitally important to everyone.'</td></tr>
+          <tr><td>Strength</td><td>11</td><td>Damage, carrying weight, doors and obstacles</td></tr>
+          <tr><td>Dexterity</td><td>11</td><td>Dodging, reacting to surprises, ranged accuracy</td></tr>
+          <tr><td>Intelligence</td><td>10</td><td>Higher-level spells, casting checks, seeing through illusions</td></tr>
+          <tr><td>Wisdom</td><td>11</td><td>Resistance to magical attack</td></tr>
+          <tr><td>Charisma</td><td>-</td><td>Shop prices when haggling; some creatures react badly to low Charisma</td></tr>
+        </tbody>
+      </table>
+      <p>Dragon Killer Rating titles and the dragon list: <a href="/wiki/mechanics/dkr-levels.html">DKR levels</a>.</p>
     </main>
 
     <footer class="wiki-foot">

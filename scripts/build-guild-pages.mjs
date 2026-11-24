@@ -92,16 +92,10 @@ function renderIndex() {
     sections += `<h3>${section.title}</h3>\n<table>\n<thead><tr><th>Guild</th><th>Races</th><th>Minimum stats</th><th>Where</th></tr></thead>\n<tbody>\n`;
     for (const guild of section.guilds) {
       const href = guildPageHref(guild);
-      sections += `<tr><td><a href="${href}">${guild.name}</a></td><td>${guild.races}</td><td>${guild.stats}</td><td>${guild.where}</td></tr>\n`;
+      const id = guild.slug === "celtian-battlemages" ? ' id="battlemages"' : "";
+      sections += `<tr><td><a${id} href="${href}">${guild.name}</a></td><td>${guild.races}</td><td>${guild.stats}</td><td>${guild.where}</td></tr>\n`;
     }
-    sections += `</tbody>\n</table>\n<ul>`;
-    for (const guild of section.guilds) {
-      const href = guildPageHref(guild);
-      const id =
-        guild.slug === "celtian-battlemages" ? ' id="battlemages"' : "";
-      sections += `<li><strong${id}><a href="${href}">${guild.name}</a></strong> — ${guild.description}</li>`;
-    }
-    sections += `</ul>\n`;
+    sections += `</tbody>\n</table>\n`;
   }
 
   let raceRows = "";
@@ -109,7 +103,7 @@ function renderIndex() {
     raceRows += `<tr><td>${row.race}</td><td>${row.guilds}</td></tr>\n`;
   }
 
-  const main = `<p class="wiki-lede">From in-game guild help. Join at 500+ exp (Merchants are the exception). At the recruiter, type <code>info</code> for the joining task. Each guild below has the same fields: races, minimum stats, where, and a short description.</p>
+  const main = `<p class="wiki-lede">From in-game guild help. Join at 500+ exp (Merchants are the exception). At the recruiter, type <code>info</code> for the joining task. This page is the comparison: races, minimum stats, and where. Open a guild for what it trains.</p>
 <h2>Guilds</h2>
 ${sections}
 <div class="wiki-callout"><strong>Skills don't always carry over.</strong> Some skills stop working when you join a guild. For example, a mage guild loses Slash, so check <code>help &lt;guild&gt;</code> before you train a weapon type in the arena. Blunt and Pierce carry into almost every guild.</div>

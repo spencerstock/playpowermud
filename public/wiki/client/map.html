@@ -49,13 +49,16 @@
         shows a path as MUD commands — it does not auto-walk yet (no speedwalk or click-to-walk).
       </p>
 
-      <h3>Your map</h3>
+      <h3 id="your-map">Your map</h3>
       <p>
-        Each session starts with an empty map. Rooms and exits are added only as you walk them.
+        Each session starts with an empty map. Nothing is preloaded from a shared world file.
+        Rooms and exits are added only as you walk them.
         That graph belongs to the session and is saved in <strong>IndexedDB</strong> on this browser.
         The game does not include a world map. <strong>Export map</strong> / <strong>Import map</strong>
         in the menu move a map on its own. <strong>Export config</strong> / <strong>Import config</strong>
         save or add a whole session, including its map.
+        Written walks: <a href="/wiki/world/directions.html">Walking directions</a> and
+        <a href="/wiki/world/underdark.html">Underdark directions</a>.
       </p>
 
       <h3>How mapping works (short)</h3>
