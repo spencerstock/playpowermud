@@ -64,7 +64,7 @@ import { createAliasMenu } from "./aliasMenu.js";
 import { createAppMenu } from "./appMenu.js";
 import { createHotkeyMenu } from "./hotkeyMenu.js";
 import { createWhenMenu } from "./whenMenu.js";
-import { createWikiOverlay } from "./wikiOverlay.js";
+import { DEFAULT_WIKI_PATH, openWikiInNewTab } from "./wikiOpen.js";
 import { mountMobileCommandButtons } from "./mobileButtons.js";
 
 /** Replaced at build time (scripts/build.mjs). Unset build → wss://powermud.com:2000. */
@@ -97,7 +97,6 @@ const aliasAcEl = byId("alias-ac");
 const wireHintEl = byId("wire-hint");
 const mapPanelMount = byId("map-panel-mount");
 const sidePanelMount = byId("chat-panel-mount");
-const wikiOpenBtn = byId<HTMLButtonElement>("wiki-open");
 const appMenuBtn = byId<HTMLButtonElement>("app-menu-btn");
 const appMenuPanel = byId("app-menu-panel");
 const aliasMenuOpenBtn = byId<HTMLButtonElement>("alias-menu-open");
@@ -314,16 +313,6 @@ const sidePanel = createSidePanel({
 let worldPanel: ReturnType<typeof createWorldPanel> | null = null;
 let mapApiFn: ReturnType<typeof createMapApi> | null = null;
 
-const wikiOverlay = createWikiOverlay({
-  defaultPath: "/wiki/reference/",
-  onClose: () => {
-    mudTerm.scrollToBottom();
-    input.focus();
-  },
-});
-
-wikiOpenBtn.addEventListener("click", () => wikiOverlay.toggle());
-
 const clientDialogOnClose = () => {
   mudTerm.scrollToBottom();
   input.focus();
@@ -363,11 +352,6 @@ document.addEventListener("keydown", (e) => {
     appMenu.setOpen(false);
     return;
   }
-  if (e.key === "Escape" && wikiOverlay.isOpen()) {
-    e.preventDefault();
-    wikiOverlay.close();
-    return;
-  }
   if (!passwordMode() && !clientDialogOpen()) {
     const hotkeyCmd = hotkeyRules.commandForEvent(e);
     if (hotkeyCmd) {
@@ -380,7 +364,7 @@ document.addEventListener("keydown", (e) => {
   if (!(e.altKey && !e.metaKey && !e.ctrlKey && !e.shiftKey)) return;
   if (e.code === "KeyW") {
     e.preventDefault();
-    wikiOverlay.toggle();
+    openWikiInNewTab(DEFAULT_WIKI_PATH);
   } else if (e.code === "KeyM" && worldPanel) {
     e.preventDefault();
     worldPanel.toggleExpanded();

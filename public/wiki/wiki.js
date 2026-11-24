@@ -113,9 +113,28 @@ document.getElementById("wiki-skin")?.addEventListener("click", () => {
   applySkin(next);
 });
 
-function wikiPathKey(url) {
-  return url.replace(/\/index\.html$/i, "").replace(/\.html$/i, "").replace(/\/$/, "") || "/";
+function wikiPublicUrl(url) {
+  const u = new URL(url, window.location.origin);
+  if (!u.pathname.startsWith("/wiki")) return url;
+  let p = u.pathname;
+  if (p.endsWith("/index.html")) p = p.slice(0, -"/index.html".length) || "/wiki";
+  else if (p.endsWith(".html")) p = p.slice(0, -".html".length);
+  if (p === "/wiki/index") p = "/wiki";
+  return `${p}${u.search}${u.hash}`;
 }
+
+function wikiPathKey(url) {
+  return wikiPublicUrl(url).replace(/\/$/, "") || "/";
+}
+
+(function normalizeWikiLinks() {
+  for (const a of document.querySelectorAll('a[href^="/wiki"]')) {
+    const href = a.getAttribute("href");
+    if (!href || !href.startsWith("/wiki")) continue;
+    const next = wikiPublicUrl(href);
+    if (next !== href) a.setAttribute("href", next);
+  }
+})();
 
 /** @type {Map<string, string>} */
 const WIKI_NAV_SECTION_BY_HREF = new Map();
@@ -438,24 +457,6 @@ function mountWikiSearch() {
 }
 
 mountWikiSearch();
-
-(function wireWikiEmbedMode() {
-  if (window.parent === window) return;
-  document.documentElement.classList.add("wiki-embedded");
-  const closeParent = () => {
-    window.parent.postMessage({ type: "playpowermud-wiki-close" }, window.location.origin);
-  };
-  for (const a of document.querySelectorAll('a[href="/"]')) {
-    a.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      closeParent();
-    });
-  }
-  const playTop = document.querySelector(".wiki-top-actions a.primary");
-  if (playTop instanceof HTMLAnchorElement && playTop.getAttribute("href") === "/") {
-    playTop.textContent = "Back to game";
-  }
-})();
 
 if (typeof SharedWorker !== "undefined") {
   const keep = document.createElement("script");

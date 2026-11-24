@@ -10,7 +10,7 @@ export type KeyBinding = {
 const FN = /^F(?:[1-9]|1[0-2])$/i;
 const MOD = new Set(["ctrl", "control", "alt", "shift", "meta", "cmd", "command", "win"]);
 
-/** Built-in client shortcuts (wiki panel toggles). */
+/** Built-in client shortcuts (wiki new tab, panels, terminal focus). */
 export function isReservedBinding(binding: KeyBinding): boolean {
   return binding.alt && !binding.ctrl && !binding.shift && !binding.meta && ["KeyW", "KeyM", "KeyC", "KeyD"].includes(binding.code);
 }
