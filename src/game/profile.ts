@@ -115,6 +115,8 @@ export type GameProfile = {
   fleeFailed: RegExp[];
   /** We killed something; group 1 = victim. */
   killLine: RegExp;
+  /** Round opener when fighting several targets (`You attack Large kobold.`); group 1 = target. */
+  youAttackLine: RegExp;
   /** Commands that relocate without an exit (no map edge is recorded). */
   teleportCommands: RegExp;
   /** Commands that never move the character or redisplay the room. */

@@ -480,6 +480,12 @@ export class GameStream {
       this.emit({ type: "kill", victim: killed[1]!.trim(), text: t });
       return;
     }
+    const attack = t.match(p.youAttackLine);
+    if (attack) {
+      this.descBuf = [];
+      this.emit({ type: "attack", target: attack[1]!.trim(), text: t });
+      return;
+    }
 
     if (this.detectTransit(t)) {
       this.descBuf = [];

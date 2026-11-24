@@ -122,6 +122,7 @@ export type GameEvent =
   | { type: "login"; stage: LoginStage }
   | { type: "death"; who?: string; killer?: string; text: string }
   | { type: "kill"; victim: string; text: string }
+  | { type: "attack"; target: string; text: string }
   /** The MUD named our character (MUME GMCP `Char.Name`). */
   | { type: "character"; name: string; fullname?: string }
   /** Every GMCP message, raw, after the MUD profile translated what it understands. */

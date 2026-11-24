@@ -161,8 +161,10 @@ export class GameStateTracker {
           this.lastCombatAt = 0;
         }
         break;
+      case "attack":
+        this.lastCombatAt = at;
+        break;
       case "kill":
-        this.lastCombatAt = 0;
         break;
       default:
         break;

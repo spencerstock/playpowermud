@@ -119,6 +119,7 @@ export const POWERMUD_PROFILE: GameProfile = {
   fleeMoved: /^You flee like the wind, (\w+)!/i,
   fleeFailed: [/^You fail to flee/i, /^You attempt to flee,? but (?:go nowhere|fail)/i],
   killLine: /^You killed (.+?)\.\s*$/i,
+  youAttackLine: /^You attack (.+?)\.\s*$/i,
   teleportCommands: /^(?:pray|regenerate|recall|home|goto\s.*|cast\s+(?:teleport|word of recall|recall|gate)\b.*)$/i,
   nonMovementCommands:
     /^(?:cast|psi|say|'|"|tell|reply|shout|chat|gossip|emote|:|who|score|sc|i|inv|inventory|eq|equipment|help|skills|spells|psionics|disciplines|schools|effects|list|buy|sell|value|get|take|drop|put|give|wear|wield|remove|rem|kill|k|attack|consider|con|train|practice|prac|learn|time|date|uptime|save|quit|brief|verbose|prompt|eset|eunset|alias|unalias|consolidate|deposit|withdraw|balance|bank|eat|drink|light|extinguish|open|close|unlock|lock|search|examine|exam|read|wimpy|rest|sit|stand|sleep|wake|succor|first|follow|group|lastname|title|description|mail|news|finger|mudlist|releases|hide|sneak|backstab|bs|dt|gauge|bury|loot|cost|trance|who\s.*|look\s+(?:at|in)\s.*|l\s+(?:at|in)\s.*)(?:\s|$)/i,

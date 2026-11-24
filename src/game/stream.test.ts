@@ -275,6 +275,17 @@ test("login and system lines never leak into the next room description", () => {
   assert.equal(room.description, "You are standing inside of a walled arena.");
 });
 
+test("You attack lines become attack events", () => {
+  const attacks = (text: string) =>
+    new GameStream()
+      .feed(text)
+      .flatMap((e) => (e.type === "attack" ? [e.target] : []));
+  assert.deepEqual(attacks("You attack Male villager.\nYou attack Large kobold.\n"), [
+    "Male villager",
+    "Large kobold",
+  ]);
+});
+
 test("death markers: `X killed <us>.` names victim and killer; ghost line; our own kills ignored", () => {
   const deaths = (text: string) =>
     new GameStream().feed(text).flatMap((e) => (e.type === "death" ? [{ who: e.who, killer: e.killer }] : []));
