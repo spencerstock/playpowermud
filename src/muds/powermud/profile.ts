@@ -108,8 +108,8 @@ export const POWERMUD_PROFILE: GameProfile = {
   moveHindered: [/^The small boy trips you!/i, /\bblocks your way\b/i, /\bdemands money from you\b/i],
   // Deepwater docks / Waterside Road: `Your eyes sting from the blinding light, leaving you not
   // able to see for a` / `brief moment.` (live 2026-11-04). Threshold goat pen / outdoor cave:
-  // `Your eyes sting from the bright light, and you are blinded for a moment!` (live 2026-11-05
-  // Wybie r2768→r2767 / r2767→r2764). Both mean the move went through into a room we cannot see;
+  // `Your eyes sting from the bright light, and you are blinded for a moment!` (live 2026-11-05,
+  // r2768→r2767 / r2767→r2764). Both mean the move went through into a room we cannot see;
   // treating them as a lost display left the mapper put and falsely blocked the exit ("did not
   // move"), breaking the goat lap (No known path from r2768 to r2767). Kelton streets (live 2026-11-13
   // Merevia, r5043 south / r9042 north): `The bright light blinds you for a moment!` is the same
@@ -140,7 +140,7 @@ export const POWERMUD_PROFILE: GameProfile = {
   ],
   deathMarkers: [
     /^ANNOUNCE : (\w+) was killed by (.+)\./i,
-    // Combat kill line, e.g. `Jade spider killed Wybie.` → who=Wybie, killer=Jade spider.
+    // Combat kill line, e.g. `Jade spider killed Mara.` → who=Mara, killer=Jade spider.
     // GameState only records it when `who` is our character.
     /^(?=(?!You\b)(?:.+?) killed (\w+)\.\s*$)(.+?) killed \w+\.\s*$/,
     // Ghost (already dead): a command refused as a ghost.

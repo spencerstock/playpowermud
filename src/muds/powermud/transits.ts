@@ -2,7 +2,7 @@ import type { TransitRule } from "../../game/profile.js";
 
 /**
  * PowerMUD rides and forced relocations (see `TransitRule`). Lines are from live play:
- * Zurker/Wybie Deepwater ⇄ Dunagin (2026-10-30) and Wybie Deepwater → Merevia (2026-11-03).
+ * Zurker Deepwater ⇄ Dunagin (2026-10-30) and Deepwater → Merevia (2026-11-03).
  */
 export const POWERMUD_TRANSITS: TransitRule[] = [
   {
@@ -59,7 +59,7 @@ export const POWERMUD_TRANSITS: TransitRule[] = [
   },
   {
     // Serpico (cannibal shaman) banish: fight ends with this line, then Abyss room prose. Never a walk
-    // from the statue room (Wybie 2026-11-05 ~12:49 AM MST — mapper briefly linked e → Abyss).
+    // from the statue room (2026-11-05 ~12:49 AM MST — mapper briefly linked e → Abyss).
     id: "serpico-banish-abyss",
     label: "Banished to the Abyss",
     arrive: [/^You have been banished to the Abyss!?\s*$/i],

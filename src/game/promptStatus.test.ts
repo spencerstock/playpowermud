@@ -7,7 +7,7 @@ import { stripLeadingGamePrompt } from "./briefRoom.js";
 import { parseLatestHpSp } from "../domain/vitals.js";
 import type { GameEvent } from "./types.js";
 
-// Real lines from Wybie's scrollback after `prompt doh` (2026-10-30).
+// Real lines from scrollback after `prompt doh` (2026-10-30).
 const DOH = "[HP: 620(620(100%)) SP: 50(50(100%)) XP: 20400(1600(80%)) Cash: 20617(29297)]";
 const DOH_BANKED = "[HP: 620(620(100%)) SP: 50(50(100%)) XP: 20400(1600(80%)) Cash: 0(49914)]";
 

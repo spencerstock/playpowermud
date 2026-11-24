@@ -26,7 +26,7 @@ export type DiscoveredPlayersFile = {
 /** Powermud `who` row: `[   Newbie   ] Lorax - title … [215 m]` */
 export const WHO_ROW = /^\[\s*([^\]]+?)\s*\]\s+(\S+)/;
 
-/** Live channel: `ANNOUNCE : Wybie has reconnected to PowerMud.` */
+/** Live channel: `ANNOUNCE : Lorax has reconnected to PowerMud.` */
 export const ANNOUNCE_PREFIX = /^ANNOUNCE\s*:\s*(.+)$/i;
 
 /** Login / `announce` history lines (no prefix). */

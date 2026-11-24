@@ -137,7 +137,7 @@ test("score block parses guild, home and exp", () => {
   const s = new GameStream();
   const ev = s.feed(
     [
-      "[HP:90 SP:50]You are Wybie the Adventurer.",
+      "[HP:90 SP:50]You are Mara the Adventurer.",
       "You are a male drow known as being Neutral.",
       "You are a member of the Adventurer's Guild.",
       "You call Nal Shaddar your home.",
@@ -158,7 +158,7 @@ test("score block parses guild, home and exp", () => {
   const score = ev.find((e) => e.type === "score");
   assert.ok(score && score.type === "score");
   const st = score.status;
-  assert.equal(st.name, "Wybie");
+  assert.equal(st.name, "Mara");
   assert.equal(st.race, "drow");
   assert.equal(st.guild, "Adventurer's Guild");
   assert.equal(st.home, "Nal Shaddar");
@@ -289,8 +289,8 @@ test("You attack lines become attack events", () => {
 test("death markers: `X killed <us>.` names victim and killer; ghost line; our own kills ignored", () => {
   const deaths = (text: string) =>
     new GameStream().feed(text).flatMap((e) => (e.type === "death" ? [{ who: e.who, killer: e.killer }] : []));
-  assert.deepEqual(deaths("The spider slams into you!\nJade spider killed Wybie.\n"), [
-    { who: "Wybie", killer: "Jade spider" },
+  assert.deepEqual(deaths("The spider slams into you!\nJade spider killed Mara.\n"), [
+    { who: "Mara", killer: "Jade spider" },
   ]);
   assert.deepEqual(deaths("You killed Rothe.\n"), []);
   assert.deepEqual(deaths("[HP:10 SP:20]You are a ghost, forget it!\n"), [{ who: undefined, killer: undefined }]);
@@ -299,7 +299,7 @@ test("death markers: `X killed <us>.` names victim and killer; ghost line; our o
 test("score block: guild line without `the` (e.g. Melee-Magthere) still parses exp", () => {
   const ev = new GameStream().feed(
     [
-      "You are Wybie gettin' smacked.",
+      "You are Mara gettin' smacked.",
       "You are a male drow known as being Demonic.",
       "You are a member of Melee-Magthere.",
       "You call Nal Shaddar your home.",

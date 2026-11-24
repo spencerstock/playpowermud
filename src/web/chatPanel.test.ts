@@ -7,7 +7,7 @@ test("isBotWho matches progression bot attribution", () => {
   assert.equal(isBotWho("Bot"), true);
   assert.equal(isBotWho("bot:grind"), true);
   assert.equal(isBotWho("agent"), false);
-  assert.equal(isBotWho("Wybie"), false);
+  assert.equal(isBotWho("Mara"), false);
 });
 
 test("botSocialLinesFromEchoCommand counts say/tell/shout in echo", () => {

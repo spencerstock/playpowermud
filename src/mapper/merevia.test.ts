@@ -1,5 +1,5 @@
 /**
- * Merevia, replayed from Wybie's first walk there (2026-11-03). Its forest trails bend: the
+ * Merevia, replayed from a first walk there (2026-11-03). Its forest trails bend: the
  * grid the mapper lays out stacks the grasslands over the forest paths and puts the spring
  * nowhere near the junction it opens onto.
  */

@@ -881,7 +881,7 @@ export class Mapper {
 
   /**
    * A move while blinded has no room display. The command still went through when the MUD did not
-   * refuse it: follow the charted link so a walk can keep sending the path (Wybie vampire cave,
+   * refuse it: follow the charted link so a walk can keep sending the path (vampire cave,
    * 2026-11-11). A real refusal (`move-failed`) marks the command responded first, so it never
    * lands here.
    */

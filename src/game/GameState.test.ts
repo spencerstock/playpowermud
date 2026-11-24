@@ -65,7 +65,7 @@ test("a score block with no HP or SP does not freeze the next prompt", () => {
   const s = new GameStateTracker();
   s.onEvent({
     type: "score",
-    status: { name: "Wybie", updatedAt: Date.now() },
+    status: { name: "Mara", updatedAt: Date.now() },
   });
   s.onEvent({
     type: "prompt",
@@ -81,7 +81,7 @@ test("prompt after score does not regress SP from stale status line", () => {
   s.onEvent({
     type: "score",
     status: {
-      name: "Wybie",
+      name: "Mara",
       hp: 364,
       hpMax: 364,
       sp: 50,

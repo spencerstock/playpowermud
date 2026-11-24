@@ -1,6 +1,6 @@
 /**
  * Transits (profile `transits`): the Kendrite Passages ship from Deepwater to Merevia, replayed
- * from Wybie's live trip (2026-11-03, 1:44–1:56 PM MST), and the newbie-arena boot.
+ * from a live trip (2026-11-03, 1:44–1:56 PM MST), and the newbie-arena boot.
  *
  * Before transits the mapper took the deck for a place, then matched the Merevia berth to the
  * Dunagin berth (their last 80 characters are the same) and painted Merevia over Deepwater.
