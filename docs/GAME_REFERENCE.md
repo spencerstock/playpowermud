@@ -27,7 +27,6 @@ The public wiki is the reference. Personal character sheets, client config, prox
 | [Guilds](../public/wiki/guilds/index.html) | Every guild: races, minimums, location |
 | [Guild pages](../public/wiki/guilds/) | One page per joinable guild (see index) |
 | [Races and abilities](../public/wiki/guilds/races.html) | Race chart, resistances, ability averages |
-| [Drow](../public/wiki/guilds/drow.html) | Noble houses in Nal Shaddar |
 | [Bastion of High Sorcery](../public/wiki/guilds/bastion.html) | Mage guild and joining quest |
 
 ## Equipment
@@ -58,14 +57,13 @@ Hand-curated equipment rows: `scripts/items-hand-data.mjs`. After copying `data/
 
 | Wiki page | Topic |
 |-----------|--------|
-| [Combat](../public/wiki/mechanics/combat.html) | Hit words, stun, dragon notes |
+| [Combat](../public/wiki/mechanics/combat.html) | Hit words, dragon notes |
 | [DKR levels](../public/wiki/mechanics/dkr-levels.html) | Dragon Killer Rating, rank ladder, huge kills, dragon list |
 | [Professions](../public/wiki/mechanics/professions.html) | Lower and upper professions |
 | [Profession trainers](../public/wiki/mechanics/profession-trainers.html) | Profession NPCs, costs, stat reqs |
 | [Skill trainers](../public/wiki/mechanics/skill-trainers.html) | Standalone skill NPCs (riding, tailoring, etc.) |
 | [Armor resize](../public/wiki/mechanics/armor-resize.html) | Resize armor by race size; Harius in Kalinport |
 | [Doctor and herbs](../public/wiki/mechanics/doctor.html) | Doctor, harvest, intensify |
-| [PK areas](../public/wiki/mechanics/pk-areas.html) | `help pkareas` |
 
 ## Browser client
 

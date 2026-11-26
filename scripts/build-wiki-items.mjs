@@ -101,6 +101,7 @@ function dropNpcDedupeKey(label) {
 /** Provenance notes (not kill drops) stay out of equipment tables. */
 function isNpcDropLabel(piece) {
   const base = formatDropNpcLabel(piece.replace(DROP_COUNT_SUFFIX, "")).toLowerCase();
+  if (base.includes("bey-sandrax")) return false;
   if (base.includes("chest only")) return false;
   if (/^staff\s+chest\b/.test(base)) return false;
   return true;
@@ -266,6 +267,7 @@ function droppedByNames(kItem, npcs) {
   if (!kItem) return "";
   const by = new Map();
   for (const [nk, count] of Object.entries(kItem.droppedBy ?? {})) {
+    if (/bey[- ]?sandrax/i.test(nk)) continue;
     const raw = npcs[nk]?.name || titleCaseNpc(nk);
     if (!raw) continue;
     const label = count > 1 ? `${formatDropNpcLabel(raw)}×${count}` : formatDropNpcLabel(raw);
@@ -274,7 +276,7 @@ function droppedByNames(kItem, npcs) {
   const itemKey = kItem.key;
   if (itemKey) {
     for (const n of Object.values(npcs)) {
-      if (!n?.key || by.has(n.key) || !n.seenLoot?.[itemKey]) continue;
+      if (!n?.key || /bey[- ]?sandrax/i.test(n.key) || by.has(n.key) || !n.seenLoot?.[itemKey]) continue;
       by.set(n.key, formatDropNpcLabel(n.name || titleCaseNpc(n.key)));
     }
   }

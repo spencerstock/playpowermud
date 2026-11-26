@@ -35,7 +35,6 @@ const WIKI_NAV_SECTIONS = [
     links: [
       ["All guilds", "/wiki/guilds/index.html"],
       ["Races", "/wiki/guilds/races.html"],
-      ["Drow", "/wiki/guilds/drow.html"],
     ],
   },
   {
@@ -73,7 +72,6 @@ const WIKI_NAV_SECTIONS = [
       ["Languages", "/wiki/mechanics/languages.html"],
       ["Doctor & herbs", "/wiki/mechanics/doctor.html"],
       ["Armor resize", "/wiki/mechanics/armor-resize.html"],
-      ["PK areas", "/wiki/mechanics/pk-areas.html"],
     ],
   },
   {
