@@ -25,6 +25,8 @@ import { defaultMudWebSocketUrl, type RelayStatus } from "../client/connection.j
 import { createMudConnection } from "../client/relayClient.js";
 import { createMapApi } from "../client/mapApi.js";
 import { BrowserMapStore } from "../client/mapStore.js";
+import { resendOnEnterEnabled, setResendOnEnter } from "../client/resendOnEnter.js";
+import { isSlashRepeatManageLine, parseSlashRepeatLine } from "../client/slashRepeat.js";
 import { ClientRuntime } from "../client/runtime.js";
 import { EsetLoginSync } from "../game/esetSync.js";
 import { setAnsiSkin, type AnsiSkin } from "./ansiHtml.js";
@@ -102,6 +104,7 @@ const appMenuPanel = byId("app-menu-panel");
 const aliasMenuOpenBtn = byId<HTMLButtonElement>("alias-menu-open");
 const whenMenuOpenBtn = byId<HTMLButtonElement>("when-menu-open");
 const hotkeyMenuOpenBtn = byId<HTMLButtonElement>("hotkey-menu-open");
+const resendOnEnterChk = byId<HTMLInputElement>("resend-on-enter");
 
 const mudTerm = createMudTerminal(logEl, 10_000);
 const aliases = new AliasStore();
@@ -140,6 +143,23 @@ applySkin(localStorage.getItem(SKIN_LS) ?? "dark", false);
 skinCycleBtn.addEventListener("click", () => {
   const cur = document.documentElement.dataset.skin === "light" ? "light" : "dark";
   applySkin(SKINS[(SKINS.indexOf(cur) + 1) % SKINS.length]!);
+});
+
+// ---- empty Enter: repeat last command ---------------------------------------------------
+
+function syncResendOnEnterUi(): void {
+  resendOnEnterChk.checked = resendOnEnterEnabled();
+}
+
+function applyResendOnEnter(on: boolean, announce = false): void {
+  setResendOnEnter(on);
+  syncResendOnEnterUi();
+  if (announce) meta(`Resend last command on Enter: ${on ? "on" : "off"}`);
+}
+
+syncResendOnEnterUi();
+resendOnEnterChk.addEventListener("change", () => {
+  applyResendOnEnter(resendOnEnterChk.checked, true);
 });
 
 // ---- sessions, config, and map files ----------------------------------------------------
@@ -956,6 +976,15 @@ function handleSlashCommand(line: string): boolean {
     else errorLine(`No alias named "${undef.name}".`);
     return true;
   }
+  const repeat = parseSlashRepeatLine(line);
+  if (repeat) {
+    if (repeat.kind === "error") errorLine(repeat.reason);
+    else {
+      const on = repeat.kind === "toggle" ? !resendOnEnterEnabled() : repeat.on;
+      applyResendOnEnter(on, true);
+    }
+    return true;
+  }
   const list = parseSlashAliasesLine(line);
   if (list) {
     const rows = aliases.list(list.filter);
@@ -990,14 +1019,13 @@ function resetInputLine(): void {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   ensureEditorFromInput();
-  // Empty Enter: reconnect when offline, otherwise repeat the last command (as in the original UI).
+  // Empty Enter: reconnect when offline; otherwise repeat last command or send a blank line.
   if (lineEditor.isEmpty()) {
     if (!connection.connected) {
       if (connection.status !== "connecting") connect();
-    } else if (lastSubmit && !passwordMode()) {
+    } else if (resendOnEnterEnabled() && lastSubmit && !passwordMode()) {
       submitLine(lastSubmit.wire, lastSubmit.display, { expandClient: lastSubmit.expandClient === true });
-    }
-    else submitLine("", "");
+    } else submitLine("", "");
     return;
   }
   const slashWp = parseSlashWpLine(lineEditor.text.trim());
@@ -1045,7 +1073,8 @@ form.addEventListener("submit", (e) => {
       isSlashAliasUndefinePrefix(display) ||
       parseSlashAliasesLine(display) ||
       isSlashHotkeyManageLine(display) ||
-      isSlashWhenManageLine(display))
+      isSlashWhenManageLine(display) ||
+      isSlashRepeatManageLine(display))
   ) {
     pushCommandHistory({ wire: display, display });
     clearHistoryBrowse();

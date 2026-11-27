@@ -25,6 +25,7 @@ test("mergeAutocompleteNames prefers slash commands on bare /", () => {
     "/alias",
     "/aliases",
     "/hotkey",
+    "/repeat",
     "/to",
     "/unalias",
     "/unhotkey",

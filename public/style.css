@@ -252,6 +252,23 @@ header.app-menu-open {
   color: var(--ui-hint);
 }
 
+.app-menu-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.app-menu-check input {
+  margin: 0;
+  flex-shrink: 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

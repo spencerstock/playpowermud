@@ -9,6 +9,7 @@ export const CLIENT_SLASH_COMMANDS = [
   "/unwhen",
   "/wp",
   "/to",
+  "/repeat",
 ] as const;
 
 export type ClientSlashCommand = (typeof CLIENT_SLASH_COMMANDS)[number];
@@ -37,7 +38,7 @@ export function filterSlashCommands(
  */
 export function isSlashCommandArgsEntry(text: string): boolean {
   const t = text.trimStart();
-  return /^\/(?:alias|unalias|aliases|hotkey|unhotkey|when|unwhen|wp|to)\s/i.test(t);
+  return /^\/(?:alias|unalias|aliases|hotkey|unhotkey|when|unwhen|wp|to|repeat)\s/i.test(t);
 }
 
 /** `/aliases` (optionally with a filter word) lists the alias table. */

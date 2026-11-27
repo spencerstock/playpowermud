@@ -27,7 +27,9 @@
       <h3>Command line</h3>
       <ul>
         <li><strong>History</strong> — ↑ and ↓ walk previous commands (plain arrows, not modified).</li>
-        <li><strong>Repeat</strong> — Enter on an empty line resends the last command.</li>
+        <li><strong>Repeat</strong> — When enabled (Menu → <em>Resend last command on Enter</em>, or
+          <code>/repeat on</code>), Enter on an empty line resends the last command. With it off, empty Enter
+          sends a blank line (pagers, prompts). Offline, empty Enter still reconnects.</li>
         <li><strong>Password</strong> — input is masked while Powermud asks for your password.</li>
         <li><strong>Line cursor</strong> — ←/→ move within the line; <kbd>Alt</kbd>+←/→ insert telnet cursor-move sequences at the caret.</li>
         <li><strong>Log cursor</strong> — <kbd>Alt</kbd>+<kbd>Shift</kbd>+arrow sends cursor keys to the MUD (for full-screen editors on the game side).</li>
